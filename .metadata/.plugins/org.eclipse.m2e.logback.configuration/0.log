@@ -1,0 +1,23 @@
+2016-05-26 23:50:58,381 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not available. Remote download required.
+2016-05-27 21:16:14,112 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-27 21:16:56,016 [Start Help Server] INFO  org.eclipse.jetty.util.log - Logging initialized @107949ms
+2016-05-27 21:16:56,472 [Start Help Server] INFO  org.eclipse.jetty.server.Server - jetty-9.2.13.v20150730
+2016-05-27 21:16:56,642 [Start Help Server] INFO  o.e.j.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@2758121c{/help,null,AVAILABLE}
+2016-05-27 21:16:56,956 [Start Help Server] INFO  o.e.jetty.server.ServerConnector - Started ServerConnector@5265c43b{HTTP/1.1}{127.0.0.1:18269}
+2016-05-27 21:16:56,958 [Start Help Server] INFO  org.eclipse.jetty.server.Server - Started @108891ms
+2016-05-27 21:24:09,505 [Stop Help Server] INFO  o.e.jetty.server.ServerConnector - Stopped ServerConnector@5265c43b{HTTP/1.1}{127.0.0.1:0}
+2016-05-27 21:24:09,570 [Stop Help Server] INFO  o.e.j.server.handler.ContextHandler - Stopped o.e.j.s.ServletContextHandler@2758121c{/help,null,UNAVAILABLE}
+2016-05-27 21:24:42,885 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-27 21:28:52,907 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-27 22:17:45,048 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-27 22:33:37,355 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-27 22:45:20,990 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-27 22:58:52,986 [Worker-13] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-27 23:02:51,288 [Worker-9] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-28 19:05:31,390 [Worker-13] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is out-of-date. Remote download required.
+2016-05-29 00:24:38,388 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-29 15:19:24,921 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-29 20:35:41,852 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is out-of-date. Remote download required.
+2016-05-30 00:02:42,267 [Worker-5] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-30 01:03:39,962 [Worker-10] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
+2016-05-30 16:21:42,771 [main] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache file is not out-of-date. No remote download required.
