@@ -1,3 +1,7 @@
+/**
+ *  SPAN - Smart Phone Ad-Hoc Networking project
+ *  Copyright (c) 2012 The MITRE Corporation.
+ */
 package org.span.manager;
 
 import java.util.HashSet;

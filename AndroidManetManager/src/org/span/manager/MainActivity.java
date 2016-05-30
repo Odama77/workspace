@@ -32,6 +32,8 @@ import org.span.R;
 import org.span.service.ManetObserver;
 import org.span.manager.ManetManagerAdapter;
 import org.span.service.core.ManetService.AdhocStateEnum;
+import org.span.service.legal.EulaHelper;
+import org.span.service.legal.EulaObserver;
 import org.span.service.routing.Node;
 import org.span.service.system.CoreTask;
 import org.span.service.system.ManetConfig;
@@ -72,7 +74,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements ManetObserver {
+public class MainActivity extends Activity implements EulaObserver, ManetObserver {
 	
 	public static final String TAG = "MainActivity";
 	
@@ -185,6 +187,9 @@ public class MainActivity extends Activity implements ManetObserver {
 			showDialog(ID_DIALOG_CONFIG, bundle);
 		}
         
+        EulaHelper eula = new EulaHelper(this, this);
+        eula.showDialog();
+        
     }
     
     @Override
@@ -266,33 +271,33 @@ public class MainActivity extends Activity implements ManetObserver {
     	return supRetVal;
     }
     
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem menuItem) {
-//    	boolean supRetVal = super.onOptionsItemSelected(menuItem);
-//    	switch (menuItem.getItemId()) {
-//	    	case MENU_CHANGE_SETTINGS :
-//	    		// TODO: create enums for MANET config fields and set via manager app activity
-//		        startActivityForResult(new Intent(
-//		        	MainActivity.this, ChangeSettingsActivity.class), 0);
-//		        break;
-//	    	case MENU_ABOUT :
-//	    		openAboutDialog();
-//	    		break;
-//	    	case MENU_VIEW_LOG :
-//	    		ViewLogActivity.open(this);
-//	    		break;
-//	    	case MENU_SEND_MESSAGE :
-//	    		SendMessageActivity.open(this);
-//	    		break;
-//	    	case MENU_VIEW_ROUTING_INFO :
-//	    		ViewRoutingInfoActivity.open(this);
-//	    		break;
-//	    	case MENU_SHARE :
-//	    		ShareActivity.open(this);
-//	    		break;
-//	    }
-//    	return supRetVal;
-//    }    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+    	boolean supRetVal = super.onOptionsItemSelected(menuItem);
+    	switch (menuItem.getItemId()) {
+	    	case MENU_CHANGE_SETTINGS :
+	    		// TODO: create enums for MANET config fields and set via manager app activity
+		        startActivityForResult(new Intent(
+		        	MainActivity.this, ChangeSettingsActivity.class), 0);
+		        break;
+	    	case MENU_ABOUT :
+	    		openAboutDialog();
+	    		break;
+	    	case MENU_VIEW_LOG :
+	    		ViewLogActivity.open(this);
+	    		break;
+	    	case MENU_SEND_MESSAGE :
+	    		SendMessageActivity.open(this);
+	    		break;
+	    	case MENU_VIEW_ROUTING_INFO :
+	    		ViewRoutingInfoActivity.open(this);
+	    		break;
+	    	case MENU_SHARE :
+	    		ShareActivity.open(this);
+	    		break;
+	    }
+    	return supRetVal;
+    }    
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -449,7 +454,7 @@ public class MainActivity extends Activity implements ManetObserver {
    	}
     */
    
-//   	private void openAboutDialog() {
+   	private void openAboutDialog() {
 //		LayoutInflater li = LayoutInflater.from(this);
 //        View view = li.inflate(R.layout.aboutview, null); 
 //        // TextView versionName = (TextView)view.findViewById(R.id.versionName);
@@ -463,7 +468,7 @@ public class MainActivity extends Activity implements ManetObserver {
 //                }
 //        })
 //        .show();  		
-//   	}
+   	}
 
 //  	private void showRadioMode(boolean usingBluetooth) {
 //  		if (usingBluetooth) {
@@ -559,8 +564,8 @@ public class MainActivity extends Activity implements ManetObserver {
   	
 //  	private void displayIPandSSID(final ManetConfig manetcfg)
 //  	{
-//  	  tvIP.setText(manetcfg.getIpAddress());       
-//      tvSSID.setText(manetcfg.getWifiSsid());
+//  	  	tvIP.setText(manetcfg.getIpAddress());       
+//      	tvSSID.setText(manetcfg.getWifiSsid());
 //  	}
   	
  	@Override
@@ -625,5 +630,21 @@ public class MainActivity extends Activity implements ManetObserver {
 	public void onError(String error) {
 		Log.d(TAG, "onError()"); // DEBUG
 	}
+
+	@Override
+	public void onEulaAccepted() {
+		// used to be part of onPostCreate()
+				// connect to MANET service
+		        if (!manetManagerAdapter.manetHelper.isConnectedToService()) {
+					showDialog(ID_DIALOG_CONNECTING);
+					currDialogId = ID_DIALOG_CONNECTING;
+					manetManagerAdapter.manetHelper.connectToService();
+		        } else {
+		    		showAdhocMode(manetManagerAdapter.adhocStateEnum);
+//		    		showRadioMode(manetManagerAdapter.manetConfig.isUsingBluetooth());
+		        }
+	}
+		
+	
 }
 

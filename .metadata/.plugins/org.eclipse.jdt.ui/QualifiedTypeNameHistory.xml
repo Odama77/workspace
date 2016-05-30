@@ -5,4 +5,6 @@
 <fullyQualifiedTypeName name="android.content.SharedPreferences.Editor"/>
 <fullyQualifiedTypeName name="org.span.manager.ManetManagerAdapter"/>
 <fullyQualifiedTypeName name="android.widget.Button"/>
+<fullyQualifiedTypeName name="org.span.service.legal.EulaHelper"/>
+<fullyQualifiedTypeName name="org.span.service.legal.EulaObserver"/>
 </qualifiedTypeNameHistroy>
