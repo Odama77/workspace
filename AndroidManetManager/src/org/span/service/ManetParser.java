@@ -2,9 +2,14 @@ package org.span.service;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class ManetParser {
 
+	public static String TAG="ManetParser";
+	
 	public static ArrayList<String> parseOLSR(String data){
+		Log.v(TAG, "parseOLSR()");
 		if (data==null){
 			System.err.println("Data String is null!");
 			return null;
@@ -31,6 +36,7 @@ public class ManetParser {
 	}
 	
 	public static ArrayList<String> parseRoutingInfo(String data){
+		Log.v(TAG,"parseRoutingInfo()");
 		if (data==null){
 			System.err.println("Data String is null!");
 			return null;

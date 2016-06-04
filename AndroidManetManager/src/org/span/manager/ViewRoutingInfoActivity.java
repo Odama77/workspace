@@ -29,12 +29,12 @@ public class ViewRoutingInfoActivity extends Activity implements ManetObserver {
 	
 	private static final int UPDATE_WAIT_TIME_MILLISEC = 1000;
 	
-	private ManetManagerAdapter manetManagerAdapter = null;
+	private ManetManagerApp app = null;
 	
     private Handler handler = new Handler();
     
-//    private TextView tvInfo = null;
-//    private Button btnGetInfo  = null;
+    private TextView tvInfo = null;
+    private Button btnGetInfo  = null;
     
     private UpdateThread updateThread = null;
     
@@ -42,29 +42,30 @@ public class ViewRoutingInfoActivity extends Activity implements ManetObserver {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-				
-//		setContentView(R.layout.routinginfoview);
+		Log.v(TAG, "onCreate()");
+		setContentView(R.layout.routinginfoview);
 		
-		manetManagerAdapter = (ManetManagerAdapter)getApplication();
-		manetManagerAdapter.manetHelper.registerObserver(this);
+		app = (ManetManagerApp)getApplication();
+		app.manet.registerObserver(this);
 				
-//		tvInfo = (TextView) findViewById(R.id.tvInfo);
+		tvInfo = (TextView) findViewById(R.id.tvInfo);
 		
-//	    btnGetInfo  = (Button) findViewById(R.id.btnGetInfo);
-//	    btnGetInfo.setOnClickListener(new OnClickListener() {
-//			public void onClick(View v) {
-//				app.manet.sendRoutingInfoQuery();
-//			}
-//	    });
+	    btnGetInfo  = (Button) findViewById(R.id.btnGetInfo);
+	    btnGetInfo.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				app.manet.sendRoutingInfoQuery();
+			}
+	    });
 
 	    // hide button since we're auto-updating
 	    // TODO: give user choice between auto-updating and manual (button press) updating
-//	    btnGetInfo.setVisibility(View.GONE); 
+	    btnGetInfo.setVisibility(View.GONE); 
     }
 	
 	@Override
 	public void onStart() {
 		super.onStart();
+		Log.v(TAG, "onStart()");
 		
 		updateThread = new UpdateThread();
 		updateThread.start();
@@ -78,6 +79,7 @@ public class ViewRoutingInfoActivity extends Activity implements ManetObserver {
 	@Override
 	public void onStop() {
 		super.onStop();
+		Log.v(TAG, "onStop()");
 		
 		try {
 			if (updateThread != null) {
@@ -92,19 +94,22 @@ public class ViewRoutingInfoActivity extends Activity implements ManetObserver {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		manetManagerAdapter.manetHelper.unregisterObserver(this);
+		Log.v(TAG, "onDestroy()");
+		app.manet.unregisterObserver(this);
 	}
 	
 	public static void open(Activity parentActivity) {
+		Log.v(TAG, "open()");
 		Intent it = new Intent("android.intent.action.GET_ROUTING_INFO_ACTION");
 		parentActivity.startActivity(it);
 	}
 	
 	public void update(final String info) {
+		Log.v(TAG, "update()");
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-//				tvInfo.setText(info);
+				tvInfo.setText(info);
 				// app.displayToastMessage("Info Updated");
 			}
 		});
@@ -119,7 +124,7 @@ public class ViewRoutingInfoActivity extends Activity implements ManetObserver {
 			
 			try {
 				while (alive) {
-					manetManagerAdapter.manetHelper.sendRoutingInfoQuery();
+					app.manet.sendRoutingInfoQuery();
 					Thread.sleep(UPDATE_WAIT_TIME_MILLISEC);
 				}
 			} catch (Exception e) {

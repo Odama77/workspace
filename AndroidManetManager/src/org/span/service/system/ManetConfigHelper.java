@@ -29,15 +29,20 @@ import org.span.service.system.ManetConfig.WifiTxpowerEnum;
 
 
 import android.os.Environment;
+import android.util.Log;
 
 public class ManetConfigHelper {
 
+	public static String TAG = "ManetConfigHelper";
+	
 	public ManetConfig readConfig() {
+		Log.v(TAG,"readConfig()");
 		String filename = CoreTask.DATA_FILE_PATH + "/conf/manet.conf";
 		return readConfig(filename);
 	}
 	
 	public ManetConfig readConfig(String filename) {
+		Log.v(TAG,"readConfig()");
 		TreeMap<String,String> map = new TreeMap<String,String>();
 		
 		for (String line : CoreTask.readLinesFromFile(filename)) {
@@ -57,6 +62,7 @@ public class ManetConfigHelper {
 	}
 	
 	public boolean writeConfig(ManetConfig manetcfg) {
+		Log.v(TAG,"writeConfig()");
 		TreeMap<String,String> map = manetcfg.toMap();
 		String lines = new String();
 		for (String key : map.keySet()) {
@@ -71,7 +77,7 @@ public class ManetConfigHelper {
 
 	// create new configuration with derived settings
 	public ManetConfig update(final ManetConfig manetcfg) {
-			
+		Log.v(TAG,"update()");
 		WifiTxpowerEnum txpower = manetcfg.getWifiTxpower();
 		WifiEncryptionSetupMethodEnum wepsetupMethod = manetcfg.getWifiEncryptionSetupMethod();
 		WifiEncryptionAlgorithmEnum wifiEncyptionAlgorithm = manetcfg.getWifiEncryptionAlgorithm();

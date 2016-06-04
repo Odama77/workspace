@@ -32,6 +32,7 @@ public class HostapdConfig extends HashMap<String, String> {
 	private static final long serialVersionUID = 1L;
 	
 	public HashMap<String, String> read() {
+		Log.v(TAG,"read()");
 		String filename = CoreTask.DATA_FILE_PATH + "/conf/hostapd.conf";
 		this.clear();
 		for (String line : CoreTask.readLinesFromFile(filename)) {
@@ -51,6 +52,7 @@ public class HostapdConfig extends HashMap<String, String> {
 	}
 	
 	public boolean write() {
+		Log.v(TAG,"write()");
 		String lines = new String();
 		for (String key : this.keySet()) {
 			lines += key + "=" + this.get(key) + "\n";

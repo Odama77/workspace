@@ -2,10 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/backgroud2"
+    android:background="@drawable/background"
     android:orientation="vertical" >
-    
-    <!--
+
     <RelativeLayout
         android:id="@+id/layoutHeaderMain"
         android:layout_width="fill_parent"
@@ -303,24 +302,5 @@
             android:textSize="16sp"
             android:textStyle="bold" />
     </RelativeLayout>
-	-->
-
-    <Button
-        android:id="@+id/button_disconnect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="22dp"
-        android:text="Disconnect" />
-
-    <Button
-        android:id="@+id/button_Connect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_disconnect"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
-        android:text="Connect" />
 
 </RelativeLayout>

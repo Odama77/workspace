@@ -25,11 +25,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 
+import android.util.Log;
+
 public class TiWlanConf {
     /*
      * Handle operations on the TiWlan.conf file.
      */
+	
+	public static String TAG = "TiWlanConf";
+	
     public Hashtable<String,String> get() {
+    	Log.v(TAG,"get()");
     	Hashtable<String,String> tiWlanConf = new Hashtable<String,String>();
     	ArrayList<String> lines = CoreTask.readLinesFromFile(CoreTask.DATA_FILE_PATH + "/conf/tiwlan.ini");
 
@@ -43,12 +49,14 @@ public class TiWlanConf {
     }
  
     public synchronized boolean write(String name, String value) {
+    	Log.v(TAG,"write()");
     	Hashtable<String, String> table = new Hashtable<String, String>();
     	table.put(name, value);
     	return write(table);
     }
     
     public synchronized boolean write(Hashtable<String,String> values) {
+    	Log.v(TAG,"write2()");
     	String filename = CoreTask.DATA_FILE_PATH + "/conf/tiwlan.ini";
     	ArrayList<String> valueNames = Collections.list(values.keys());
 

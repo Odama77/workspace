@@ -16,8 +16,12 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 public class MessageService extends Service {
+	
+	public static String TAG = "MessageService";
+	
 	public static final int MESSAGE_PORT = 9000;
 	public static final int MAX_MESSAGE_LENGTH = 256; // 10;
 	
@@ -37,12 +41,13 @@ public class MessageService extends Service {
     
     @Override 
     public void onCreate() {
+    	Log.v(TAG, "onCreated()");
     	// do nothing until prompted by startup activity
     }    
     
     @Override    
     public int onStartCommand(Intent intent, int flags, int startId) {
-    	
+    	Log.v(TAG, "onStartCommand()");
     	if (msgListenerThread == null) {	
 	    	msgListenerThread = new MessageListenerThread();
 	    	msgListenerThread.start();
@@ -66,7 +71,7 @@ public class MessageService extends Service {
      * Show a notification while this service is running.     
      */    
     private void showNotification(String tickerStr, Bundle extras) {
-    	
+    	Log.v(TAG, "showNotification()");
     	if (notifier == null) {
     		// get reference to notifier
     		notifier = (NotificationManager)getSystemService(NOTIFICATION_SERVICE); 

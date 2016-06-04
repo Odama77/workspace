@@ -60,7 +60,7 @@ public class WpaSupplicant {
     		}
     	}
     	return SuppConf;
-    }  
+    }   
     
     public synchronized boolean write(Hashtable<String,String> values) {
     	String filename = CoreTask.DATA_FILE_PATH + "/conf/wpa_supplicant.conf";

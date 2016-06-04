@@ -54,6 +54,7 @@ public class ManetHelper {
 	
 	// constructor
 	public ManetHelper(Context context) {
+		Log.v(TAG, "ManetHelper Constructor");
 		this.context = context;
 		manetObservers = new HashSet<ManetObserver>();
 		logObservers = new HashSet<LogObserver>();
@@ -72,18 +73,22 @@ public class ManetHelper {
 	}
 	
 	public void registerObserver(ManetObserver observer) {
+		Log.v(TAG, "registerOpserver()");
 		manetObservers.add(observer);
 	}
 	
 	public void unregisterObserver(ManetObserver observer) {
+		Log.v(TAG, "unregisterObserver()");
 		manetObservers.remove(observer);
 	}
 	
 	public void registerLogger(LogObserver observer) {
+		Log.v(TAG, "registerLogger()");
 		logObservers.add(observer);
 	}
 	
 	public void unregisterLogger(LogObserver observer) {
+		Log.v(TAG, "unregisterLogger()");
 		logObservers.remove(observer);
 	}
 	
@@ -92,6 +97,7 @@ public class ManetHelper {
 	
 	public boolean isConnectedToService() {
 		// return serviceConn != null;
+		Log.v(TAG, "isConenctedToService()");
 		return sendMessenger != null;
 	}
 	
@@ -100,6 +106,7 @@ public class ManetHelper {
 	
 	public void connectToService() {
 		// create receive messenger
+		Log.v(TAG, "connectToService()");
 		receiveMessenger = new Messenger(new IncomingHandler());
 		
 		// start service (if it is not already started) so that its lifetime is not 
@@ -116,6 +123,7 @@ public class ManetHelper {
 	}
 	
 	public void disconnectFromService() {
+		Log.v(TAG, "disconnectFromService()");
 		context.unregisterReceiver(intentReceiver);
 		intentReceiver = null;
 		
@@ -128,18 +136,22 @@ public class ManetHelper {
 	}
 	
 	public void sendStartAdhocCommand() {
+		Log.v(TAG, "sendStartAdhocCommand()");
 		sendMessage(ManetService.COMMAND_START_ADHOC);
 	}
 	
 	public void sendStopAdhocCommand() {
+		Log.v(TAG, "sendStopAdhocCommand()");
 		sendMessage(ManetService.COMMAND_STOP_ADHOC);
 	}
 	
 	public void sendRestartAdhocCommand() {
+		Log.v(TAG, "sendRestartAdhocCommand()");
 		sendMessage(ManetService.COMMAND_RESTART_ADHOC);
 	}
 	
 	public void sendManetConfigUpdateCommand(ManetConfig config) {
+		Log.v(TAG, "sendManetConfigUpdateCommand()");
 		try {
 			Bundle data = new Bundle();
 			data.putSerializable(ManetService.CONFIG_KEY, config);
@@ -154,6 +166,7 @@ public class ManetHelper {
 	}
 	
 	public void sendManetConfigLoadCommand(String filename){
+		Log.v(TAG, "sendManetConfigLoadCommand()");
 		try{
 			Bundle data = new Bundle();
 			data.putString(ManetService.FILE_KEY, filename);
@@ -168,22 +181,27 @@ public class ManetHelper {
 	}
 	
 	public void sendAdhocStatusQuery() {
+		Log.v(TAG, "sendAdhocStatusQuery()");
 		sendMessage(ManetService.QUERY_ADHOC_STATUS);
 	}
 	
 	public void sendManetConfigQuery() {
+		Log.v(TAG, "sendManetConfigQuery()");
 		sendMessage(ManetService.QUERY_MANET_CONFIG);
 	}
 	
 	public void sendPeersQuery() {
+		Log.v(TAG, "sendPeersQuery()");
 		sendMessage(ManetService.QUERY_PEERS);
 	}
 	
 	public void sendRoutingInfoQuery() {
+		Log.v(TAG, "sendRoutingInfoQuery()");
 		sendMessage(ManetService.QUERY_ROUTING_INFO);
 	}
 	
 	private void sendMessage(int what) {
+		Log.v(TAG, "sendMessage()");
 		if(sendMessenger == null) {
 			Log.e("ManetHelper::sendMessage", "You must connect to the ManetService before sending messages to it!");
 			return;
@@ -202,6 +220,7 @@ public class ManetHelper {
 		
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			Log.v(TAG, "onReceive()");
 			String action = intent.getAction();
 			Bundle data = intent.getExtras();
 			if(action.equals(ManetService.ACTION_SERVICE_STARTED)) {
@@ -242,6 +261,7 @@ public class ManetHelper {
 		
 		@Override    
 		public void handleMessage(Message rxmessage) {
+			Log.v(TAG, "IncomingHandler handleMessage()");
 			Bundle data = rxmessage.getData();
 			switch (rxmessage.what) {
 				case ManetService.QUERY_ADHOC_STATUS:
@@ -281,6 +301,7 @@ public class ManetHelper {
 		
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
+			Log.v(TAG, "ManetServiceConnected onServiceConnected()");
 			// we will communicate with the service through an IDL interface
 			sendMessenger = new Messenger(service);
 	    	for(ManetObserver observer : manetObservers) {
@@ -289,7 +310,8 @@ public class ManetHelper {
 		}
 
 		@Override
-		public void onServiceDisconnected(ComponentName name) {			
+		public void onServiceDisconnected(ComponentName name) {	
+			Log.v(TAG, "ManetServiceConnected onServiceDisconnected()");
 			sendMessenger = null;
 	    	for(ManetObserver observer : manetObservers) {
 				observer.onServiceDisconnected();

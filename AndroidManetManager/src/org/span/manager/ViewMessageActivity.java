@@ -4,16 +4,22 @@
  */
 package org.span.manager;
 
+import org.span.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class ViewMessageActivity extends Activity {
-private Handler handler = new Handler();
+	
+	public static String TAG = "ViewMessageActivity";
+	
+    private Handler handler = new Handler();
     
     private TextView tvFrom = null;
     private TextView tvMessage = null;
@@ -22,11 +28,12 @@ private Handler handler = new Handler();
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle bundle) {
+		Log.v(TAG, "onCreate()");
 		super.onCreate(bundle);	
-//		setContentView(R.layout.messageview);
+		setContentView(R.layout.messageview);
 	    
-//		tvFrom = (TextView) findViewById(R.id.etFrom);
-//	    tvMessage = (TextView) findViewById(R.id.etMessage);
+		tvFrom = (TextView) findViewById(R.id.etFrom);
+	    tvMessage = (TextView) findViewById(R.id.etMessage);
 	    
 	    // populate fields
 	    Bundle extras = getIntent().getExtras();
@@ -36,12 +43,12 @@ private Handler handler = new Handler();
 	    tvFrom.setText(from);
 	    tvMessage.setText(content);
 	    
-//	    btnDone = (Button) findViewById(R.id.btnDone);
-//	  	btnDone.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//				finish();
-//	  		}
-//		});
+	    btnDone = (Button) findViewById(R.id.btnDone);
+	  	btnDone.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+				finish();
+	  		}
+		});
     }
 	
 	
@@ -61,6 +68,7 @@ private Handler handler = new Handler();
 	}
 	
 	public static void open(Activity parentActivity) {
+		Log.v(TAG, "open()");
 		Intent it = new Intent("android.intent.action.VIEW_MESSAGE_ACTION");
 		parentActivity.startActivity(it);
 	}

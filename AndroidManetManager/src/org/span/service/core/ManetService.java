@@ -115,7 +115,7 @@ public class ManetService extends Service {
 	}
 	
 	public void showNotification(String content) {
-		
+		Log.v(TAG,"showNotification()");
 		int icon;
 		if (helper.getAdhocState() == AdhocStateEnum.STARTED) {
 			icon = R.drawable.adhoc_on_notification;
@@ -156,6 +156,7 @@ public class ManetService extends Service {
 		
 		@Override        
 		public void handleMessage(Message rxmessage) {    
+			Log.v(TAG,"IncomingHandler handleMessage()");
 			switch (rxmessage.what) {
 				/*
 				case MSG_COMMAND_REGISTER:

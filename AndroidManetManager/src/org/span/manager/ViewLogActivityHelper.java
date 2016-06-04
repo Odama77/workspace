@@ -6,9 +6,14 @@ package org.span.manager;
 
 import org.span.service.CircularStringBuffer;
 import org.span.service.LogObserver;
-import org.span.manager.ManetManagerAdapter;
 
-public class ViewLogActivityHelper implements LogObserver{
+import android.util.Log;
+
+// helper class to help maintain state between activity instances
+public class ViewLogActivityHelper implements LogObserver {
+	
+	public static String TAG = "ViewLogActivityHelper";
+	
 	private ViewLogActivity activity = null;
 	
 	public boolean messageScrollLock = true;
@@ -19,14 +24,16 @@ public class ViewLogActivityHelper implements LogObserver{
 	
 	private ViewLogActivityHelper() {}
 	
-	public static void setApplication(ManetManagerAdapter manetManagerAdapter) {
+	public static void setApplication(ManetManagerApp app) {
+		Log.v(TAG, "setApplication()");
 		if (instance == null) {
 			instance = new ViewLogActivityHelper();
 		}
-		manetManagerAdapter.manetHelper.registerLogger(instance);
+        app.manet.registerLogger(instance);
 	}
 	
 	public static ViewLogActivityHelper getInstance(ViewLogActivity activity) {
+		Log.v(TAG, "getInstance()");
 		if (instance == null) {
 			instance = new ViewLogActivityHelper();
 		}
@@ -40,6 +47,7 @@ public class ViewLogActivityHelper implements LogObserver{
 	// callback method
 	@Override
 	public void onLogUpdated(String content) {
+		Log.v(TAG, "onLogUpdated()");
 		if (activity != null) {
 			activity.appendMessage(content);
 		}

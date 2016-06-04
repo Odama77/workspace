@@ -34,6 +34,7 @@ public class DnsmasqConfig {
 	private String ipNetwork = null;
 	
 	public void set(String ipNetwork) {
+		Log.v(TAG,"set() ipNetwork");
 		this.ipNetwork = ipNetwork;
 	}
 	

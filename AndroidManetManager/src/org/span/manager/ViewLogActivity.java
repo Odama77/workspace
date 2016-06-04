@@ -4,12 +4,16 @@
  */
 package org.span.manager;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+
 import org.span.R;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -18,7 +22,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class ViewLogActivity extends Activity {
-	private ManetManagerAdapter app = null;
+	public static String TAG = "ViweLogActivity";
+	private ManetManagerApp app = null;
 	
     private ViewLogActivityHelper helper = null;
 	
@@ -33,43 +38,45 @@ public class ViewLogActivity extends Activity {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		Log.v(TAG, "onCreate()");
 				
 		// requestWindowFeature(Window.FEATURE_NO_TITLE);         
 		// getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		//		WindowManager.LayoutParams.FLAG_FULLSCREEN); 
 		
-//		setContentView(R.layout.logview);
+		setContentView(R.layout.logview);
 		
-		app = (ManetManagerAdapter)getApplication();
+		app = (ManetManagerApp)getApplication();
 		helper = ViewLogActivityHelper.getInstance(this);
 		
-//        tvMessage = (TextView) findViewById(R.id.tvMessage);
-//        svMessage = (ScrollView) findViewById(R.id.svMessage);
+        tvMessage = (TextView) findViewById(R.id.tvMessage);
+        svMessage = (ScrollView) findViewById(R.id.svMessage);
         
         // clear button
-//        btnClear = (Button)findViewById(R.id.btnClear);
-//        btnClear.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//	  			synchronized (helper.buff) {
-//	  				helper.buff.clear();
-//	  			}
-//	  			setMessage("Nothing logged ...");
-//	  		}
-//		});
+        btnClear = (Button)findViewById(R.id.btnClear);
+        btnClear.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+	  			synchronized (helper.buff) {
+	  				helper.buff.clear();
+	  			}
+	  			setMessage("Nothing logged ...");
+	  		}
+		});
         
 		// scroll lock
-//        cbMessageScrollLock = (CheckBox)findViewById(R.id.cbMessageScrollLock);
-//        cbMessageScrollLock.setChecked(helper.messageScrollLock);
-//        cbMessageScrollLock.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//				helper.messageScrollLock = !helper.messageScrollLock;
-//	  		}
-//		});
+        cbMessageScrollLock = (CheckBox)findViewById(R.id.cbMessageScrollLock);
+        cbMessageScrollLock.setChecked(helper.messageScrollLock);
+        cbMessageScrollLock.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+				helper.messageScrollLock = !helper.messageScrollLock;
+	  		}
+		});
     }
 	
 	@Override
 	public void onStart() {
 		super.onStart();
+		Log.v(TAG, "onStart()");
 		
 		// scroll to previous position
 		svMessage.post(new Runnable() {          
@@ -106,6 +113,7 @@ public class ViewLogActivity extends Activity {
 	}
 		
 	public static void open(Activity parentActivity) {
+		Log.v(TAG, "open()");
 		Intent it = new Intent("android.intent.action.VIEW_LOG_ACTION");
 		parentActivity.startActivity(it);
 	}
@@ -125,10 +133,11 @@ public class ViewLogActivity extends Activity {
 	 private class AppendMessageRunnable implements Runnable {
 		 private String msg = null;
 		 
-//		 public AppendMessageRunnable(String msg) {
-//			Timestamp timestamp = new Timestamp(Calendar.getInstance().getTimeInMillis());
-//			 this.msg = "+ [" + timestamp + "]\n" + msg;
-//		 }
+		 public AppendMessageRunnable(String msg) {
+			 Log.v(TAG, "AppendMessageRunnable()");
+			Timestamp timestamp = new Timestamp(Calendar.getInstance().getTimeInMillis());
+			 this.msg = "+ [" + timestamp + "]\n" + msg;
+		 }
 		 
 		 @Override
 		 public void run() {
@@ -152,6 +161,7 @@ public class ViewLogActivity extends Activity {
 		 private String msg = null;
 		 
 		 public SetMessageRunnable(String msg) {
+			 Log.v(TAG, "setMessageRunnable()");
 			 this.msg = msg;
 		 }
 		 
@@ -167,11 +177,10 @@ public class ViewLogActivity extends Activity {
 	 
 
 	public void appendMessage(final String msg) {
-	    handler.post(new AppendMessageRunnable()); 
+	    handler.post(new AppendMessageRunnable(msg)); 
 	}
 	
 	public void setMessage(final String msg) {
 	    handler.post(new SetMessageRunnable(msg)); 
 	}
-
 }

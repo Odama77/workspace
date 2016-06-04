@@ -27,6 +27,7 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 public class WifiApControl {
+	public static String TAG = "WifiApControl";
 	private static Method getWifiApState;
 	private static Method isWifiApEnabled;
 	private static Method setWifiApEnabled;
@@ -61,21 +62,25 @@ public class WifiApControl {
 	}
 
 	public static boolean isApSupported(){
+		Log.v(TAG, "isApSupported()");
 		return (getWifiApState!=null && isWifiApEnabled!=null && setWifiApEnabled!=null && getWifiApConfiguration!=null);
 	}
 
 	private WifiManager mgr;
 	private WifiApControl(WifiManager mgr){
+		Log.v(TAG, "WifiApControl Constructor");
 		this.mgr=mgr;
 	}
 
 	public static WifiApControl getApControl(WifiManager mgr){
+		Log.v(TAG, "getApControl()");
 		if (!isApSupported())
 			return null;
 		return new WifiApControl(mgr);
 	}
 
 	public boolean isWifiApEnabled(){
+		Log.v(TAG, "isWifiApEnabled()");
 		try {
 			return (Boolean) isWifiApEnabled.invoke(mgr);
 		} catch (Exception e) {
@@ -85,6 +90,7 @@ public class WifiApControl {
 	}
 
 	public int getWifiApState(){
+		Log.v(TAG, "getWifiApState()");
 		try {
 			return (Integer) getWifiApState.invoke(mgr);
 		} catch (Exception e) {
@@ -94,6 +100,7 @@ public class WifiApControl {
 	}
 
 	public WifiConfiguration getWifiApConfiguration(){
+		Log.v(TAG, "getWifiApConfiguration()");
 		try {
 			return (WifiConfiguration) getWifiApConfiguration.invoke(mgr);
 		} catch (Exception e) {
@@ -103,6 +110,7 @@ public class WifiApControl {
 	}
 
 	public boolean setWifiApEnabled(WifiConfiguration config, boolean enabled){
+		Log.v(TAG, "setWifiApEnabled()");
 		try {
 			return (Boolean) setWifiApEnabled.invoke(mgr, config, enabled);
 		} catch (Exception e) {

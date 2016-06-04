@@ -59,14 +59,14 @@ public class ShareActivity extends Activity {
 
 	public static String DATA_FILE_PATH = null;
 	
-//	private ImageView startBtn = null;
-//	private OnClickListener startBtnListener = null;
-//	private ImageView stopBtn = null;
-//	private OnClickListener stopBtnListener = null;
-//	private TextView tvShareInstructions = null;
+	private ImageView startBtn = null;
+	private OnClickListener startBtnListener = null;
+	private ImageView stopBtn = null;
+	private OnClickListener stopBtnListener = null;
+	private TextView tvShareInstructions = null;
 	
-//	private TableRow startTblRow = null;
-//	private TableRow stopTblRow = null;
+	private TableRow startTblRow = null;
+	private TableRow stopTblRow = null;
 	
 	private ScaleAnimation animation = null;
 	
@@ -81,16 +81,16 @@ public class ShareActivity extends Activity {
         super.onCreate(savedInstanceState);
     	Log.d(TAG, "onCreate()"); // DEBUG
         
-//        setContentView(R.layout.share);
+        setContentView(R.layout.share);
         
         radio = new WiFiRadio(this);
 
         // init table rows
-//        startTblRow = (TableRow)findViewById(R.id.startMasterRow);
-//        stopTblRow = (TableRow)findViewById(R.id.stopMasterRow);
-//        
-//        tvShareInstructions = (TextView)findViewById(R.id.tvShareTnstructions);
-//        tvShareInstructions.setText(INSTRUCTIONS);
+        startTblRow = (TableRow)findViewById(R.id.startMasterRow);
+        stopTblRow = (TableRow)findViewById(R.id.stopMasterRow);
+        
+        tvShareInstructions = (TextView)findViewById(R.id.tvShareTnstructions);
+        tvShareInstructions.setText(INSTRUCTIONS);
 
         // define animation
         animation = new ScaleAnimation(
@@ -104,24 +104,24 @@ public class ShareActivity extends Activity {
         animation.setRepeatMode(Animation.REVERSE);
 
         // start button
-//        startBtn = (ImageView) findViewById(R.id.startMasterBtn);
-//        startBtnListener = new OnClickListener() {
-//        	@Override
-//			public void onClick(View v) {
-//		    	startMasterMode();
-//			}
-//		};
-//		startBtn.setOnClickListener(this.startBtnListener);
+        startBtn = (ImageView) findViewById(R.id.startMasterBtn);
+        startBtnListener = new OnClickListener() {
+        	@Override
+			public void onClick(View v) {
+		    	startMasterMode();
+			}
+		};
+		startBtn.setOnClickListener(this.startBtnListener);
 
 		// stop button
-//		stopBtn = (ImageView) findViewById(R.id.stopMasterBtn);
-//		stopBtnListener = new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				stopMasterMode();
-//			}
-//		};
-//		stopBtn.setOnClickListener(this.stopBtnListener);
+		stopBtn = (ImageView) findViewById(R.id.stopMasterBtn);
+		stopBtnListener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				stopMasterMode();
+			}
+		};
+		stopBtn.setOnClickListener(this.stopBtnListener);
 		
 		// make sure all this folders exist, even if empty
 		String[] dirs = {"/htdocs", "/htdocs/packages"};
@@ -133,17 +133,20 @@ public class ShareActivity extends Activity {
     }
     
     public void onPause() {
+    	Log.v(TAG, "onPause()");
     	super.onPause();
     	stopMasterMode();
     }
     
 	public static void open(Activity parentActivity) {
+		Log.v(TAG, "open()");
 		Intent it = new Intent("android.intent.action.SHARE_ACTION");
 		parentActivity.startActivity(it);
 	}
 	
 	// TODO: check if currently in ad-hoc mode
 	private void startMasterMode() {
+		Log.v(TAG, "startMasterMode()");
 		try {
     		radio.startAp(SSID);
     		showMasterMode(true);
@@ -158,6 +161,7 @@ public class ShareActivity extends Activity {
 	}
 	
 	private void stopMasterMode() {
+		Log.v(TAG, "stopMasterMode()");
 	    try {
 			radio.stopAp();
 			showMasterMode(false);
@@ -172,25 +176,26 @@ public class ShareActivity extends Activity {
 	}
   	
   	private void showMasterMode(boolean enabled) {
-		
+  		Log.v(TAG, "showMasterMode()");
 		if (enabled) {
-//			startTblRow.setVisibility(View.GONE);
-//			stopTblRow.setVisibility(View.VISIBLE);
-//			
-//			// animation
-//			if (animation != null) {
-//				stopBtn.startAnimation(animation);
-//			}
+			startTblRow.setVisibility(View.GONE);
+			stopTblRow.setVisibility(View.VISIBLE);
+			
+			// animation
+			if (animation != null) {
+				stopBtn.startAnimation(animation);
+			}
 			
 		} else {
-//			startTblRow.setVisibility(View.VISIBLE);
-//			stopTblRow.setVisibility(View.GONE);
-//			
-//			// animation
-//			if (animation != null) {
-//				startBtn.startAnimation(this.animation);
-//			}
+			startTblRow.setVisibility(View.VISIBLE);
+			stopTblRow.setVisibility(View.GONE);
+			
+			// animation
+			if (animation != null) {
+				startBtn.startAnimation(this.animation);
+			}
 						
 		}
   	}
 }
+

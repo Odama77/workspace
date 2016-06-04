@@ -2,6 +2,23 @@
  *  SPAN - Smart Phone Ad-Hoc Networking project
  *  Copyright (c) 2012 The MITRE Corporation.
  */
+/**
+ *  Portions of this code are copyright (c) 2009 Harald Mueller and Sofia Lemons.
+ * 
+ *  This program is free software; you can redistribute it and/or modify it under 
+ *  the terms of the GNU General Public License as published by the Free Software 
+ *  Foundation; either version 3 of the License, or (at your option) any later 
+ *  version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along with 
+ *  this program; if not, see <http://www.gnu.org/licenses/>. 
+ *  Use this application at your own risk.
+ */
 package org.span.manager;
 
 import org.span.R;
@@ -11,17 +28,18 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.text.Editable;
 import android.text.TextWatcher;
-
+import android.util.Log;
 
 public class Validation {
-
+	public static String TAG = "Validation";
 	public static void setupWpaEncryptionValidators(final EditTextPreference wifiEncKeyEditTextPref,
     		final int origTextColorWifiEncKey) {
 
-		final ManetManagerAdapter manetManagerAdapter = ManetManagerAdapter.getInstance();
+		Log.v(TAG, "setupWpaEncryptionValidators()");
+		final ManetManagerApp app = ManetManagerApp.getInstance();
 		
-    	wifiEncKeyEditTextPref.setSummary(manetManagerAdapter.getString(R.string.setup_layout_password_summary_wpa));
-    	wifiEncKeyEditTextPref.setDialogMessage(manetManagerAdapter.getString(R.string.setup_activity_error_password_info));
+    	wifiEncKeyEditTextPref.setSummary(app.getString(R.string.setup_layout_password_summary_wpa));
+    	wifiEncKeyEditTextPref.setDialogMessage(app.getString(R.string.setup_activity_error_password_info));
     	
         // encryption key change listener for WPA encryption
     	wifiEncKeyEditTextPref.getEditText().addTextChangedListener(new TextWatcher() {
@@ -53,15 +71,15 @@ public class Validation {
                   "abcdefghijklmnopqrstuvwxyz" +
                   "0123456789";
         		if (newValue.toString().length() < 8) {
-        			manetManagerAdapter.displayToastMessage(manetManagerAdapter.getString(R.string.setup_activity_error_password_tooshort));
+        			app.displayToastMessage(app.getString(R.string.setup_activity_error_password_tooshort));
         			return false;
         		} else if (newValue.toString().length() > 30) {
-        			manetManagerAdapter.displayToastMessage(manetManagerAdapter.getString(R.string.setup_activity_error_password_toolong));
+        			app.displayToastMessage(app.getString(R.string.setup_activity_error_password_toolong));
         			return false;	        			
         		}
         		for (int i = 0 ; i < newValue.toString().length() ; i++) {
         			if (!validChars.contains(newValue.toString().substring(i, i+1))) {
-        				manetManagerAdapter.displayToastMessage(manetManagerAdapter.getString(R.string.setup_activity_error_password_invalidchars));
+        				app.displayToastMessage(app.getString(R.string.setup_activity_error_password_invalidchars));
         				return false;
         		    }
         		}
@@ -72,8 +90,8 @@ public class Validation {
     
 	public static void setupWepEncryptionValidators(final EditTextPreference wifiEncKeyEditTextPref,
     		final int origTextColorWifiEncKey) {
-		
-		final ManetManagerAdapter app = ManetManagerAdapter.getInstance();
+		Log.v(TAG, "setupWepEncryptionValidators()");
+		final ManetManagerApp app = ManetManagerApp.getInstance();
 		
     	wifiEncKeyEditTextPref.setSummary(app.getString(R.string.setup_layout_password_summary_wep));
     	wifiEncKeyEditTextPref.setDialogMessage(app.getString(R.string.setup_activity_error_password_13chars));
@@ -123,10 +141,11 @@ public class Validation {
 	public static void setupWifiSsidValidator(final EditTextPreference wifiSsidEditTextPref) {
     	wifiSsidEditTextPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
     		
-    		final ManetManagerAdapter app = ManetManagerAdapter.getInstance();
+    		final ManetManagerApp app = ManetManagerApp.getInstance();
     		
         	@Override
         	public boolean onPreferenceChange(Preference preference, Object newValue) {
+        		Log.v(TAG, "onPreferenceChange()");
         		String message = "";
 	       		String validChars = "ABCDEFGHIJKLMONPQRSTUVWXYZ"
 	       				+ "abcdefghijklmnopqrstuvwxyz" + "0123456789_.";
@@ -151,6 +170,7 @@ public class Validation {
     }
     
 	public static void setupIpAddressValidator(final EditTextPreference ipAddressEditTextPref) {
+		Log.v(TAG, "setupIpAddressValidator()");
     	ipAddressEditTextPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {    		
         	@Override
         	public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -160,8 +180,9 @@ public class Validation {
     }
 	
 	public static boolean isValidIpAddress(String addr) {
+		Log.v(TAG, "isValidIpAddress()");
 		boolean valid = true;
-		ManetManagerAdapter app = ManetManagerAdapter.getInstance();
+		ManetManagerApp app = ManetManagerApp.getInstance();
 	       
 		try {
     		String[] octets = addr.split("\\.");
@@ -181,5 +202,4 @@ public class Validation {
 		}
 		return valid;
 	}
-	
 }

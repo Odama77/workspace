@@ -30,7 +30,6 @@ import java.util.List;
 import org.apache.http.conn.util.InetAddressUtils;
 import org.span.R;
 import org.span.service.ManetObserver;
-import org.span.manager.ManetManagerAdapter;
 import org.span.service.core.ManetService.AdhocStateEnum;
 import org.span.service.legal.EulaHelper;
 import org.span.service.legal.EulaObserver;
@@ -67,7 +66,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
@@ -86,30 +84,27 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 	private static int ID_DIALOG_CONNECTING = 2;
 	private static int ID_DIALOG_CONFIG 	= 3;
 	
-	private static ManetManagerAdapter manetManagerAdapter = null;
+	private static ManetManagerApp app = null;
 		
 	private ProgressDialog progressDialog = null;
 
-//	private ImageView startBtn = null;
-	private Button startButton = null;
-	private Button stopButton = null;
-	
+	private ImageView startBtn = null;
 	private OnClickListener startBtnListener = null;
-//	private ImageView stopBtn = null;
+	private ImageView stopBtn = null;
 	private OnClickListener stopBtnListener = null;
-//	private ImageView radioModeImage = null;
+	private ImageView radioModeImage = null;
 	private RelativeLayout batteryTemperatureLayout = null;
 	private RelativeLayout headerMainLayout = null;
 	
-//	private TextView batteryTemperature = null;
+	private TextView batteryTemperature = null;
 	
-//	private TableRow startTblRow = null;
-//	private TableRow stopTblRow = null;
+	private TableRow startTblRow = null;
+	private TableRow stopTblRow = null;
 	
 	private ScaleAnimation animation = null;
 	
-//	private TextView tvIP = null;
-//	private TextView tvSSID = null;
+	private TextView tvIP = null;
+	private TextView tvSSID = null;
 	
 	private int currDialogId = -1;
 			
@@ -121,23 +116,23 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
         
         setContentView(R.layout.main);
         
-        manetManagerAdapter = (ManetManagerAdapter)getApplication();
-        manetManagerAdapter.manetHelper.registerObserver(this);
+        app = (ManetManagerApp)getApplication();
+        app.manet.registerObserver(this);
 
         // init table rows
-//        startTblRow = (TableRow)findViewById(R.id.startAdhocRow);
-//        stopTblRow = (TableRow)findViewById(R.id.stopAdhocRow);
-//        radioModeImage = (ImageView)findViewById(R.id.radioModeImage);
-//        batteryTemperatureLayout = (RelativeLayout)findViewById(R.id.layoutBatteryTemp);
-//        headerMainLayout = (RelativeLayout)findViewById(R.id.layoutHeaderMain);
+        startTblRow = (TableRow)findViewById(R.id.startAdhocRow);
+        stopTblRow = (TableRow)findViewById(R.id.stopAdhocRow);
+        radioModeImage = (ImageView)findViewById(R.id.radioModeImage);
+        batteryTemperatureLayout = (RelativeLayout)findViewById(R.id.layoutBatteryTemp);
+        headerMainLayout = (RelativeLayout)findViewById(R.id.layoutHeaderMain);
         
-//        batteryTemperature = (TextView)findViewById(R.id.batteryTempText);
-//        tvIP = (TextView)findViewById(R.id.tvIP);
-//        tvSSID = (TextView)findViewById(R.id.tvSSID);
+        batteryTemperature = (TextView)findViewById(R.id.batteryTempText);
+        tvIP = (TextView)findViewById(R.id.tvIP);
+        tvSSID = (TextView)findViewById(R.id.tvSSID);
 
         // Update the IP and SSID display immediate when the Activity is shown and
         // when the orientation is changed.
-        manetManagerAdapter.manetHelper.sendManetConfigQuery();
+        app.manet.sendManetConfigQuery();
         
         // define animation
         animation = new ScaleAnimation(
@@ -149,31 +144,32 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
         animation.setStartOffset(0);
         animation.setRepeatCount(1);
         animation.setRepeatMode(Animation.REVERSE);
+
         // start button
-        startButton = (Button) findViewById(R.id.button_Connect);
+        startBtn = (ImageView) findViewById(R.id.startAdhocBtn);
         startBtnListener = new OnClickListener() {
         	@Override
 			public void onClick(View v) {
-				Log.d(TAG, "startButton pressed ...");
+				Log.d(TAG, "StartBtn pressed ...");
 		    	showDialog(ID_DIALOG_STARTING);
 		    	currDialogId = ID_DIALOG_STARTING;
-		    	manetManagerAdapter.manetHelper.sendStartAdhocCommand();
+		    	app.manet.sendStartAdhocCommand();
 			}
 		};
-		startButton.setOnClickListener(this.startBtnListener);
+		startBtn.setOnClickListener(this.startBtnListener);
 
 		// stop button
-		stopButton = (Button) findViewById(R.id.button_disconnect);
+		stopBtn = (ImageView) findViewById(R.id.stopAdhocBtn);
 		stopBtnListener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d(TAG, "stoptButton pressed ...");
+				Log.d(TAG, "StopBtn pressed ...");
 		    	showDialog(ID_DIALOG_STOPPING);
 		    	currDialogId = ID_DIALOG_STOPPING;
-		    	manetManagerAdapter.manetHelper.sendStopAdhocCommand();
+		    	app.manet.sendStopAdhocCommand();
 			}
 		};
-		stopButton.setOnClickListener(this.stopBtnListener);
+		stopBtn.setOnClickListener(this.stopBtnListener);
 		
    		// start messenger service so that it runs even if no active activities are bound to it
    		startService(new Intent(this, MessageService.class));
@@ -189,7 +185,6 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
         
         EulaHelper eula = new EulaHelper(this, this);
         eula.showDialog();
-        
     }
     
     @Override
@@ -221,18 +216,18 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
     	Log.d(TAG, "onResume()"); // DEBUG
 				
 		// check if the battery temperature should be displayed
-		if(manetManagerAdapter.sharedPreferences.getString("batterytemppref", "fahrenheit").equals("disabled") == false) {
+		if(app.prefs.getString("batterytemppref", "fahrenheit").equals("disabled") == false) {
 	        // create the IntentFilter that will be used to listen
 	        // to battery status broadcasts
 	        intentFilter = new IntentFilter();
 	        intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 	        registerReceiver(intentReceiver, intentFilter);
-//	        batteryTemperatureLayout.setVisibility(View.VISIBLE);
+	        batteryTemperatureLayout.setVisibility(View.VISIBLE);
 		} else {
 			try {
 				unregisterReceiver(this.intentReceiver);
 			} catch (Exception e) {;}
-//			batteryTemperatureLayout.setVisibility(View.INVISIBLE);
+			batteryTemperatureLayout.setVisibility(View.INVISIBLE);
 		}
 		
 		// Register to receive updates about the device network state
@@ -257,7 +252,7 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	Log.d(TAG, "onCreateOptionsMenu()");
+    	Log.v(TAG, "onCreateOptionsMenu()");
     	boolean supRetVal = super.onCreateOptionsMenu(menu);
     	SubMenu setup = menu.addSubMenu(0, MENU_CHANGE_SETTINGS, 0, getString(R.string.main_activity_settings));
     	setup.setIcon(drawable.ic_menu_preferences);
@@ -273,6 +268,7 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
     
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
+    	Log.v(TAG, "onOptionsItemSelected()");
     	boolean supRetVal = super.onOptionsItemSelected(menuItem);
     	switch (menuItem.getItemId()) {
 	    	case MENU_CHANGE_SETTINGS :
@@ -301,7 +297,7 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 
     @Override
     protected Dialog onCreateDialog(int id) {
-    	Log.d(TAG, "onCreateDialog()");
+    	Log.v(TAG, "onCreateDialog2()");
     	if (id == ID_DIALOG_STARTING) {
 	    	progressDialog = new ProgressDialog(this);
 	    	progressDialog.setTitle(getString(R.string.main_activity_start));
@@ -349,7 +345,7 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
     		        	   String command = "cp " + filename + " /data/data/org.span/conf/manet.conf";
     		        	   System.out.println(command);//debug
     		        	   //CoreTask.runCommand(command);
-    		        	   manetManagerAdapter.manetHelper.sendManetConfigLoadCommand(filename);
+    		        	   app.manet.sendManetConfigLoadCommand(filename);
     		        	   dialog.cancel();
     		           }
     		       })
@@ -370,7 +366,7 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
     private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
     	@Override
         public void onReceive(Context context, Intent intent) {
-    		Log.d(TAG, "onReceiver()");
+    		Log.v(TAG, "onReceive()");
             String action = intent.getAction();
             
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
@@ -378,32 +374,32 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
             	int celsius = (int)((temp+5)/10);
             	int fahrenheit = (int)(((temp/10)/0.555)+32+0.5);
             	Log.d(TAG, "Temp ==> "+temp+" -- Celsius ==> "+celsius+" -- Fahrenheit ==> "+fahrenheit);
-            	String tempPref = MainActivity.this.manetManagerAdapter.sharedPreferences.getString("batterytemppref", "fahrenheit");
-//            	if (tempPref.equals("celsius")) {
-//            		batteryTemperature.setText("" + celsius + getString(R.string.main_activity_temperatureunit_celsius));
-//            	} else {
-//            		batteryTemperature.setText("" + fahrenheit + getString(R.string.main_activity_temperatureunit_fahrenheit));
-//            	}
+            	String tempPref = MainActivity.this.app.prefs.getString("batterytemppref", "fahrenheit");
+            	if (tempPref.equals("celsius")) {
+            		batteryTemperature.setText("" + celsius + getString(R.string.main_activity_temperatureunit_celsius));
+            	} else {
+            		batteryTemperature.setText("" + fahrenheit + getString(R.string.main_activity_temperatureunit_fahrenheit));
+            	}
             }
     	}
     };
 
     public Handler viewUpdateHandler = new Handler(){
         public void handleMessage(Message msg) {
-        	Log.d(TAG, "handleMessage()");
+        	Log.v(TAG, "viewUpdateHandler handleMessage()");
         	switch(msg.what) {
         	case MESSAGE_CHECK_LOG :
         		Log.d(TAG, "Error detected. Check log.");
-        		manetManagerAdapter.displayToastMessage(getString(R.string.main_activity_start_errors));
-        		manetManagerAdapter.manetHelper.sendAdhocStatusQuery();
+        		app.displayToastMessage(getString(R.string.main_activity_start_errors));
+        		app.manet.sendAdhocStatusQuery();
             	break;
         	case MESSAGE_CANT_START_ADHOC :
         		Log.d(TAG, "Unable to start ad-hoc mode!");
-        		manetManagerAdapter.displayToastMessage(getString(R.string.main_activity_start_unable));
-        		manetManagerAdapter.manetHelper.sendAdhocStatusQuery();
+        		app.displayToastMessage(getString(R.string.main_activity_start_unable));
+        		app.manet.sendAdhocStatusQuery();
             	break;
         	default:
-        		manetManagerAdapter.manetHelper.sendAdhocStatusQuery();
+        		app.manet.sendAdhocStatusQuery();
         	}
         	super.handleMessage(msg);
         }
@@ -455,40 +451,42 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
     */
    
    	private void openAboutDialog() {
-//		LayoutInflater li = LayoutInflater.from(this);
-//        View view = li.inflate(R.layout.aboutview, null); 
-//        // TextView versionName = (TextView)view.findViewById(R.id.versionName);
-//        // versionName.setText(this.application.getVersionName());        
-//		new AlertDialog.Builder(MainActivity.this)
-//        .setTitle(getString(R.string.main_activity_about))
-//        .setView(view)
-//        .setNegativeButton(getString(R.string.main_activity_close), new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int whichButton) {
-//                        Log.d(TAG, "Close pressed");
-//                }
-//        })
-//        .show();  		
+   		Log.v(TAG, "openAboudDialog()");
+		LayoutInflater li = LayoutInflater.from(this);
+        View view = li.inflate(R.layout.aboutview, null); 
+        // TextView versionName = (TextView)view.findViewById(R.id.versionName);
+        // versionName.setText(this.application.getVersionName());        
+		new AlertDialog.Builder(MainActivity.this)
+        .setTitle(getString(R.string.main_activity_about))
+        .setView(view)
+        .setNegativeButton(getString(R.string.main_activity_close), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                        Log.d(TAG, "Close pressed");
+                }
+        })
+        .show();  		
    	}
 
-//  	private void showRadioMode(boolean usingBluetooth) {
-//  		if (usingBluetooth) {
-//  			radioModeImage.setImageResource(R.drawable.bluetooth);
-//  		} else {
-//  			radioModeImage.setImageResource(R.drawable.wifi);
-//  		}
-//  	}
+  	private void showRadioMode(boolean usingBluetooth) {
+  		Log.v(TAG, "showRadioMode()");
+  		if (usingBluetooth) {
+  			radioModeImage.setImageResource(R.drawable.bluetooth);
+  		} else {
+  			radioModeImage.setImageResource(R.drawable.wifi);
+  		}
+  	}
   	
   	private void showAdhocMode(AdhocStateEnum state) {
-  		Log.d(TAG, "showAdhocMode()");
+  		Log.v(TAG, "showAdhocMode()");
   		headerMainLayout.setVisibility(View.VISIBLE);
 		
 		if (state == AdhocStateEnum.STARTED) {
-//			startTblRow.setVisibility(View.GONE);
-//			stopTblRow.setVisibility(View.VISIBLE);
+			startTblRow.setVisibility(View.GONE);
+			stopTblRow.setVisibility(View.VISIBLE);
 			
 			// animation
 			if (animation != null) {
-				stopButton.startAnimation(animation);
+				stopBtn.startAnimation(animation);
 			}
 					
 			/*
@@ -511,17 +509,17 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 			// app.showStartNotification();
 			
 		} else if (state == AdhocStateEnum.STOPPED) {
-//			startTblRow.setVisibility(View.VISIBLE);
-//			stopTblRow.setVisibility(View.GONE);
+			startTblRow.setVisibility(View.VISIBLE);
+			stopTblRow.setVisibility(View.GONE);
 			
 			// animation
 			if (animation != null) {
-				startButton.startAnimation(this.animation);
+				startBtn.startAnimation(this.animation);
 			}
 						
 		} else { // AdhocStateEnum.UNKNOWN
-//			startTblRow.setVisibility(View.VISIBLE);
-//			stopTblRow.setVisibility(View.VISIBLE);
+			startTblRow.setVisibility(View.VISIBLE);
+			stopTblRow.setVisibility(View.VISIBLE);
 		}
 		
  		/*
@@ -562,18 +560,34 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
   	
   	// callback methods
   	
-//  	private void displayIPandSSID(final ManetConfig manetcfg)
-//  	{
-//  	  	tvIP.setText(manetcfg.getIpAddress());       
-//      	tvSSID.setText(manetcfg.getWifiSsid());
-//  	}
+  	private void displayIPandSSID(final ManetConfig manetcfg)
+  	{
+  	  Log.v(TAG, "displayIPandSSID()");
+  	  tvIP.setText(manetcfg.getIpAddress());       
+      tvSSID.setText(manetcfg.getWifiSsid());
+  	}
+  	
+	@Override
+	public void onEulaAccepted() {
+		// used to be part of onPostCreate()
+		// connect to MANET service
+		Log.v(TAG, "onEulaAccepted()");
+        if (!app.manet.isConnectedToService()) {
+			showDialog(ID_DIALOG_CONNECTING);
+			currDialogId = ID_DIALOG_CONNECTING;
+			app.manet.connectToService();
+        } else {
+    		showAdhocMode(app.adhocState);
+    		showRadioMode(app.manetcfg.isUsingBluetooth());
+        }
+	}
   	
  	@Override
  	public void onServiceConnected() {
  		Log.d(TAG, "onServiceConnected()"); // DEBUG
  		removeDialog();
- 		manetManagerAdapter.manetHelper.sendManetConfigQuery();
- 		manetManagerAdapter.manetHelper.sendAdhocStatusQuery();
+ 		app.manet.sendManetConfigQuery();
+ 		app.manet.sendAdhocStatusQuery();
  	}
 
  	@Override
@@ -604,16 +618,16 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		Log.d(TAG, "onAdhocStateUpdated()"); // DEBUG
 		removeDialog();
 		showAdhocMode(state);
-		manetManagerAdapter.displayToastMessage(info);
+		app.displayToastMessage(info);
 	}
 
 	@Override
 	public void onConfigUpdated(ManetConfig manetcfg) {
 		Log.d(TAG, "onConfigUpdated()"); // DEBUG
 		
-//		showRadioMode(manetcfg.isUsingBluetooth());
+		showRadioMode(manetcfg.isUsingBluetooth());
 		
-//		displayIPandSSID(manetcfg);
+		displayIPandSSID(manetcfg);
 	}
 	
 	@Override
@@ -630,21 +644,5 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 	public void onError(String error) {
 		Log.d(TAG, "onError()"); // DEBUG
 	}
-
-	@Override
-	public void onEulaAccepted() {
-		// used to be part of onPostCreate()
-				// connect to MANET service
-		        if (!manetManagerAdapter.manetHelper.isConnectedToService()) {
-					showDialog(ID_DIALOG_CONNECTING);
-					currDialogId = ID_DIALOG_CONNECTING;
-					manetManagerAdapter.manetHelper.connectToService();
-		        } else {
-		    		showAdhocMode(manetManagerAdapter.adhocStateEnum);
-//		    		showRadioMode(manetManagerAdapter.manetConfig.isUsingBluetooth());
-		        }
-	}
-		
-	
 }
 

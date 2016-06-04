@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,12 +27,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class EditIgnoreListActivity extends PreferenceActivity {
-
-	private ManetManagerAdapter manetManagerAdapter = null;
 	
-//	private Button btnAdd = null;
+	public static String TAG = "EditIgnoreListActivity";
 	
-//	private Button btnDone = null;
+	private ManetManagerApp app = null;
+		
+	private Button btnAdd = null;
+	
+	private Button btnDone = null;
 	
 	private List<String> ignoreList = new ArrayList<String>();
 	
@@ -40,26 +43,27 @@ public class EditIgnoreListActivity extends PreferenceActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle bundle) {
+		Log.v(TAG, "onCreate()");
 		super.onCreate(bundle);	
 		
         // init application
-		manetManagerAdapter = (ManetManagerAdapter)getApplication();
+        app = (ManetManagerApp)getApplication();
         		
-//		setContentView(R.layout.ignoreviewwrapper);
+		setContentView(R.layout.ignoreviewwrapper);
 	        
-//        btnAdd = (Button) findViewById(R.id.btnAdd);
-//	  	btnAdd.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//				openAddDialog();
-//	  		}
-//		});
+        btnAdd = (Button) findViewById(R.id.btnAdd);
+	  	btnAdd.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+				openAddDialog();
+	  		}
+		});
 	  	
-//        btnDone = (Button) findViewById(R.id.btnDone);
-//	  	btnDone.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//				finish();
-//	  		}
-//		});
+        btnDone = (Button) findViewById(R.id.btnDone);
+	  	btnDone.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+				finish();
+	  		}
+		});
 	  	
 		prefs = this.getPreferenceManager().getSharedPreferences();
 		
@@ -76,6 +80,7 @@ public class EditIgnoreListActivity extends PreferenceActivity {
     }
 	
 	private void updateView() {
+		Log.v(TAG, "updateView()");
 		// update view
 		String[] values =  new String[ignoreList.size()];
 		ignoreList.toArray(values);
@@ -85,6 +90,7 @@ public class EditIgnoreListActivity extends PreferenceActivity {
 	}
 	
 	private void updateConfig() {
+		Log.v(TAG, "updateConfig()");
 		// update preferences		
 		JSONArray array = new JSONArray(ignoreList);
 		prefs.edit().putString("ignorepref", array.toString()).commit();
@@ -106,6 +112,7 @@ public class EditIgnoreListActivity extends PreferenceActivity {
 	}
 	
 	public static void open(Activity parentActivity) {
+		Log.v(TAG, "open()");
 		Intent it = new Intent("android.intent.action.EDIT_IGNORE_LIST_ACTION");
 		parentActivity.startActivity(it);
 	}
@@ -116,6 +123,7 @@ public class EditIgnoreListActivity extends PreferenceActivity {
 	}
 	
 	private void openDeleteDialog(final int position) {
+		Log.v(TAG, "openDeleteDialog()");
 		new AlertDialog.Builder(this)
         	.setTitle("Delete entry?")
         	.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
@@ -135,11 +143,11 @@ public class EditIgnoreListActivity extends PreferenceActivity {
    	}
 	
 	private void openAddDialog() {
-		
+		Log.v(TAG, "openAddDialog()");
 		final EditText etAddress = new EditText(this.getBaseContext());
 		etAddress.setInputType(InputType.TYPE_CLASS_PHONE);
-		etAddress.setText(manetManagerAdapter.manetConfig.getIpNetwork());
-		manetManagerAdapter.focusAndshowKeyboard(etAddress);
+		etAddress.setText(app.manetcfg.getIpNetwork());
+		app.focusAndshowKeyboard(etAddress);
 		
 		new AlertDialog.Builder(this)
         	.setTitle("Add entry")
@@ -164,5 +172,4 @@ public class EditIgnoreListActivity extends PreferenceActivity {
         	})
         	.show();
    	}
-	
 }

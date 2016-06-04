@@ -69,6 +69,7 @@ public class CoreTask {
     }
     
     public static ArrayList<String> getNetworkInterfaces() {
+    	Log.v(TAG,"getNetworkIntefaces()");
     	ArrayList<String> interfaces = new ArrayList<String>();
     	
     	String output = runCommandGetOutput("netcfg");
@@ -83,6 +84,7 @@ public class CoreTask {
     }
     
     public static boolean isNetworkInterfaceUp(String networkInterface) {
+    	Log.v(TAG,"isNetworkInterfaceUp()");
     	String output = runCommandGetOutput("netcfg");
     	
     	String[] tokens = output.split("\n");
@@ -97,6 +99,7 @@ public class CoreTask {
     }
     
     public static ArrayList<String> getRoutingProtocols() {
+    	Log.v(TAG,"getRoutingProtocols()");
     	ArrayList<String> routingProtocols = new ArrayList<String>();
     	
     	routingProtocols.add(SimpleProactiveProtocol.NAME);
@@ -106,6 +109,7 @@ public class CoreTask {
     }
     
     public static ArrayList<String> readLinesFromFile(String filename) {
+    	Log.v(TAG,"readLinesFromFile()");
     	String line = null;
     	BufferedReader br = null;
     	InputStream ins = null;
@@ -157,11 +161,13 @@ public class CoreTask {
     }
     
     public static boolean isNatEnabled() {
+    	Log.v(TAG,"isNatEnabled()");
     	ArrayList<String> lines = readLinesFromFile("/proc/sys/net/ipv4/ip_forward");
     	return lines.contains("1");
     }
     
     public static String getKernelVersion() {
+    	Log.v(TAG,"getKernelVersion()");
         ArrayList<String> lines = readLinesFromFile("/proc/version");
         String version = lines.get(0).split(" ")[2];
         Log.d(TAG, "Kernel version: " + version);
@@ -172,6 +178,7 @@ public class CoreTask {
 	 * This method checks if netfilter/iptables is supported by kernel
 	 */
     public static boolean isNetfilterSupported() {
+    	Log.v(TAG,"isNetfilterSupported()");
     	if ((new File("/proc/config.gz")).exists() == false) {
 	    	if ((new File("/proc/net/netfilter")).exists() == false)
 	    		return false;
@@ -188,6 +195,7 @@ public class CoreTask {
     }
     
     private static synchronized Hashtable<String,String> getRunningProcesses() {
+    	Log.v(TAG,"getRunningProcesses()");
     	File procDir = new File("/proc");
     	FilenameFilter filter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
@@ -215,7 +223,7 @@ public class CoreTask {
     }
     
     private static HashSet<String> getPids(String processName) throws Exception {
-    	
+    	Log.v(TAG,"getPids()");
     	String pid = null;
     	Hashtable<String,String> tmpRunningProcesses = getRunningProcesses();
     	HashSet<String> pids = new HashSet<String>();
@@ -233,12 +241,14 @@ public class CoreTask {
     }
     
     public static boolean isProcessRunning(String processName) throws Exception {
+    	Log.v(TAG,"isProcessRunning()");
     	return !getPids(processName).isEmpty();
     }
     
     // TODO
     public static boolean killProcess(String processName) throws Exception {
     	// runRootCommand("killall " + processName); // requires busybox
+    	Log.v(TAG,"killProcess()");
     	HashSet<String> pids = getPids(processName);
     	for (String pid : pids) {
     		runRootCommand("kill -9 " + pid);
@@ -247,6 +257,7 @@ public class CoreTask {
     }
 
     public static boolean hasRootPermission() {
+    	Log.v(TAG,"hasRootPermission()");
     	boolean rooted = true;
 		try {
 			File su = new File("/system/bin/su");
@@ -264,6 +275,7 @@ public class CoreTask {
     }
     
     public static boolean startAdhocMode(ManetConfig manetcfg) {
+    	Log.v(TAG,"startAdhocMode()");
     	try {
 			if (runRootCommand(DATA_FILE_PATH + "/bin/adhoc start 1")) {
 				// wait for changes to take effect
@@ -281,6 +293,7 @@ public class CoreTask {
     }
     
     public static boolean stopAdhocMode(ManetConfig manetcfg) {
+    	Log.v(TAG,"stopAdhocMode()");
     	try {
 			if (runRootCommand(DATA_FILE_PATH + "/bin/adhoc stop 1")) {
 				// wait for changes to take effect
@@ -298,6 +311,7 @@ public class CoreTask {
     }
     
     public static boolean isAdHocModeEnabled(ManetConfig manetcfg) {
+    	Log.v(TAG,"isAdhocModeEnabled()");
     	String wifiInterface = manetcfg.getWifiInterface();
     	if (!isNetworkInterfaceUp(wifiInterface)) {
     		return false;
@@ -312,16 +326,19 @@ public class CoreTask {
     }
         
     public static String getProp(String property) {
+    	Log.v(TAG,"getProp()");
     	// return System.getProperty(property);
     	return runRootCommandGetOutput("getprop " + property);
     }
     
     public static void setProp(String property, String value) {
+    	Log.v(TAG,"setProp()");
     	// System.setProperty(property, value);
     	runRootCommand("setprop " + property + " " + value);
     }
     
     public static long[] getDataTraffic(String device) {
+    	Log.v(TAG,"getDataTraffic()");
     	// Returns traffic usage for all interfaces starting with 'device'.
     	long [] dataCount = new long[] {0, 0};
     	if (device == "")
@@ -340,6 +357,7 @@ public class CoreTask {
 
     
     public static synchronized void updateDnsmasqFilepath() {
+    	Log.v(TAG,"updateDnsmasqFilepath()");
     	String dnsmasqConf = DATA_FILE_PATH + "/conf/dnsmasq.conf";
     	String newDnsmasq = new String();
     	boolean writeconfig = false;
@@ -395,6 +413,7 @@ public class CoreTask {
     
     public static boolean filesetOutdated(){
     	boolean outdated = true;
+    	Log.v(TAG,"fileSetOutdated()");
     	
     	File inFile = new File(DATA_FILE_PATH + "/conf/adhoc.edify");
     	if (inFile.exists() == false) {
@@ -419,6 +438,7 @@ public class CoreTask {
 
     
     public static long getModifiedDate(String filename) {
+    	Log.v(TAG,"getModifiedDate()");
     	File file = new File(filename);
     	if (file.exists() == false) {
     		return -1;
@@ -478,6 +498,7 @@ public class CoreTask {
     */
     
     public static String reassembleLine(String source, String splitPattern, String prefix, String target) {
+    	Log.v(TAG,"reassembleLine()");
     	String returnString = new String();
     	String[] sourceparts = source.split(splitPattern);
     	boolean prefixmatch = false;
@@ -527,11 +548,13 @@ public class CoreTask {
     }
     
     public static boolean runRootCommand(String command) {
-		return runCommand(prepareRootCommandScript(command));
+    	Log.v(TAG,"runRootCommand()");
+    	return runCommand(prepareRootCommandScript(command));
     }
     
     public static boolean runCommand(String command) {
-		try {
+    	Log.v(TAG,"runCommand()");
+    	try {
 	    	Process process = Runtime.getRuntime().exec(command);
 	    	return process.waitFor() == 0;
 		} catch (Exception e) {
@@ -540,10 +563,12 @@ public class CoreTask {
     }
     
     public static String runRootCommandGetOutput(String command) {
+    	Log.v(TAG,"runRootCommandGetOutput()");
     	return runCommandGetOutput(prepareRootCommandScript(command));
     }
 	
 	public static String runCommandGetOutput(String command) {
+		Log.v(TAG,"runCommandGetOutput()");
 		String output = "";
     	try {
 			Process process = Runtime.getRuntime().exec(command);
@@ -577,10 +602,12 @@ public class CoreTask {
 	}
 	
 	public static Process runRootCommandInBackground(String command) {
+		Log.v(TAG,"runRootCommandInBackground()");
 		return runCommandInBackground(prepareRootCommandScript(command));
 	}
 	
 	public static Process runCommandInBackground(String command) {
+		Log.v(TAG,"runCommandInBackground()");
 		Process process = null;
 		try {
 			process = Runtime.getRuntime().exec(command);
@@ -599,15 +626,16 @@ public class CoreTask {
 	}
 	
 	private static abstract class EmptyStreamThread extends Thread {
-		
 		private InputStream istream = null;
 		private CircularStringBuffer buff = new CircularStringBuffer();
 		
 		public EmptyStreamThread(InputStream istream) {
+			Log.v(TAG,"EmptyStreamThread()");
 			this.istream = istream;
 		}
 		
 		public String getOutput() {
+			Log.v(TAG,"getOutput()");
 			return buff.toString().trim();
 		}
 		

@@ -51,6 +51,7 @@ import android.util.Log;
  */
 public class SimpleWebServer extends Thread {
 
+	public static final String TAG = "SimpleWebServer";
     public static final String VERSION = "SimpleWebServer  http://www.jibble.org/";
     public static final Hashtable<String,String> MIME_TYPES = new Hashtable<String,String>();
 
@@ -68,6 +69,7 @@ public class SimpleWebServer extends Thread {
     }
 
     public SimpleWebServer(File rootDir, int port) throws IOException {
+    	Log.v(TAG, "SimpleWebServer Constructor");
         _rootDir = rootDir.getCanonicalFile();
         if (!_rootDir.isDirectory()) {
             throw new IOException("Not a directory.");
@@ -78,6 +80,7 @@ public class SimpleWebServer extends Thread {
 
     @Override
 	public void interrupt() {
+    	Log.v(TAG, "interrupt()");
     	_running=false;
 		try {
 			_serverSocket.close();
@@ -109,6 +112,7 @@ public class SimpleWebServer extends Thread {
     // Work out the filename extension.  If there isn't one, we keep
     // it as the empty string ("").
     public static String getExtension(java.io.File file) {
+    	Log.v(TAG, "getExtension()");
         String extension = "";
         String filename = file.getName();
         int dotPos = filename.lastIndexOf(".");

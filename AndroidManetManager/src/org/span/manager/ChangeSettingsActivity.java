@@ -2,6 +2,23 @@
  *  SPAN - Smart Phone Ad-Hoc Networking project
  *  Copyright (c) 2012 The MITRE Corporation.
  */
+/**
+ *  Portions of this code are copyright (c) 2009 Harald Mueller and Sofia Lemons.
+ * 
+ *  This program is free software; you can redistribute it and/or modify it under 
+ *  the terms of the GNU General Public License as published by the Free Software 
+ *  Foundation; either version 3 of the License, or (at your option) any later 
+ *  version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along with 
+ *  this program; if not, see <http://www.gnu.org/licenses/>. 
+ *  Use this application at your own risk.
+ */
 package org.span.manager;
 
 import java.util.ArrayList;
@@ -41,13 +58,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class ChangeSettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
+public class ChangeSettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+		
 	public static final String TAG = "ChangeSettingsActivity";
 	
 	private static int ID_DIALOG_RESTARTING = 10;
 	
-	private ManetManagerAdapter manetManagerAdapter = null;
+	private ManetManagerApp app = null;
 	
     private ManetConfig manetcfg = null;
 	
@@ -57,8 +75,8 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
 	
 	private Handler handler = new Handler();
 	
-//	private Button btnCommit = null;
-//	private Button btnCancel = null;
+	private Button btnCommit = null;
+	private Button btnCancel = null;
     
     private SharedPreferences sharedPreferences = null;
     
@@ -69,32 +87,33 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     // will be called when setting menu option is pressed
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	Log.v(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         
         // init application
-        manetManagerAdapter = (ManetManagerAdapter)getApplication();
+        app = (ManetManagerApp)getApplication();
                 
-//        addPreferencesFromResource(R.layout.settingsview); 
-//        setContentView(R.layout.settingsviewwrapper);
+        addPreferencesFromResource(R.layout.settingsview); 
+        setContentView(R.layout.settingsviewwrapper);
         
-//        btnCommit = (Button) findViewById(R.id.btnCommit);
-//	  	btnCommit.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//	  			manetManagerAdapter.manetHelper.sendManetConfigUpdateCommand(manetcfg);
-//				if (manetManagerAdapter.adhocStateEnum == AdhocStateEnum.STARTED) {
-//					openRestartDialog();
-//				} else {
-//					finish();
-//				}
-//	  		}
-//		});
+        btnCommit = (Button) findViewById(R.id.btnCommit);
+	  	btnCommit.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+				app.manet.sendManetConfigUpdateCommand(manetcfg);
+				if (app.adhocState == AdhocStateEnum.STARTED) {
+					openRestartDialog();
+				} else {
+					finish();
+				}
+	  		}
+		});
         
-//        btnCancel = (Button) findViewById(R.id.btnCancel);
-//	  	btnCancel.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//	  			checkIfDirty();
-//	  		}
-//		});
+        btnCancel = (Button) findViewById(R.id.btnCancel);
+	  	btnCancel.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+	  			checkIfDirty();
+	  		}
+		});
     }
     
     // will be called after initial creation and when backing out of EditIgnoreListActivity
@@ -107,7 +126,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
 		sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     	
         // copy MANET config in case the app's version of it is updated while the user is making changes
-        manetcfg = new ManetConfig(manetManagerAdapter.manetConfig.toMap());
+        manetcfg = new ManetConfig(app.manetcfg.toMap());
     	
     	if (setupFlag) {
     		updateConfig(); // update MANET config because we backed out of another preferences activity
@@ -123,7 +142,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     }
 	
     private void updateView() {
-    	
+    	Log.v(TAG, "updateView()");
     	// user id
         EditTextPreference uidEditTextPref = (EditTextPreference)findPreference("uidpref");
         uidEditTextPref.setText(manetcfg.getUserId());
@@ -335,6 +354,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     }
     
     private void updateConfig() {
+    	Log.v(TAG, "updateConfig()");
     	Map<String,Object> map = (Map<String, Object>) sharedPreferences.getAll();
     	for (String key : map.keySet()) {
     		updateConfig(key);
@@ -343,7 +363,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     
     // invoked each time a preference is changed
     private void updateConfig(String key) {
-    	
+    	Log.v(TAG, "updateConfig2()");
     	boolean updateFlag = false;
     	Map<String,String> oldcfgmap = new TreeMap<String,String>(manetcfg.toMap());
     	
@@ -448,6 +468,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     }
     
     private void checkIfDirty() {
+    	Log.v(TAG, "checkIfDirty()");
     	if (dirtyFlag) {
 			openConfirmDialog();
 			dirtyFlag = false; // reset flag
@@ -458,6 +479,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     
     @Override
     protected Dialog onCreateDialog(int id) {
+    	Log.v(TAG, "onCreateDialog()");
     	if (id == ID_DIALOG_RESTARTING) {
 	    	progressDialog = new ProgressDialog(this);
 	    	progressDialog.setTitle(getString(R.string.setup_activity_restart_adhoc_title));
@@ -471,17 +493,19 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     
     @Override
 	public void onBackPressed() {
+    	Log.v(TAG, "onBackPressed()");
     	checkIfDirty();
     }
     
 	private void openConfirmDialog() {
+		Log.v(TAG, "openConfirmDialog()");
 		new AlertDialog.Builder(this)
         	.setTitle("Confirm Settings?")
         	.setMessage("Some settings were modified. Do you wish to confirm those settings? If not, all changes will be lost.")
         	.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-    				manetManagerAdapter.manetHelper.sendManetConfigUpdateCommand(manetcfg);
-    				if (manetManagerAdapter.adhocStateEnum == AdhocStateEnum.STARTED) {
+    				app.manet.sendManetConfigUpdateCommand(manetcfg);
+    				if (app.adhocState == AdhocStateEnum.STARTED) {
     					openRestartDialog();
     				} else {
     					finish();
@@ -497,6 +521,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
    	}
 	
 	private void openRestartDialog() {
+		Log.v(TAG, "openRestartDialog()");
 		new AlertDialog.Builder(this)
         	.setTitle("Restart Ad-Hoc mode?")
         	.setMessage("Some settings were modified. " +
@@ -504,8 +529,8 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
         			"Do you wish to restart it now?")
         	.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                	manetManagerAdapter.displayToastMessage("Restarting Ad-Hoc mode. Please wait ...");
-                	manetManagerAdapter.manetHelper.sendRestartAdhocCommand();
+                	app.displayToastMessage("Restarting Ad-Hoc mode. Please wait ...");
+    				app.manet.sendRestartAdhocCommand();
     				finish();
                 }
         	})
@@ -524,6 +549,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     
     Handler restartingDialogHandler = new Handler(){
         public void handleMessage(Message msg) {
+        	Log.v(TAG, "restartingDialogHandler handleMessage()");
         	if (msg.what == 0) {
         		showDialog(ID_DIALOG_RESTARTING);
         	} else {
@@ -536,12 +562,12 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     
    Handler displayToastMessageHandler = new Handler() {
         public void handleMessage(Message msg) {
+        	Log.v(TAG, "displayToastMessageHandler handleMessage()");
        		if (msg.obj != null) {
-       			manetManagerAdapter.displayToastMessage((String)msg.obj);
+       			app.displayToastMessage((String)msg.obj);
        		}
         	super.handleMessage(msg);
         	System.gc();
         }
     };
-	
 }

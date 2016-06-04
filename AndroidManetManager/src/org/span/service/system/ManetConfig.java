@@ -13,12 +13,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.span.service.routing.OlsrProtocol;
 
+import android.util.Log;
+
 
 
 // data container to be passed to/from applications and the MANET service
 public class ManetConfig implements Serializable {
 
 	// static variables
+	
+	public static String TAG = "ManetConfig";
 	
 	// automatically configured or derived
 	public static final String DEVICE_TYPE_KEY 				= "device.type";			// galaxys2epictouch, etc.
@@ -63,6 +67,7 @@ public class ManetConfig implements Serializable {
 	// enumerations
 	
 	public static <T extends Enum<T>> T getEnumFromString(Class<T> c, String str) {
+		Log.v(TAG,"getEnumFromString()");
 		if( c != null && str != null ) {
 			T vals[] = c.getEnumConstants();
 			for (int i = 0; i < vals.length; i++) {
@@ -75,6 +80,7 @@ public class ManetConfig implements Serializable {
 	}
 	
 	public static <T extends Enum<T>> String[] getStringValuesFromEnum(Class<T> c) {
+		Log.v(TAG,"getStringValuesFromEnum()");
 		T vals[] = c.getEnumConstants();
 		String strvals[] = new String[vals.length];
 		for (int i = 0; i < vals.length; i++) {

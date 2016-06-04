@@ -32,9 +32,12 @@ import org.span.service.system.ManetConfig.WifiEncryptionSetupMethodEnum;
 
 
 import android.os.Build;
+import android.util.Log;
 
 public class DeviceConfig {
 
+	public static String TAG = "DeviceConfig";
+	
 	public static final String DEVICE_NEXUSONE   		= "nexusone";
 	public static final String DEVICE_GALAXY1X   		= "galaxy1x";
 	public static final String DEVICE_GALAXY2X   		= "galaxy2x";
@@ -72,6 +75,7 @@ public class DeviceConfig {
 	 */
 
 	public static String getDeviceType() {
+		Log.v(TAG,"getDeviceType()");
 		/*
 		// UNTESTED
 		if ((new File("/system/lib/modules/bcm4329.ko")).exists() == true) {
@@ -152,6 +156,7 @@ public class DeviceConfig {
 	 * on wpa_supplicant-start
 	 */
 	public static String getWifiInterfaceDriver(String deviceType) {
+		Log.v(TAG,"getWifiInterfaceDriver()");
 		/*
 		if (deviceType.equals(DEVICE_DREAM)) {
 			return DRIVER_TIWLAN0;
@@ -176,6 +181,7 @@ public class DeviceConfig {
 	}
 
 	public static String getWifiInterface(String deviceType) {
+		Log.v(TAG,"getWifiInterface()");
 		if (deviceType.equals(DEVICE_GALAXYNEXUS) ||
 				deviceType.equals(DEVICE_TRANSFORMERPRIME) ||
 				deviceType.equals(DEVICE_NEXUS7) ||
@@ -195,6 +201,7 @@ public class DeviceConfig {
 	 * Returns the wpa_supplicant-driver which should be used on wpa_supplicant-start
 	 */
 	public static WifiEncryptionSetupMethodEnum getEncryptionAutoMethod(String deviceType) {
+		Log.v(TAG,"getEncryptionAutoMethod()");
 		if (deviceType.equals(DEVICE_LEGEND) || deviceType.equals(DEVICE_NEXUSONE)) {
 			return WifiEncryptionSetupMethodEnum.IWCONFIG;
 		}
@@ -207,6 +214,7 @@ public class DeviceConfig {
 	 * @return
 	 */
 	public static boolean enableFixPersist(String deviceType) {
+		Log.v(TAG,"enableFixPersist()");
 		if ((new File("/system/lib/modules/tiwlan_drv.ko")).exists() == true
 				&& (new File("/system/etc/wifi/fw_wlan1271.bin")).exists() == true
 				&& getWifiInterfaceDriver(getDeviceType()).equals(DRIVER_WEXT) == true){
@@ -224,6 +232,7 @@ public class DeviceConfig {
 	 * @return
 	 */
 	public static boolean enableFixRoute() {
+		Log.v(TAG,"enableFixRoute()");
 		if ((new File("/system/etc/iproute2/rt_tables")).exists() == true
 				&& CoreTask.getProp("ro.product.manufacturer").equalsIgnoreCase("HTC")) {
 			return true;
@@ -233,6 +242,7 @@ public class DeviceConfig {
 
 	// TODO: update this method to work with modern devices
     public static boolean hasKernelFeature(String feature) {
+    	Log.v(TAG,"hasKernelFeature()");
     	try {
 			File cfg = new File("/proc/config.gz");
 			if (cfg.exists() == false) {
@@ -257,7 +267,7 @@ public class DeviceConfig {
     }
 
     public static boolean loadKernelModules(String deviceType) {
-
+    	Log.v(TAG,"loadKernelModules()");
     	boolean success = true;
 
     	if (deviceType.equals(DEVICE_TRANSFORMERPRIME)) {

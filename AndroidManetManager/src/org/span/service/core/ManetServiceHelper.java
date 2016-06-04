@@ -132,6 +132,7 @@ public class ManetServiceHelper {
 	private ManetServiceHelper() {}
 	
 	public static ManetServiceHelper getInstance() {
+		Log.v(TAG,"getInstance()");
 		if (instance == null) {
 			instance = new ManetServiceHelper();
 		}
@@ -139,6 +140,7 @@ public class ManetServiceHelper {
 	}
 	
 	public void setService(ManetService service) {
+		Log.v(TAG,"setService()");
 		this.service = service;
 	}
 	
@@ -232,6 +234,7 @@ public class ManetServiceHelper {
 	
 	// TODO: consider eventually using a factory class to mix-and-match protocol modules based on settings
 	private RoutingProtocol createRoutingProtocol() {
+		Log.v(TAG,"createRoutingProtocol()");
 		if (manetcfg.getRoutingProtocol().equals(SimpleProactiveProtocol.NAME)) {
 			return new SimpleProactiveProtocol();
 		} else if (manetcfg.getRoutingProtocol().equals(OlsrProtocol.NAME)) {
@@ -242,10 +245,12 @@ public class ManetServiceHelper {
 	}
 	
 	private void displayToastMessage(String message) {
+		Log.v(TAG,"displayToastMessage()");
 		Toast.makeText(service, message, Toast.LENGTH_LONG).show();
 	}
 	
 	private boolean setBluetoothState(boolean enabled) {
+		Log.v(TAG,"setBluetoothState()");
 		boolean connected = false;
 		if (enabled == false) {
 			this.bluetoothService.stopBluetooth();
@@ -264,7 +269,7 @@ public class ManetServiceHelper {
 	}
 	
 	private void updateConfigs(ManetConfig cfg) {
-		
+		Log.v(TAG,"updateConfigs()");
 		manetcfg = manetcfgHelper.update(cfg); // determine derived settings
 		
 		long startStamp = System.currentTimeMillis();
@@ -372,7 +377,7 @@ public class ManetServiceHelper {
 	}
 
 	public void handleStartAdhocCommand(Message rxmessage) {
-		
+		Log.v(TAG,"handleStartAdhocCommand()");
 		boolean cont = true;
 		
 		if (manetcfg.isUsingBluetooth()) {
@@ -447,7 +452,7 @@ public class ManetServiceHelper {
     	// this.trafficCounterEnable(false);
 		// this.dnsUpdateEnable(false);
 		// this.clientConnectEnable(false);
-    	
+		Log.v(TAG,"handleStopAdhocCommand()");
     	releaseLocks();
     	
     	if (intentReceiver != null) {
@@ -487,17 +492,20 @@ public class ManetServiceHelper {
 	}
 	
 	public void handleRestartAdhocCommand(Message rxmessage) {
+		Log.v(TAG,"handleRestartAdhocCommand()");
 		handleStopAdhocCommand(rxmessage);
 		handleStartAdhocCommand(rxmessage);
 	}
 	
 	public void handleManetConfigUpdateCommand(Message rxmessage) {
+		Log.v(TAG,"handleManetConfigUpdateCommand()");
 		Bundle data = rxmessage.getData();
 		ManetConfig cfg = (ManetConfig)data.getSerializable(ManetService.CONFIG_KEY);
 		updateConfigs(cfg);
 	}
 	
 	public void handleManetConfigLoadCommand(Message rxmessage) {
+		Log.v(TAG,"handleManetConfigLoadCommand()");
 		Bundle data = rxmessage.getData();
 		String filename = data.getString(ManetService.FILE_KEY);
 		ManetConfig cfg = manetcfgHelper.readConfig(filename);
@@ -506,11 +514,12 @@ public class ManetServiceHelper {
 	}
     
     public void handleAdhocStatusQuery(Message rxmessage) {
+    	Log.v(TAG,"handleAdhocStatusQuery()");
     	updateAdhocState(rxmessage);
     }
     
     private void updateAdhocState(Message rxmessage) {
-    	
+    	Log.v(TAG,"updateAdhocState()");
     	try {
 	    	boolean routingProtocolRunning = false;
 	    	String routingProtocolName = "Routing";
@@ -563,7 +572,8 @@ public class ManetServiceHelper {
     }
     
     public synchronized void updateLog(String content) {
-		Bundle data = new Bundle();
+    	Log.v(TAG,"updateLog()");
+    	Bundle data = new Bundle();
 		data.putString(ManetService.LOG_KEY, content);
     	
 		// send broadcast
@@ -573,6 +583,7 @@ public class ManetServiceHelper {
     }
     
     public void handleManetConfigQuery(Message rxmessage) {
+    	Log.v(TAG,"handleManetConfigQuery()");
     	try {
     		Bundle data = new Bundle();
     		data.putSerializable(ManetService.CONFIG_KEY, manetcfg);
@@ -589,6 +600,7 @@ public class ManetServiceHelper {
     }
     
     public void handlePeersQuery(Message rxmessage) {
+    	Log.v(TAG,"handlePeersQuery()");
     	try {
         	HashSet<Node> peers = routingProtocol.getPeers();
     		
@@ -605,8 +617,9 @@ public class ManetServiceHelper {
     		e.printStackTrace();
     	}
     }
-
-	public void handleRoutingInfoQuery(Message rxmessage) {
+    
+    public void handleRoutingInfoQuery(Message rxmessage) {
+    	Log.v(TAG,"handleRoutingInfoQuery()");
     	try {
         	String info = routingProtocol.getInfo();
     		
@@ -651,6 +664,7 @@ public class ManetServiceHelper {
 
     // disable the default wifi interface for this device
     private void disableWifi() {
+    	Log.v(TAG,"desabledWifi()");
     	if (origWifiState = this.wifiManager.isWifiEnabled()) {
     		this.wifiManager.setWifiEnabled(false);
     		Log.d(TAG, "Wifi disabled!");
@@ -665,6 +679,7 @@ public class ManetServiceHelper {
     
     // enable the default wifi interface for this device
     private void enableWifi() {
+    	Log.v(TAG,"enableWifi()");
     	// re-enable only if enabled before previously disabled
     	if (origWifiState) {
         	// Waiting for interface-restart
@@ -679,6 +694,7 @@ public class ManetServiceHelper {
     }
     
 	public void acquireLocks() {
+		Log.v(TAG,"acquireLocks()");
 		try {
 			Log.d(TAG, "Trying to acquire locks now");
 			
@@ -696,6 +712,7 @@ public class ManetServiceHelper {
 	}
 	
 	private void releaseLocks() {
+		Log.v(TAG,"releaseLocks()");
 		try {
 			Log.d(TAG, "Trying to release locks now");
 			wakeLock.release();
@@ -709,15 +726,18 @@ public class ManetServiceHelper {
 	}
     
 	private boolean binariesExists() {
+		Log.v(TAG,"binariesExists()");
     	File file = new File(CoreTask.DATA_FILE_PATH + "/bin/adhoc");
     	return file.exists();
     }
     
 	private void installWpaSupplicantConfig() {
+		Log.v(TAG,"installWpaSupplicantConfig()");
     	copyFile(CoreTask.DATA_FILE_PATH + "/conf/wpa_supplicant.conf", "0644", R.raw.wpa_supplicant_conf);
     }
     
 	private void installHostapdConfig() {
+		Log.v(TAG,"installHostapdConfig()");
     	if (deviceType.equals(DeviceConfig.DEVICE_DROIDX)) {
     		copyFile(CoreTask.DATA_FILE_PATH + "/conf/hostapd.conf", "0644", R.raw.hostapd_conf_droidx);
     	} else if (deviceType.equals(DeviceConfig.DEVICE_BLADE)) {
@@ -726,7 +746,7 @@ public class ManetServiceHelper {
     }
 
 	private void installFiles() {
-    	
+		Log.v(TAG,"installFiles()");
 		String message = null;
 		
 		// check if manet file on SD card
@@ -869,6 +889,7 @@ public class ManetServiceHelper {
     }
     
     private String copyFile(String filename, String permission, int ressource) {
+    	Log.v(TAG,"copyFile()");
     	String result = copyFile(filename, ressource);
     	if (result != null) {
     		return result;
@@ -880,6 +901,7 @@ public class ManetServiceHelper {
     }
     
     private String copyFile(String filename, int ressource) {
+    	Log.v(TAG,"copyFile2()");
     	File outFile = new File(filename);
     	if (!outFile.exists()) { // don't overwrite existing files
 	    	Log.d(TAG, "Copying file '" + filename + "' ...");
@@ -901,6 +923,7 @@ public class ManetServiceHelper {
     }
     
     private void checkDirs() {
+    	Log.v(TAG,"checkDirs()");
     	File dir = new File(CoreTask.DATA_FILE_PATH);
     	if (dir.exists() == false) {
     			// this.displayToastMessage("Application data-dir does not exist!");
@@ -975,13 +998,15 @@ public class ManetServiceHelper {
     	
     	@Override
         public void handleMessage(Message msg) {
-       		if (msg.obj != null) {
+    		Log.v(TAG,"DisplayMessageHandler handleMessage()");
+    		if (msg.obj != null) {
        			displayToastMessage((String)msg.obj);
        		}
         	super.handleMessage(msg);
         }
     	
     	public void sendMessage(String content) {
+    		Log.v(TAG,"DisplayMessageHandle sendMessage()");
     		Message msg = new Message();
     		msg.obj = content;
     		this.sendMessage(msg);
@@ -991,6 +1016,7 @@ public class ManetServiceHelper {
     private class IntentReceiver extends BroadcastReceiver {
     	@Override
         public void onReceive(Context context, Intent intent) {   		 
+    		Log.v(TAG,"IntentReceiver onReceive()");
     		String action = intent.getAction();
             
     		if (action.equals(Intent.ACTION_SCREEN_OFF)) {
@@ -1018,6 +1044,7 @@ public class ManetServiceHelper {
     
     public void updatePeers() {
         // Log.i("ManetServiceHelper","updatePeers");
+    	Log.v(TAG,"updatePeers()");
         Bundle data = new Bundle();
         data.putSerializable(ManetService.PEERS_KEY, routingProtocol.getPeers());
 

@@ -18,10 +18,12 @@ public class RoutingIgnoreListConfig extends HashMap<String, String> {
 	private List<String> routingIgnoreList = null;
 	
 	public void set(List<String> routingIgnoreList) {
+		Log.v(TAG,"set()");
 		this.routingIgnoreList = routingIgnoreList;
 	}
 	
 	public boolean write() {
+		Log.v(TAG,"write()");
     	StringBuffer buffer = new StringBuffer();;
     	for (String addr : routingIgnoreList) {  		
     		buffer.append(addr+"\n");

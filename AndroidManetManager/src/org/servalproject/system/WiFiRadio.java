@@ -28,17 +28,21 @@ import android.util.Log;
 
 public class WiFiRadio {
 
+	public static String TAG = "WifiRadio";
+	
 	// WifiManager
 	private WifiManager wifiManager = null;
 	private WifiApControl wifiApManager = null;
 	
 	public WiFiRadio(Context context) {
+		Log.v(TAG, "WifiRaio Constructor");
 		// init wifiManager
 		wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		wifiApManager = WifiApControl.getApControl(wifiManager);
 	}
 
 	private void waitForApState(int newState) throws IOException {
+		Log.v(TAG, "waitForApState()");
 		for (int i = 0; i < 50; i++) {
 
 			int state = wifiApManager.getWifiApState();
@@ -60,6 +64,7 @@ public class WiFiRadio {
 	}
 
 	private void waitForApEnabled(boolean enabled) throws IOException {
+		Log.v(TAG, "waitForApEnabled()");
 		for (int i = 0; i < 50; i++) {
 			if (enabled == this.wifiApManager.isWifiApEnabled())
 				return;
@@ -72,6 +77,7 @@ public class WiFiRadio {
 	}
 
 	public void startAp(String ssid) throws IOException {
+		Log.v(TAG, "startAp()");
 		int tries = 0;
 
 		WifiConfiguration netConfig = new WifiConfiguration();
@@ -106,6 +112,7 @@ public class WiFiRadio {
 	}
 
 	public void stopAp() throws IOException {
+		Log.v(TAG, "stopAp()");
 		if (!this.wifiApManager.setWifiApEnabled(null, false))
 			throw new IOException("Failed to control access point mode");
 		waitForApState(WifiApControl.WIFI_AP_STATE_DISABLED);

@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.span.manager.ManetManagerAdapter;
+import org.span.manager.ManetManagerApp;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -65,6 +65,7 @@ import android.util.Log;
  *
  */
 public class RequestThread extends Thread {
+	public static final String TAG = "ReuestThread";
 
     public RequestThread(Socket socket, File rootDir) {
         _socket = socket;
@@ -72,7 +73,8 @@ public class RequestThread extends Thread {
     }
 
     private static void sendHeader(BufferedOutputStream out, int code, String contentType, long contentLength, long lastModified) throws IOException {
-        out.write(("HTTP/1.0 " + code + " OK\r\n" +
+    	Log.v(TAG, "sendHeader()");
+    	out.write(("HTTP/1.0 " + code + " OK\r\n" +
                    "Date: " + new Date().toString() + "\r\n" +
                    "Server: JibbleWebServer/1.0\r\n" +
                    "Content-Type: " + contentType + "\r\n" +
@@ -83,12 +85,14 @@ public class RequestThread extends Thread {
     }
 
     private static void sendError(BufferedOutputStream out, int code, String message) throws IOException {
-        message = message + "<hr>" + SimpleWebServer.VERSION;
+    	Log.v(TAG, "sendError()");
+    	message = message + "<hr>" + SimpleWebServer.VERSION;
         sendHeader(out, code, "text/html", message.length(), System.currentTimeMillis());
         out.write(message.getBytes());
     }
 
 	private String appName(PackageManager packageManager, PackageInfo info) {
+		Log.v(TAG, "appName()");
 		ApplicationInfo appInfo = info.applicationInfo;
 		if (appInfo == null
 				|| (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0)
@@ -102,6 +106,7 @@ public class RequestThread extends Thread {
 	}
 
 	private class HTTPException extends Exception {
+		
 		private static final long serialVersionUID = 1L;
 
 		int code;
@@ -110,6 +115,7 @@ public class RequestThread extends Thread {
 			super(text);
 			this.code = code;
 		}
+		
 	}
 
     @Override
@@ -138,7 +144,7 @@ public class RequestThread extends Thread {
 				if (path.equals("/packages")) {
 
 					final PackageManager packageManager = 
-							ManetManagerAdapter.getInstance().getPackageManager();
+							ManetManagerApp.getInstance().getPackageManager();
 					List<PackageInfo> packages = packageManager
 							.getInstalledPackages(0);
 					Set<PackageInfo> sortedPackages = new TreeSet<PackageInfo>(
@@ -194,7 +200,7 @@ public class RequestThread extends Thread {
 
 					if (path.startsWith("/packages/")) {
 						final PackageManager packageManager = 
-								ManetManagerAdapter.getInstance().getPackageManager();
+								ManetManagerApp.getInstance().getPackageManager();
 
 						PackageInfo info = packageManager.getPackageInfo(
 								path.substring(path.lastIndexOf('/') + 1,

@@ -22,13 +22,11 @@
     <uses-permission android:name="org.span.permission.MANET" />
     
     <!-- NOTE: receiver and service tags must be embedded within application tag -->
-    <application android:name="org.span.manager.ManetManagerAdapter"
+    <application android:name="org.span.manager.ManetManagerApp"
         android:icon="@drawable/service_icon_64" 
         android:logo="@drawable/service_icon_64" 
         android:label="@string/global_app_name"
-        >
-        
-        
+        android:debuggable="true">
         
         <activity android:name=".manager.MainActivity"
             android:label="@string/global_app_name" 

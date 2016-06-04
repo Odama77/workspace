@@ -1,3 +1,7 @@
+/**
+ *  SPAN - Smart Phone Ad-Hoc Networking project
+ *  Copyright (c) 2012 The MITRE Corporation.
+ */
 package org.span.manager;
 
 import java.net.DatagramPacket;
@@ -18,6 +22,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -27,15 +32,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 public class SendMessageActivity extends Activity implements OnItemSelectedListener, ManetObserver {
+	
+	public static String TAG = "SendMessageActivity";
+	
 	private static final String PROMPT = "Enter address ...";
 	
-	private ManetManagerAdapter manetManagerAdapter = null;
+	private ManetManagerApp app = null;
     
     private Spinner spnDestination = null;
-//    private EditText etAddress = null;
-//    private EditText etMessage = null;
-//    private Button btnSend = null;
-//    private Button btnCancel = null;
+    private EditText etAddress = null;
+    private EditText etMessage = null;
+    private Button btnSend = null;
+    private Button btnCancel = null;
     
     private String selection = null;
     
@@ -44,80 +52,82 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);	
 		
+		Log.v(TAG, "onCreate()");
+		
         // init application
-		manetManagerAdapter = (ManetManagerAdapter)getApplication();
+        app = (ManetManagerApp)getApplication();
 		
-//		setContentView(R.layout.sendmessageview);
+		setContentView(R.layout.sendmessageview);
 		
-		manetManagerAdapter = (ManetManagerAdapter)getApplication();
+	    app = (ManetManagerApp)getApplication();
 	    
-//	    etAddress = (EditText) findViewById(R.id.etAddress);
-//	    etMessage = (EditText) findViewById(R.id.etMessage);
+	    etAddress = (EditText) findViewById(R.id.etAddress);
+	    etMessage = (EditText) findViewById(R.id.etMessage);
 	    
-		manetManagerAdapter.manetHelper.registerObserver(this);
-		manetManagerAdapter.manetHelper.sendPeersQuery();
+	    app.manet.registerObserver(this);
+	    app.manet.sendPeersQuery();
 	    
-//	    spnDestination = (Spinner) findViewById(R.id.spnDestination);
-//	    spnDestination.setOnItemSelectedListener(this);
+	    spnDestination = (Spinner) findViewById(R.id.spnDestination);
+	    spnDestination.setOnItemSelectedListener(this);
 		
-//	    btnSend = (Button) findViewById(R.id.btnSend);
-//	    btnSend.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//	  			String destination = (String) spnDestination.getSelectedItem();
-//	  			String msg = etMessage.getText().toString();
-//	  			String address = null;
-//	  			String error = null, errorMsg = "";
-//	  			if (selection.equals(PROMPT)) {
-//	  				address = etAddress.getText().toString();
-//  					// remove user id
-//	  				if (address.contains("(")) {
-//	  					address = address.split("(")[0];
-//	  				}
-//		  			if (!Validation.isValidIpAddress(address)) {
-//		  				error = "Invalid IP address.";
-//						errorMsg += error + "\n";
-//		  			}
-//	  			} else {
-//	  				address = destination;
-//	  			}
-//	  			if (destination == null) {
-//	  				error = "Destination is empty.";
-//					errorMsg += error + "\n";
-//	  			}
-//	  			if (msg.isEmpty()) {
-//	  				error = "Message is empty.";
-//	  				errorMsg += error + "\n";
-//	  			}
-//	  			if (errorMsg.isEmpty()) {
-//	  				msg = manetManagerAdapter.manetConfig.getIpAddress() + " (" + manetManagerAdapter.manetConfig.getUserId() + ")\n" + msg;
-//	  				String retval = null;
-//	  				try {
-//	  					SendMessageTask task = new SendMessageTask();
-//	  					task.execute(new String[] {address, msg});
-//	  					retval = task.get();
-//	  				} catch (Exception e) {
-//	  					retval = "Error: " + e.getMessage();
-//	  				}
-//	  				manetManagerAdapter.displayToastMessage(retval);
-//	  			} else {
-//	  				// show error messages
-//	  				AlertDialog.Builder builder = new AlertDialog.Builder(SendMessageActivity.this);
-//	  				builder.setTitle("Please Make Corrections")
-//	  					.setMessage(errorMsg.trim())
-//	  					.setCancelable(false)
-//	  					.setPositiveButton("OK", null);
-//	  				AlertDialog alert = builder.create();
-//	  				alert.show();
-//	  			}
-//	  		}
-//		});
+	    btnSend = (Button) findViewById(R.id.btnSend);
+	    btnSend.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+	  			String destination = (String) spnDestination.getSelectedItem();
+	  			String msg = etMessage.getText().toString();
+	  			String address = null;
+	  			String error = null, errorMsg = "";
+	  			if (selection.equals(PROMPT)) {
+	  				address = etAddress.getText().toString();
+  					// remove user id
+	  				if (address.contains("(")) {
+	  					address = address.split("(")[0];
+	  				}
+		  			if (!Validation.isValidIpAddress(address)) {
+		  				error = "Invalid IP address.";
+						errorMsg += error + "\n";
+		  			}
+	  			} else {
+	  				address = destination;
+	  			}
+	  			if (destination == null) {
+	  				error = "Destination is empty.";
+					errorMsg += error + "\n";
+	  			}
+	  			if (msg.isEmpty()) {
+	  				error = "Message is empty.";
+	  				errorMsg += error + "\n";
+	  			}
+	  			if (errorMsg.isEmpty()) {
+	  				msg = app.manetcfg.getIpAddress() + " (" + app.manetcfg.getUserId() + ")\n" + msg;
+	  				String retval = null;
+	  				try {
+	  					SendMessageTask task = new SendMessageTask();
+	  					task.execute(new String[] {address, msg});
+	  					retval = task.get();
+	  				} catch (Exception e) {
+	  					retval = "Error: " + e.getMessage();
+	  				}
+	  			    app.displayToastMessage(retval);
+	  			} else {
+	  				// show error messages
+	  				AlertDialog.Builder builder = new AlertDialog.Builder(SendMessageActivity.this);
+	  				builder.setTitle("Please Make Corrections")
+	  					.setMessage(errorMsg.trim())
+	  					.setCancelable(false)
+	  					.setPositiveButton("OK", null);
+	  				AlertDialog alert = builder.create();
+	  				alert.show();
+	  			}
+	  		}
+		});
 	    
-//	    btnCancel = (Button) findViewById(R.id.btnCancel);
-//	  	btnCancel.setOnClickListener(new View.OnClickListener() {
-//	  		public void onClick(View v) {
-//				finish();
-//	  		}
-//		});
+	    btnCancel = (Button) findViewById(R.id.btnCancel);
+	  	btnCancel.setOnClickListener(new View.OnClickListener() {
+	  		public void onClick(View v) {
+				finish();
+	  		}
+		});
     }
 	
 	
@@ -138,11 +148,13 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	
 	@Override
 	public void onDestroy() {
+		Log.v(TAG, "onDestroy()");
 		super.onDestroy();
-		manetManagerAdapter.manetHelper.unregisterObserver(this);
+		app.manet.unregisterObserver(this);
 	}
 	
 	public static void open(Activity parentActivity) {
+		Log.v(TAG, "open()");
 		Intent it = new Intent("android.intent.action.SEND_MESSAGE_ACTION");
 		parentActivity.startActivity(it);
 	}
@@ -150,15 +162,16 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-//		selection = (String)spnDestination.getItemAtPosition(position);
-//		if (selection.equals(PROMPT)) {
-//			etAddress.setVisibility(EditText.VISIBLE);
-//			etAddress.setText(manetManagerAdapter.manetConfig.getIpNetwork());
-//			etAddress.setSelection(etAddress.getText().length()); // move cursor to end
-//			manetManagerAdapter.focusAndshowKeyboard(etAddress);
-//		} else {
-//			etAddress.setVisibility(EditText.GONE);
-//		}
+		Log.v(TAG, "onItemSelected()");
+		selection = (String)spnDestination.getItemAtPosition(position);
+		if (selection.equals(PROMPT)) {
+			etAddress.setVisibility(EditText.VISIBLE);
+			etAddress.setText(app.manetcfg.getIpNetwork());
+			etAddress.setSelection(etAddress.getText().length()); // move cursor to end
+			app.focusAndshowKeyboard(etAddress);
+		} else {
+			etAddress.setVisibility(EditText.GONE);
+		}
 	}
 
 	@Override
@@ -170,6 +183,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		 
 		 @Override
 		 protected String doInBackground(String... params) {
+			Log.v(TAG, "doInBackground()");
 			String address = params[0]; 
 			String msg = params[1];  
 			String retval = sendMessage(address, msg);
@@ -178,7 +192,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		 }
 		 
 		 private String sendMessage(String address, String msg) {
-
+			 Log.v(TAG, "sendMessage()");
 			 	String retval = null;
 				DatagramSocket socket = null;
 				try {
@@ -265,8 +279,9 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	@Override
 	public void onPeersUpdated(HashSet<Node> peers) {
 		// provide option to enter peer address
+		Log.v(TAG, "onPeersUpdated()");
 		Set<String> options = new TreeSet<String>();
-		options.add(manetManagerAdapter.manetConfig.getIpBroadcast() + " (Broadcast)");
+		options.add(app.manetcfg.getIpBroadcast() + " (Broadcast)");
 		options.add(PROMPT);
 		
 		String option = null;
