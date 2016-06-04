@@ -1,0 +1,5 @@
+06-04 16:37:37.870: D/dalvikvm(14112): GC_FOR_ALLOC freed 467K, 7% free 7848K/8436K, paused 29ms, total 29ms
+06-04 16:37:45.870: D/dalvikvm(14112): GC_FOR_ALLOC freed 460K, 8% free 7840K/8436K, paused 29ms, total 30ms
+06-04 16:37:51.620: V/MessageService(14059): showNotification()
+06-04 16:37:53.860: D/dalvikvm(14112): GC_FOR_ALLOC freed 467K, 7% free 7848K/8436K, paused 29ms, total 29ms
+06-04 16:38:01.860: D/dalvikvm(14112): GC_FOR_ALLOC freed 467K, 7% free 7848K/8436K, paused 28ms, total 28ms
