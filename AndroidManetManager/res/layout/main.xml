@@ -20,8 +20,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10px"
-            android:layout_marginTop="10px"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/battery"
             android:gravity="center" >
 
@@ -29,7 +29,7 @@
                 android:id="@+id/batteryTempText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="5px"
+                android:paddingRight="5dp"
                 android:text="N/A"
                 android:textColor="#000000"
                 android:textSize="12sp"
@@ -40,8 +40,8 @@
 		    android:layout_width="wrap_content"
    			android:layout_height="wrap_content"
    			android:layout_gravity="center_vertical"
-   			android:layout_marginLeft="100px"
-   			android:layout_marginTop="5px"
+   			android:layout_marginLeft="100dp"
+   			android:layout_marginTop="5dp"
    			android:orientation="vertical" >
        
 			<LinearLayout 
@@ -101,9 +101,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="10px"
-            android:layout_marginTop="10px"
-            android:gravity="center" />		
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:contentDescription="@null"/>		
 		
     </RelativeLayout>
 
@@ -121,8 +122,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:paddingLeft="5px"
-            android:paddingRight="5px"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:text=""
             android:textColor="#ffffff"
             android:textStyle="bold" />
@@ -134,18 +135,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:max="100"
-            android:paddingLeft="5px"
-            android:paddingRight="5px"
-            android:paddingTop="22px" />
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="22dp" />
 
         <TextView
             android:id="@+id/progressText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:paddingLeft="5px"
-            android:paddingRight="5px"
-            android:paddingTop="40px"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="40dp"
             android:text=""
             android:textColor="#ffffff"
             android:textStyle="bold" />
@@ -177,14 +178,15 @@
                             android:layout_width="180dp"
                             android:layout_height="135dp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/adhoc_off" />
+                            android:src="@drawable/adhoc_off"
+                            android:contentDescription="@null" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
                             android:layout_gravity="center_vertical"
-                            android:paddingTop="10px"
+                            android:paddingTop="10dp"
                             android:text="@string/main_layout_presstostart"
                             android:textColor="#FFFFFFFF"
                             android:textStyle="bold" />
@@ -208,14 +210,15 @@
                             android:layout_width="180dp"
                             android:layout_height="135dp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/adhoc_on" />
+                            android:src="@drawable/adhoc_on"
+                            android:contentDescription="@null" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
                             android:layout_gravity="center_vertical"
-                            android:paddingTop="10px"
+                            android:paddingTop="10dp"
                             android:text="@string/main_layout_presstostop"
                             android:textColor="#FFFFFFFF"
                             android:textStyle="bold" />

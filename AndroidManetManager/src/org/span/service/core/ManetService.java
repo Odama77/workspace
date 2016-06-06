@@ -123,7 +123,7 @@ public class ManetService extends Service {
 			icon = R.drawable.adhoc_off_notification;
 		}
 		
-    	if (notification == null || notification.icon != icon) {    		
+    	if (notification == null || notification.icon != icon) {	
 	    	// set the icon, ticker text, and timestamp        
 	    	notification = new Notification(icon, content, System.currentTimeMillis());
 	    	

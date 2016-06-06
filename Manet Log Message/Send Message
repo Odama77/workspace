@@ -1,5 +1,4 @@
-06-04 16:39:05.870: D/dalvikvm(14112): GC_FOR_ALLOC freed 460K, 7% free 7848K/8436K, paused 37ms, total 38ms
-06-04 16:39:13.870: D/dalvikvm(14112): GC_FOR_ALLOC freed 471K, 7% free 7848K/8436K, paused 29ms, total 29ms
+//This is when you click the button to go to the menu
 06-04 16:39:13.980: V/MainActivity(14059): onCreateOptionsMenu()
 06-04 16:39:17.040: V/MainActivity(14059): onOptionsItemSelected()
 06-04 16:39:17.040: V/SendMessageActivity(14059): open()
@@ -9,22 +8,21 @@
 06-04 16:39:17.100: V/ManetContext(14059): sendMessage()
 06-04 16:39:17.100: V/ManetService(14112): IncomingHandler handleMessage()
 06-04 16:39:17.100: V/ManetServiceHelper(14112): handlePeersQuery()
-06-04 16:39:17.210: D/dalvikvm(14059): GC_FOR_ALLOC freed 206K, 3% free 9914K/10156K, paused 20ms, total 21ms
 06-04 16:39:17.250: V/ManetContext(14059): IncomingHandler handleMessage()
 06-04 16:39:17.260: V/SendMessageActivity(14059): onPeersUpdated()
 06-04 16:39:17.260: D/MainActivity(14059): onPeersUpdated()
 06-04 16:39:17.310: V/SendMessageActivity(14059): onItemSelected()
 06-04 16:39:17.700: D/MainActivity(14059): onStop()
-06-04 16:39:20.860: D/dalvikvm(14112): GC_FOR_ALLOC freed 465K, 8% free 7842K/8436K, paused 28ms, total 28ms
-06-04 16:39:27.010: V/SendMessageActivity(14059): doInBackground()
-06-04 16:39:27.010: V/SendMessageActivity(14059): sendMessage()
-06-04 16:39:27.010: V/MessageService(14059): showNotification()
-06-04 16:39:27.050: V/ManetManagerApp(14059): displayToastMessage()
-06-04 16:39:27.130: D/MainActivity(14059): onStart()
-06-04 16:39:27.130: D/MainActivity(14059): onResume()
-06-04 16:39:27.240: V/MainActivity(14059): onReceive()
-06-04 16:39:27.240: D/MainActivity(14059): Temp ==> 326 -- Celsius ==> 33 -- Fahrenheit ==> 90
-06-04 16:39:27.770: V/SendMessageActivity(14059): onDestroy()
-06-04 16:39:27.770: V/ManetContext(14059): unregisterObserver()
-06-04 16:39:28.860: D/dalvikvm(14112): GC_FOR_ALLOC freed 466K, 7% free 7849K/8436K, paused 25ms, total 26ms
-06-04 16:39:36.870: D/dalvikvm(14112): GC_FOR_ALLOC freed 465K, 7% free 7849K/8436K, paused 29ms, total 30ms
+
+//This is when you click click on send
+06-04 19:57:30.211: V/SendMessageActivity(31456): doInBackground()
+06-04 19:57:30.211: V/SendMessageActivity(31456): sendMessage()
+06-04 19:57:30.211: V/MessageService(31456): showNotification()
+06-04 19:57:30.221: V/ManetManagerApp(31456): displayToastMessage()
+06-04 19:57:30.221: V/SendMessageActivity(31456): 192.168.1.100 (Anonymous)
+06-04 19:57:30.221: V/SendMessageActivity(31456): testing
+06-04 19:57:30.271: D/MainActivity(31456): onStart()
+06-04 19:57:30.271: D/MainActivity(31456): onResume()
+06-04 19:57:30.341: V/MainActivity(31456): onReceive()
+06-04 19:57:30.891: V/SendMessageActivity(31456): onDestroy()
+06-04 19:57:30.891: V/ManetContext(31456): unregisterObserver()

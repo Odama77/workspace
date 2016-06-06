@@ -119,7 +119,10 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	  				AlertDialog alert = builder.create();
 	  				alert.show();
 	  			}
+	  			Log.v(TAG, msg);
 	  		}
+	  		
+	  		
 		});
 	    
 	    btnCancel = (Button) findViewById(R.id.btnCancel);

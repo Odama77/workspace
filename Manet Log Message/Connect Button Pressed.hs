@@ -423,12 +423,8 @@
 06-04 16:35:37.960: V/MainActivity(14059): showAdhocMode()
 06-04 16:35:37.960: V/ManetManagerApp(14059): displayToastMessage()
 06-04 16:35:37.980: D/ManetManagerApp(14112): onAdhocStateUpdated()
-06-04 16:35:38.850: D/dalvikvm(14112): GC_FOR_ALLOC freed 522K, 8% free 7806K/8436K, paused 19ms, total 19ms
 06-04 16:35:45.970: V/ManetServiceHelper(14112): getInstance()
 06-04 16:35:45.970: V/ManetServiceHelper(14112): updatePeers()
-06-04 16:35:46.020: D/dalvikvm(14112): GC_FOR_ALLOC freed 469K, 8% free 7827K/8436K, paused 29ms, total 30ms
 06-04 16:35:46.140: V/ManetContext(14112): onReceive()
 06-04 16:35:46.140: V/ManetContext(14059): onReceive()
 06-04 16:35:46.140: D/MainActivity(14059): onPeersUpdated()
-06-04 16:35:53.040: D/dalvikvm(14112): GC_FOR_ALLOC freed 524K, 8% free 7815K/8436K, paused 29ms, total 29ms
-06-04 16:36:01.880: D/dalvikvm(14112): GC_FOR_ALLOC freed 475K, 7% free 7848K/8436K, paused 34ms, total 34ms

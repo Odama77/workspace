@@ -85,9 +85,9 @@ public class MessageService extends Service {
     		new Notification(R.drawable.exclamation, tickerStr, System.currentTimeMillis());
     	  	
     	Intent intent = new Intent(this, ViewMessageActivity.class);
-    	if (extras != null) {
-    		intent.putExtras(extras);
-    	}
+//    	if (extras != null) {
+//    		intent.putExtras(extras);
+//    	}
     	
     	// NOTE: Use a unique notification id to ensure a new pending intent is created.
     	
@@ -113,7 +113,7 @@ public class MessageService extends Service {
     private class MessageListenerThread extends Thread {
     	
     	public void run() {
-    		
+    		Log.v(TAG, "We are here");
     		try {
     			// bind to local machine; will receive broadcasts and directed messages
     			// will most likely bind to 127.0.0.1 (localhost)
