@@ -23,7 +23,7 @@ public class MessageService extends Service {
 	public static String TAG = "MessageService";
 	
 	public static final int MESSAGE_PORT = 9000;
-	public static final int MAX_MESSAGE_LENGTH = 1024*1024; // 10;
+	public static final int MAX_MESSAGE_LENGTH = 3*1024*1024; // 10;
 	
 	public static final String MESSAGE_FROM_KEY = "message_from";
 	public static final String MESSAGE_CONTENT_KEY = "message_content";
@@ -82,12 +82,12 @@ public class MessageService extends Service {
     	
     	// set the icon, ticker text, and timestamp        
     	notification = 
-    		new Notification(R.drawable.exclamation, "Aca estamos", System.currentTimeMillis());
+    		new Notification(R.drawable.exclamation, tickerStr, System.currentTimeMillis());
     	  	
     	Intent intent = new Intent(this, ViewMessageActivity.class);
-    	if (extras != null) {
-    		intent.putExtras(extras);
-    	}
+//    	if (extras != null) {
+//    		intent.putExtras(extras);
+//    	}
     	
     	// NOTE: Use a unique notification id to ensure a new pending intent is created.
     	

@@ -191,14 +191,10 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		 protected String doInBackground(String... params) {
 			Log.v(TAG, "doInBackground()");
 			String address = params[0]; 
-			String msg = params[1]; 
-			try{
-				String retval = sendMessage(address, msg);
-				finish();
-				return retval;
-			}catch(Exception e){
-				return "";
-			}
+			String msg = params[1];  
+			String retval = sendMessage(address, msg);
+			finish();
+			return retval;
 		 }
 		 
 		 private String sendMessage(String address, String msg) throws IOException {
@@ -208,7 +204,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 			 	Socket socket = null;
 				try {
 					/*Amado section*/
-					socket = new Socket(address,6789);
+					socket = new Socket();
 //					socket = new DatagramSocket();
 					DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
 					
@@ -221,7 +217,8 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 						msgLen = MessageService.MAX_MESSAGE_LENGTH;
 						truncated = true;
 					}
-				
+					
+					
 //					DatagramPacket packet = 
 //							new DatagramPacket(buff, msgLen, InetAddress.getByName(address), MessageService.MESSAGE_PORT);
 //					socket.send(packet);

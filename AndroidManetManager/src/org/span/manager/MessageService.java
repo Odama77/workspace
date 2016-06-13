@@ -4,8 +4,13 @@
  */
 package org.span.manager;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import org.span.R;
 
@@ -113,25 +118,33 @@ public class MessageService extends Service {
     private class MessageListenerThread extends Thread {
     	
     	public void run() {
-    		Log.v(TAG, "We are here");
     		try {
     			// bind to local machine; will receive broadcasts and directed messages
     			// will most likely bind to 127.0.0.1 (localhost)
-    			DatagramSocket socket = new DatagramSocket(MESSAGE_PORT);
+//    			DatagramSocket socket = new DatagramSocket(MESSAGE_PORT);
+    			ServerSocket socket = new ServerSocket(MESSAGE_PORT);
     			
-    			byte[] buff = new byte[MAX_MESSAGE_LENGTH];
-				DatagramPacket packet = new DatagramPacket(buff, buff.length);
+//    			byte[] buff = new byte[MAX_MESSAGE_LENGTH];
+//				DatagramPacket packet = new DatagramPacket(buff, buff.length);
 				
 				while (true) {
 					try {
 						// address Android issue where old packet lengths are erroneously 
 						// carried over between packet reuse
-						packet.setLength(buff.length); 
+//						packet.setLength(buff.length); 
+						Socket connectionSocket = socket.accept();
 						
-						socket.receive(packet); // blocking
+						BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 						
-						String msg = new String(packet.getData(), 0, packet.getLength());
+						DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+//						socket.receive(packet); // blocking
+						
+//						String msg = new String(packet.getData(), 0, packet.getLength());
+						byte[] receivedData = inFromClient.readLine().getBytes();
+						String msg = new String(receivedData, 0, receivedData.length);
+//						String from = msg.substring(0, msg.indexOf("\n"));
 						String from = msg.substring(0, msg.indexOf("\n"));
+//						String content = msg.substring(msg.indexOf("\n")+1);
 						String content = msg.substring(msg.indexOf("\n")+1);
 						
 						String tickerStr = "New message";
@@ -141,6 +154,7 @@ public class MessageService extends Service {
 				    	extras.putString(MESSAGE_CONTENT_KEY, content);
 						
 						showNotification(tickerStr, extras);
+						outToClient.writeBytes("By Amado");
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
