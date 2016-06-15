@@ -4,9 +4,12 @@
  */
 package org.span.manager;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -188,18 +191,30 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		 protected String doInBackground(String... params) {
 			Log.v(TAG, "doInBackground()");
 			String address = params[0]; 
-			String msg = params[1];  
-			String retval = sendMessage(address, msg);
-			finish();
-			return retval;
+			String msg = params[1]; 
+			try{
+				String retval = sendMessage(address, msg);
+				finish();
+				return retval;
+			}catch(Exception e){
+				return "";
+			}
 		 }
 		 
-		 private String sendMessage(String address, String msg) {
+		 private String sendMessage(String address, String msg) throws IOException {
 			 Log.v(TAG, "sendMessage()");
 			 	String retval = null;
-				DatagramSocket socket = null;
+//				DatagramSocket socket = null;
+			 	Socket socket = null;
 				try {
-					socket = new DatagramSocket();
+					/*Amado section*/
+					Log.v(TAG, address);
+					socket = new Socket(address,6789);
+					Log.v(TAG, address);
+//					socket = new DatagramSocket();
+					DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+					
+					
 					
 					byte buff[] = msg.getBytes();
 					int msgLen = buff.length;
@@ -208,11 +223,12 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 						msgLen = MessageService.MAX_MESSAGE_LENGTH;
 						truncated = true;
 					}
-					
-					DatagramPacket packet = 
-							new DatagramPacket(buff, msgLen, InetAddress.getByName(address), MessageService.MESSAGE_PORT);
-					socket.send(packet);
-					
+				
+//					DatagramPacket packet = 
+//							new DatagramPacket(buff, msgLen, InetAddress.getByName(address), MessageService.MESSAGE_PORT);
+//					socket.send(packet);
+					outToServer.write(buff,0,msgLen);
+					/*Amado section End*/
 					if (truncated) {
 						retval = "Message truncated and sent.";
 					} else {

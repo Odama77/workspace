@@ -204,15 +204,13 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		 private String sendMessage(String address, String msg) throws IOException {
 			 Log.v(TAG, "sendMessage()");
 			 	String retval = null;
-				DatagramSocket socket = null;
-//			 	Socket socket = null;
+//				DatagramSocket socket = null;
+			 	Socket socket = null;
 				try {
 					/*Amado section*/
-//					Log.v(TAG, address);
-//					socket = new Socket(address,6789);
-//					Log.v(TAG, address);
-					socket = new DatagramSocket();
-//					DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+					socket = new Socket(address,6789);
+//					socket = new DatagramSocket();
+					DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
 					
 					
 					
@@ -224,10 +222,10 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 						truncated = true;
 					}
 				
-					DatagramPacket packet = 
-							new DatagramPacket(buff, msgLen, InetAddress.getByName(address), MessageService.MESSAGE_PORT);
-					socket.send(packet);
-//					outToServer.write(buff,0,msgLen);
+//					DatagramPacket packet = 
+//							new DatagramPacket(buff, msgLen, InetAddress.getByName(address), MessageService.MESSAGE_PORT);
+//					socket.send(packet);
+					outToServer.write(buff,0,msgLen);
 					/*Amado section End*/
 					if (truncated) {
 						retval = "Message truncated and sent.";
