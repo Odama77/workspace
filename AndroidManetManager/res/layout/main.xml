@@ -10,8 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:background="#A0909090"
-        android:visibility="invisible" >
+        android:background="#A0909090" >
 
         <RelativeLayout
             android:id="@+id/layoutBatteryTemp"
@@ -151,7 +150,8 @@
             android:textColor="#ffffff"
             android:textStyle="bold" />
     </RelativeLayout>
-
+	
+    
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -163,8 +163,7 @@
             android:layout_gravity="center" >
 
             <TableRow
-                android:id="@+id/startAdhocRow"
-                android:visibility="invisible" >
+                android:id="@+id/startAdhocRow" >
 
                 <TableLayout
                     android:layout_width="wrap_content"
@@ -173,30 +172,29 @@
 
                     <TableRow>
 
-                        <ImageView
-                            android:id="@+id/startAdhocBtn"
-                            android:layout_width="180dp"
-                            android:layout_height="135dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/adhoc_off"
-                            android:contentDescription="@null" />
+                        <Button
+					        android:id="@+id/start_connect"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:layout_below="@+id/layoutHeaderMain"
+					        android:layout_marginTop="151dp"
+					        android:text="Connect"/>
                     </TableRow>
 
                     <TableRow>
 
-                        <TextView
+                       <!--<TextView
                             android:layout_gravity="center_vertical"
                             android:paddingTop="10dp"
                             android:text="@string/main_layout_presstostart"
                             android:textColor="#FFFFFFFF"
-                            android:textStyle="bold" />
+                            android:textStyle="bold" />-->
                     </TableRow>
                 </TableLayout>
             </TableRow>
 
             <TableRow
-                android:id="@+id/stopAdhocRow"
-                android:visibility="invisible" >
+                android:id="@+id/stopAdhocRow" >
 
                 <TableLayout
                     android:layout_width="wrap_content"
@@ -205,23 +203,22 @@
 
                     <TableRow>
 
-                        <ImageView
-                            android:id="@+id/stopAdhocBtn"
-                            android:layout_width="180dp"
-                            android:layout_height="135dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/adhoc_on"
-                            android:contentDescription="@null" />
+                        <Button
+					        android:id="@+id/stop_connect"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:layout_below="@+id/start_connect"
+					        android:text="Disconnect"/>
                     </TableRow>
 
                     <TableRow>
 
-                        <TextView
+                        <!--<TextView
                             android:layout_gravity="center_vertical"
                             android:paddingTop="10dp"
                             android:text="@string/main_layout_presstostop"
                             android:textColor="#FFFFFFFF"
-                            android:textStyle="bold" />
+                            android:textStyle="bold" />-->
                     </TableRow>
                 </TableLayout>
             </TableRow>

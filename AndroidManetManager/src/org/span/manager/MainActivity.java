@@ -66,6 +66,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
@@ -88,13 +89,16 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		
 	private ProgressDialog progressDialog = null;
 
-	private ImageView startBtn = null;
+//	private ImageView startBtn = null;
 	private OnClickListener startBtnListener = null;
-	private ImageView stopBtn = null;
+//	private ImageView stopBtn = null;
 	private OnClickListener stopBtnListener = null;
 	private ImageView radioModeImage = null;
 	private RelativeLayout batteryTemperatureLayout = null;
 	private RelativeLayout headerMainLayout = null;
+	private Button startConnect = null;
+	private Button stopConnect = null;
+	
 	
 	private TextView batteryTemperature = null;
 	
@@ -120,6 +124,8 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
         app.manet.registerObserver(this);
 
         // init table rows
+        startConnect = (Button)findViewById(R.id.start_connect);
+        stopConnect = (Button)findViewById(R.id.stop_connect);
         startTblRow = (TableRow)findViewById(R.id.startAdhocRow);
         stopTblRow = (TableRow)findViewById(R.id.stopAdhocRow);
         radioModeImage = (ImageView)findViewById(R.id.radioModeImage);
@@ -146,7 +152,6 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
         animation.setRepeatMode(Animation.REVERSE);
 
         // start button
-        startBtn = (ImageView) findViewById(R.id.startAdhocBtn);
         startBtnListener = new OnClickListener() {
         	@Override
 			public void onClick(View v) {
@@ -156,10 +161,10 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		    	app.manet.sendStartAdhocCommand();
 			}
 		};
-		startBtn.setOnClickListener(this.startBtnListener);
+//		startBtn.setOnClickListener(this.startBtnListener);
+		startConnect.setOnClickListener(this.startBtnListener);
 
 		// stop button
-		stopBtn = (ImageView) findViewById(R.id.stopAdhocBtn);
 		stopBtnListener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -169,7 +174,9 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		    	app.manet.sendStopAdhocCommand();
 			}
 		};
-		stopBtn.setOnClickListener(this.stopBtnListener);
+		
+//		stopBtn.setOnClickListener(this.stopBtnListener);
+		stopConnect.setOnClickListener(this.stopBtnListener);
 		
    		// start messenger service so that it runs even if no active activities are bound to it
    		startService(new Intent(this, MessageService.class));
@@ -483,11 +490,13 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		if (state == AdhocStateEnum.STARTED) {
 			startTblRow.setVisibility(View.GONE);
 			stopTblRow.setVisibility(View.VISIBLE);
+//			startConnect.setVisibility(View.GONE);
+//			stopConnect.setVisibility(View.VISIBLE);
 			
 			// animation
-			if (animation != null) {
-				stopBtn.startAnimation(animation);
-			}
+//			if (animation != null) {
+//				stopBtn.startAnimation(animation);
+//			}
 					
 			/*
 		    // checking, if "wired adhoc" is currently running
@@ -511,15 +520,17 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		} else if (state == AdhocStateEnum.STOPPED) {
 			startTblRow.setVisibility(View.VISIBLE);
 			stopTblRow.setVisibility(View.GONE);
+//			startConnect.setVisibility(View.VISIBLE);
+//			stopConnect.setVisibility(View.GONE);
 			
 			// animation
-			if (animation != null) {
-				startBtn.startAnimation(this.animation);
-			}
+//			if (animation != null) {
+//				startBtn.startAnimation(this.animation);
+//			}
 						
 		} else { // AdhocStateEnum.UNKNOWN
-			startTblRow.setVisibility(View.VISIBLE);
-			stopTblRow.setVisibility(View.VISIBLE);
+//			startTblRow.setVisibility(View.VISIBLE);
+//			stopTblRow.setVisibility(View.VISIBLE);
 		}
 		
  		/*

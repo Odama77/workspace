@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen  
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" >
+
     <PreferenceCategory android:title="@string/setup_layout_category_general"
         android:key="generalprefs">
      	<EditTextPreference
@@ -11,21 +12,23 @@
     </PreferenceCategory>
 	<PreferenceCategory android:title="@string/setup_layout_category_wifi"
 		android:key="wifiprefs">
-		<ListPreference  
+		<!-- <ListPreference  
 			android:key="encalgorithmpref"  
 			android:title="@string/setup_layout_encryption_algorithm"  
 			android:summary="@string/setup_layout_encryption_algorithm_summary"
-			android:dialogTitle="@string/setup_layout_encryption_algorithm_dialog_title" /> 
-		<ListPreference  
+			android:dialogTitle="@string/setup_layout_encryption_algorithm_dialog_title" />  -->
+		<!-- <ListPreference  
 			android:key="encsetuppref"  
 			android:title="@string/setup_layout_encryption_setup"  
 			android:summary="@string/setup_layout_encryption_setup_summary"
-			android:dialogTitle="@string/setup_layout_encryption_setup_dialog_title" /> 			
-		<EditTextPreference
+			android:dialogTitle="@string/setup_layout_encryption_setup_dialog_title"
+			android:visibility="invisible" /> 	 -->		
+		<!-- <EditTextPreference
 			android:key="passwordpref"  
 			android:title="@string/setup_layout_password"  
 			android:summary="@string/setup_layout_password_summary_wpa" 
-			android:dialogTitle="@string/setup_layout_password_dialog_title" /> 
+			android:dialogTitle="@string/setup_layout_password_dialog_title"
+			android:visibility="invisible" />  -->
 		<EditTextPreference  
 			android:key="ssidpref"  
 			android:title="@string/setup_layout_ssid"  
@@ -34,27 +37,30 @@
 			android:maxLength="15"  
 			android:dialogMessage="@string/setup_layout_ssid_dialog_message"
 			android:defaultValue="AndroidAdhoc" />      
-		<ListPreference  
+		<!-- <ListPreference  
 			android:key="channelpref"  
 			android:title="@string/setup_layout_channel"  
 			android:summary="@string/setup_layout_channel_summary"  
 			android:entries="@array/channelnames"  
 			android:entryValues="@array/channelvalues"  
 			android:dialogTitle="@string/setup_layout_channel_dialog_title"
-			android:defaultValue="1" /> 
+			android:defaultValue="1"
+			android:visibility="invisible" />  -->
 		<ListPreference  
 			android:key="txpowerpref"  
 			android:title="@string/setup_layout_txpower"  
 			android:summary="@string/setup_layout_txpower_summary"  
 			android:dialogTitle="@string/setup_layout_txpower_dialog_title" />
-		<ListPreference  
+		<!-- <ListPreference  
             android:key="interfacepref"  
             android:title="@string/setup_layout_interface"  
             android:summary="@string/setup_layout_interface_summary"
-            android:dialogTitle="@string/setup_layout_interface_dialog_title" /> 
+            android:dialogTitle="@string/setup_layout_interface_dialog_title"
+            android:visibility="invisible" />  -->
 	</PreferenceCategory>
-    <PreferenceCategory android:title="@string/setup_layout_category_bluetooth"
-        android:key="btprefs">
+    <!-- <PreferenceCategory android:title="@string/setup_layout_category_bluetooth"
+        android:key="btprefs"
+        android:visibility="invisible">
         <CheckBoxPreference
         	android:key="bluetoothonpref"
             android:title="@string/setup_layout_usebluetooth"
@@ -69,7 +75,7 @@
             android:dependency="bluetoothonpref"
             android:title="@string/setup_layout_discoverable"
             android:summary="@string/setup_layout_discoverable_summary" />               
-    </PreferenceCategory>
+    </PreferenceCategory> -->
 	<PreferenceCategory android:title="@string/setup_layout_category_ip">
 	    <EditTextPreference
 	        android:key="ippref"  
@@ -84,8 +90,9 @@
             android:dialogTitle="@string/setup_layout_dns_dialog_title"
             android:inputType="phone" />
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/setup_layout_category_routing"
-	    android:key="routingprefs">
+	<!-- <PreferenceCategory android:title="@string/setup_layout_category_routing"
+	    android:key="routingprefs"
+	    android:visibility="invisible">
 	    <ListPreference  
 			android:key="routingprotocolpref"  
 			android:title="@string/setup_layout_routing_protocol"  
@@ -102,7 +109,7 @@
 			android:title="@string/setup_layout_gateway"
 			android:summary="@string/setup_layout_gateway_summary"
             android:dialogTitle="@string/setup_layout_gateway_dialog_title" /> 
-    </PreferenceCategory>
+    </PreferenceCategory> -->
 	<PreferenceCategory android:title="@string/setup_layout_category_misc">
 	     <CheckBoxPreference
         	android:key="screenonpref"

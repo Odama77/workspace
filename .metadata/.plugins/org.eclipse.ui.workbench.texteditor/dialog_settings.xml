@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="retval" key="selection"/>
+		<item value="EncAlgorithm" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="retval"/>
-			<item value="DatagramPacket"/>
-			<item value="backgro"/>
-			<item value="shownotidication"/>
-			<item value="sho"/>
-			<item value="showmessage"/>
-			<item value="displaytoastmessage"/>
-			<item value="read"/>
+			<item value="encAlgorithm"/>
+			<item value="getenumfrom"/>
+			<item value="getenum"/>
+			<item value="getstringvalue"/>
+			<item value="gete"/>
+			<item value="get"/>
+			<item value="ChangeSettingsActivity"/>
+			<item value="noroot_layout_line1"/>
 		</list>
 		<list key="replacehistory">
 		</list>
@@ -24,7 +24,7 @@
 		<item value="257" key="DIALOG_WIDTH"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		<item value="381" key="DIALOG_HEIGHT"/>
-		<item value="953" key="DIALOG_X_ORIGIN"/>
-		<item value="325" key="DIALOG_Y_ORIGIN"/>
+		<item value="956" key="DIALOG_X_ORIGIN"/>
+		<item value="287" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

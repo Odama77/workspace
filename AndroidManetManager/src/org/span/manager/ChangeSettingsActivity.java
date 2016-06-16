@@ -146,7 +146,6 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     	// user id
         EditTextPreference uidEditTextPref = (EditTextPreference)findPreference("uidpref");
         uidEditTextPref.setText(manetcfg.getUserId());
-    	
     	// wifi group
     	wifiGroupPref = (PreferenceGroup)findPreference("wifiprefs");
 		boolean bluetoothOn = manetcfg.isUsingBluetooth();
@@ -154,47 +153,48 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     	
 		// wifi encryption algorithm
 		WifiEncryptionAlgorithmEnum encAlgorithm = manetcfg.getWifiEncryptionAlgorithm();
-		ListPreference wifiEncAlgorithmPref = (ListPreference)findPreference("encalgorithmpref");
-		wifiEncAlgorithmPref.setEnabled(false); // TODO: disable until tested
-		wifiEncAlgorithmPref.setEntries(WifiEncryptionAlgorithmEnum.descriptionValues());
-		wifiEncAlgorithmPref.setEntryValues(WifiEncryptionAlgorithmEnum.stringValues());
-		wifiEncAlgorithmPref.setValueIndex(encAlgorithm.ordinal());
+//		ListPreference wifiEncAlgorithmPref = (ListPreference)findPreference("encalgorithmpref");
+//		wifiEncAlgorithmPref.setEnabled(false); // TODO: disable until tested
+//		wifiEncAlgorithmPref.setEntries(WifiEncryptionAlgorithmEnum.descriptionValues());
+//		wifiEncAlgorithmPref.setEntryValues(WifiEncryptionAlgorithmEnum.stringValues());
+//		wifiEncAlgorithmPref.setValueIndex(encAlgorithm.ordinal());
 		
 		// wifi encryption setup method
-        ListPreference wifiEncSetupMethodPref = (ListPreference)findPreference("encsetuppref");
-        wifiEncSetupMethodPref.setEnabled(false); // TODO: disable until tested
-        if (encAlgorithm == WifiEncryptionAlgorithmEnum.NONE) {
-        	wifiEncSetupMethodPref.setEnabled(false);
-        } else {
-        	wifiEncSetupMethodPref.setEnabled(true);
-	        if (manetcfg.getWifiDriver().startsWith("softap") 
-	        		|| manetcfg.getWifiDriver().equals(DeviceConfig.DRIVER_HOSTAP)) {
-	        	if (wifiEncSetupMethodPref != null) {
-	        		wifiGroupPref.removePreference(wifiEncSetupMethodPref);
-	        	}
-	        } else {
-	        	wifiEncSetupMethodPref.setEntries(WifiEncryptionSetupMethodEnum.descriptionValues());
-	        	wifiEncSetupMethodPref.setEntryValues(WifiEncryptionSetupMethodEnum.stringValues());
-	        	wifiEncSetupMethodPref.setValueIndex(manetcfg.getWifiEncryptionSetupMethod().ordinal());
-	        }
-        }
-		
+//        ListPreference wifiEncSetupMethodPref = (ListPreference)findPreference("encsetuppref");
+//        wifiEncSetupMethodPref.setEnabled(false); // TODO: disable until tested
+//        if (encAlgorithm == WifiEncryptionAlgorithmEnum.NONE) {
+//        	wifiEncSetupMethodPref.setEnabled(false);
+//        } else {
+//        	wifiEncSetupMethodPref.setEnabled(true);
+//	        if (manetcfg.getWifiDriver().startsWith("softap") 
+//	        		|| manetcfg.getWifiDriver().equals(DeviceConfig.DRIVER_HOSTAP)) {
+//	        	if (wifiEncSetupMethodPref != null) {
+//	        		wifiGroupPref.removePreference(wifiEncSetupMethodPref);
+//	        	}
+//	        } else {
+//	        	wifiEncSetupMethodPref.setEntries(WifiEncryptionSetupMethodEnum.descriptionValues());
+//	        	wifiEncSetupMethodPref.setEntryValues(WifiEncryptionSetupMethodEnum.stringValues());
+//	        	wifiEncSetupMethodPref.setValueIndex(manetcfg.getWifiEncryptionSetupMethod().ordinal());
+//	        }
+//        }
+        
+        
         // wifi encryption password
-        final EditTextPreference wifiEncPasswordEditTextPref = (EditTextPreference)findPreference("passwordpref");
-        wifiEncPasswordEditTextPref.setEnabled(false); // TODO: disable until tested
-        if (encAlgorithm == WifiEncryptionAlgorithmEnum.NONE) {
-        	wifiEncPasswordEditTextPref.setEnabled(false);
-        } else {
-        	wifiEncPasswordEditTextPref.setEnabled(true);
-	        final int origTextColorWifiEncKey = wifiEncPasswordEditTextPref.getEditText().getCurrentTextColor();
-	        if (manetcfg.getWifiDriver().startsWith("softap")
-	        		|| manetcfg.getWifiDriver().equals(DeviceConfig.DRIVER_HOSTAP)) {
-	        	Validation.setupWpaEncryptionValidators(wifiEncPasswordEditTextPref, origTextColorWifiEncKey);
-	        } else {
-	        	Validation.setupWepEncryptionValidators(wifiEncPasswordEditTextPref, origTextColorWifiEncKey);
-	        }
-	        wifiEncPasswordEditTextPref.setText(manetcfg.getWifiEncryptionPassword());
-        }
+//        final EditTextPreference wifiEncPasswordEditTextPref = (EditTextPreference)findPreference("passwordpref");
+//        wifiEncPasswordEditTextPref.setEnabled(false); // TODO: disable until tested
+//        if (encAlgorithm == WifiEncryptionAlgorithmEnum.NONE) {
+//        	wifiEncPasswordEditTextPref.setEnabled(false);
+//        } else {
+//        	wifiEncPasswordEditTextPref.setEnabled(true);
+//	        final int origTextColorWifiEncKey = wifiEncPasswordEditTextPref.getEditText().getCurrentTextColor();
+//	        if (manetcfg.getWifiDriver().startsWith("softap")
+//	        		|| manetcfg.getWifiDriver().equals(DeviceConfig.DRIVER_HOSTAP)) {
+//	        	Validation.setupWpaEncryptionValidators(wifiEncPasswordEditTextPref, origTextColorWifiEncKey);
+//	        } else {
+//	        	Validation.setupWepEncryptionValidators(wifiEncPasswordEditTextPref, origTextColorWifiEncKey);
+//	        }
+//	        wifiEncPasswordEditTextPref.setText(manetcfg.getWifiEncryptionPassword());
+//        }
         
         // wifi SSID
         EditTextPreference wifiSsidEditTextPref = (EditTextPreference)findPreference("ssidpref");
@@ -202,33 +202,33 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
         wifiSsidEditTextPref.setText(manetcfg.getWifiSsid());
         
         // wifi channel
-        ListPreference channelpref = (ListPreference)findPreference("channelpref");
-        channelpref.setEnabled(false); // TODO: disable until tested
-        String[] channelStrValues = WifiChannelEnum.stringValues();
-        String[] channelDescValues = WifiChannelEnum.descriptionValues();
-        // remove auto channel option if not supported by device
-        if (!manetcfg.getWifiDriver().startsWith("softap")
-        		|| !manetcfg.getWifiDriver().equals(DeviceConfig.DRIVER_HOSTAP)) {
-        	// auto channel option at first index
-        	String[] newChannelStrValues = new String[channelStrValues.length-1];
-        	String[] newChannelDescValues = new String[channelStrValues.length-1];
-        	for (int i = 1; i < channelStrValues.length; i++) {
-        		newChannelStrValues[i-1] = channelStrValues[i];
-        		newChannelDescValues[i-1] = channelDescValues[i];
-        	}
-        	channelpref.setEntries(newChannelDescValues);
-        	channelpref.setEntryValues(newChannelStrValues);
-        	WifiChannelEnum wifiChannel = manetcfg.getWifiChannel();
-        	if (wifiChannel == WifiChannelEnum.AUTO) {
-        		channelpref.setValueIndex(WifiChannelEnum.CHANNEL_1.ordinal()-1);
-        	} else {
-        		channelpref.setValueIndex(wifiChannel.ordinal()-1);
-        	}
-        } else {
-        	channelpref.setEntries(channelDescValues);
-        	channelpref.setEntryValues(channelStrValues);
-        	channelpref.setValueIndex(manetcfg.getWifiChannel().ordinal());
-        }
+//        ListPreference channelpref = (ListPreference)findPreference("channelpref");
+//        channelpref.setEnabled(false); // TODO: disable until tested
+//        String[] channelStrValues = WifiChannelEnum.stringValues();
+//        String[] channelDescValues = WifiChannelEnum.descriptionValues();
+//        // remove auto channel option if not supported by device
+//        if (!manetcfg.getWifiDriver().startsWith("softap")
+//        		|| !manetcfg.getWifiDriver().equals(DeviceConfig.DRIVER_HOSTAP)) {
+//        	// auto channel option at first index
+//        	String[] newChannelStrValues = new String[channelStrValues.length-1];
+//        	String[] newChannelDescValues = new String[channelStrValues.length-1];
+//        	for (int i = 1; i < channelStrValues.length; i++) {
+//        		newChannelStrValues[i-1] = channelStrValues[i];
+//        		newChannelDescValues[i-1] = channelDescValues[i];
+//        	}
+//        	channelpref.setEntries(newChannelDescValues);
+//        	channelpref.setEntryValues(newChannelStrValues);
+//        	WifiChannelEnum wifiChannel = manetcfg.getWifiChannel();
+//        	if (wifiChannel == WifiChannelEnum.AUTO) {
+//        		channelpref.setValueIndex(WifiChannelEnum.CHANNEL_1.ordinal()-1);
+//        	} else {
+//        		channelpref.setValueIndex(wifiChannel.ordinal()-1);
+//        	}
+//        } else {
+//        	channelpref.setEntries(channelDescValues);
+//        	channelpref.setEntryValues(channelStrValues);
+//        	channelpref.setValueIndex(manetcfg.getWifiChannel().ordinal());
+//        }
         
         // wifi transmit power
     	ListPreference txpowerPreference = (ListPreference)findPreference("txpowerpref");
@@ -245,36 +245,36 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
         
         // bluetooth group        
 		// disable bluetooth adhoc if not supported by the kernel
-        if (true) { // !manetcfg.isBluetoothSupported() // TODO: disable until tested
-        	PreferenceGroup btGroup = (PreferenceGroup)findPreference("btprefs");
-        	btGroup.setEnabled(false);
-        }
+//        if (true) { // !manetcfg.isBluetoothSupported() // TODO: disable until tested
+//        	PreferenceGroup btGroup = (PreferenceGroup)findPreference("btprefs");
+//        	btGroup.setEnabled(false);
+//        }
 		
 		// bluetooth
 		// NOTE: bluetooth dependencies are specified in the layout XML
 		// CheckBoxPreference bluetoothCheckboxPref = (CheckBoxPreference)findPreference("bluetoothonpref");
         
         // bluetooth keep wifi
-        CheckBoxPreference btKeepWifiCheckBoxPref = (CheckBoxPreference)findPreference("bluetoothkeepwifipref");
-        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR) {
-        	PreferenceGroup btGroup = (PreferenceGroup)findPreference("btprefs");
-        	if (btKeepWifiCheckBoxPref != null) {
-        		btGroup.removePreference(btKeepWifiCheckBoxPref);
-        	}
-        } else {
-        	btKeepWifiCheckBoxPref.setChecked(!manetcfg.isWifiDisabledWhenUsingBluetooth());
-        }
+//        CheckBoxPreference btKeepWifiCheckBoxPref = (CheckBoxPreference)findPreference("bluetoothkeepwifipref");
+//        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR) {
+//        	PreferenceGroup btGroup = (PreferenceGroup)findPreference("btprefs");
+//        	if (btKeepWifiCheckBoxPref != null) {
+//        		btGroup.removePreference(btKeepWifiCheckBoxPref);
+//        	}
+//        } else {
+//        	btKeepWifiCheckBoxPref.setChecked(!manetcfg.isWifiDisabledWhenUsingBluetooth());
+//        }
         
         // bluetooth discoverable
-    	CheckBoxPreference btdiscoverablePreference = (CheckBoxPreference)findPreference("bluetoothdiscoverablepref");
-        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR) {
-        	PreferenceGroup btGroup = (PreferenceGroup)findPreference("btprefs");
-        	if (btdiscoverablePreference != null) {
-        		btGroup.removePreference(btdiscoverablePreference);
-        	}
-        } else {
-        	btdiscoverablePreference.setChecked(manetcfg.isBluetoothDiscoverableWhenInAdhocMode());
-        }
+//    	CheckBoxPreference btdiscoverablePreference = (CheckBoxPreference)findPreference("bluetoothdiscoverablepref");
+//        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR) {
+//        	PreferenceGroup btGroup = (PreferenceGroup)findPreference("btprefs");
+//        	if (btdiscoverablePreference != null) {
+//        		btGroup.removePreference(btdiscoverablePreference);
+//        	}
+//        } else {
+//        	btdiscoverablePreference.setChecked(manetcfg.isBluetoothDiscoverableWhenInAdhocMode());
+//        }
         
         
         // ip address
@@ -288,60 +288,60 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
         dnsServerEditTextPref.setText(manetcfg.getDnsServer());        
         
         // routing protocol
-        String currRoutingProtocol = manetcfg.getRoutingProtocol();
-    	List<String> routingProtocolList = CoreTask.getRoutingProtocols();
-    	String[] routingProtocols = new String[routingProtocolList.size()];
-    	routingProtocolList.toArray(routingProtocols);
-        
-    	ListPreference routingProtocolPreference = (ListPreference)findPreference("routingprotocolpref");
-    	routingProtocolPreference.setEntries(routingProtocols);
-    	routingProtocolPreference.setEntryValues(routingProtocols);
-    	routingProtocolPreference.setValue(currRoutingProtocol);
+//        String currRoutingProtocol = manetcfg.getRoutingProtocol();
+//    	List<String> routingProtocolList = CoreTask.getRoutingProtocols();
+//    	String[] routingProtocols = new String[routingProtocolList.size()];
+//    	routingProtocolList.toArray(routingProtocols);
+//        
+//    	ListPreference routingProtocolPreference = (ListPreference)findPreference("routingprotocolpref");
+//    	routingProtocolPreference.setEntries(routingProtocols);
+//    	routingProtocolPreference.setEntryValues(routingProtocols);
+//    	routingProtocolPreference.setValue(currRoutingProtocol);
         
         // routing ignore list
-        JSONArray array = new JSONArray(manetcfg.getRoutingIgnoreList());
-        sharedPreferences.edit().putString("ignorepref", array.toString()).commit();
+//        JSONArray array = new JSONArray(manetcfg.getRoutingIgnoreList());
+//        sharedPreferences.edit().putString("ignorepref", array.toString()).commit();
                 
         // wifi interface
-        String currInterface = manetcfg.getWifiInterface();
-        String defaultInterface = DeviceConfig.getWifiInterface(manetcfg.getDeviceType());
-    	List<String> interfaceList = CoreTask.getNetworkInterfaces();
-    	if(!interfaceList.contains(defaultInterface)) {
-    		interfaceList.add(defaultInterface);
-    	}
-    	String[] interfaces = new String[interfaceList.size()];
-    	interfaceList.toArray(interfaces);
-        
-    	ListPreference interfacePreference = (ListPreference)findPreference("interfacepref");
-    	interfacePreference.setEntries(interfaces);
-    	interfacePreference.setEntryValues(interfaces);
-    	
-    	if (interfaceList.contains(currInterface)) {
-    		interfacePreference.setValue(currInterface);
-    	} else {
-    		interfacePreference.setValue(defaultInterface);
-    		currInterface = defaultInterface;
-    	}
+//        String currInterface = manetcfg.getWifiInterface();
+//        String defaultInterface = DeviceConfig.getWifiInterface(manetcfg.getDeviceType());
+//    	List<String> interfaceList = CoreTask.getNetworkInterfaces();
+//    	if(!interfaceList.contains(defaultInterface)) {
+//    		interfaceList.add(defaultInterface);
+//    	}
+//    	String[] interfaces = new String[interfaceList.size()];
+//    	interfaceList.toArray(interfaces);
+//        
+//    	ListPreference interfacePreference = (ListPreference)findPreference("interfacepref");
+//    	interfacePreference.setEntries(interfaces);
+//    	interfacePreference.setEntryValues(interfaces);
+//    	
+//    	if (interfaceList.contains(currInterface)) {
+//    		interfacePreference.setValue(currInterface);
+//    	} else {
+//    		interfacePreference.setValue(defaultInterface);
+//    		currInterface = defaultInterface;
+//    	}
         
         // routing gateway
-        String currGatewayInterface = manetcfg.getGatewayInterface();
-    	interfaceList.remove(currInterface); // remove ad-hoc interface
-    	interfaceList.add(0, ManetConfig.GATEWAY_INTERFACE_NONE);
-    	interfaces = new String[interfaceList.size()];
-    	interfaceList.toArray(interfaces);
-        
-    	ListPreference gatewayPreference = (ListPreference)findPreference("gatewaypref");
-    	gatewayPreference.setEntries(interfaces);
-    	gatewayPreference.setEntryValues(interfaces);
-    	gatewayPreference.setValue(currGatewayInterface);
+//        String currGatewayInterface = manetcfg.getGatewayInterface();
+//    	interfaceList.remove(currInterface); // remove ad-hoc interface
+//    	interfaceList.add(0, ManetConfig.GATEWAY_INTERFACE_NONE);
+//    	interfaces = new String[interfaceList.size()];
+//    	interfaceList.toArray(interfaces);
+//        
+//    	ListPreference gatewayPreference = (ListPreference)findPreference("gatewaypref");
+//    	gatewayPreference.setEntries(interfaces);
+//    	gatewayPreference.setEntryValues(interfaces);
+//    	gatewayPreference.setValue(currGatewayInterface);
+//    	
+//    	if (interfaceList.contains(currGatewayInterface)) {
+//    		gatewayPreference.setValue(currGatewayInterface);
+//    	} else {
+//    		gatewayPreference.setValue(ManetConfig.GATEWAY_INTERFACE_NONE);
+//    	}
     	
-    	if (interfaceList.contains(currGatewayInterface)) {
-    		gatewayPreference.setValue(currGatewayInterface);
-    	} else {
-    		gatewayPreference.setValue(ManetConfig.GATEWAY_INTERFACE_NONE);
-    	}
-    	
-    	
+        Log.v(TAG, "Here()");
         // screen on
     	CheckBoxPreference screenOnPreference = (CheckBoxPreference)findPreference("screenonpref");
     	screenOnPreference.setChecked(manetcfg.isScreenOnWhenInAdhocMode());
