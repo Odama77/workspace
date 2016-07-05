@@ -10,6 +10,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -32,6 +33,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 public class SendMessageActivity extends Activity implements OnItemSelectedListener, ManetObserver {
@@ -48,7 +50,15 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
     private Button btnSend = null;
     private Button btnCancel = null;
     
+    
     private String selection = null;
+    
+    //Amado Section
+    public static ArrayList<String> messageList = MessageService.messageList; 
+    public static ListView chatView = null;
+    public static ArrayAdapter<String> messageAdapter = null;
+    public static String address2 = null;
+    //End Amado Section
     
 	/** Called when the activity is first created. */
 	@Override
@@ -63,6 +73,14 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		setContentView(R.layout.sendmessageview);
 		
 	    app = (ManetManagerApp)getApplication();
+	    
+	    //Amado Setcion
+	    chatView = (ListView)findViewById(R.id.chat_id);
+	    messageAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.item_view,messageList);
+	    chatView.setAdapter(messageAdapter);
+	    //End Amado Section
+	    
+	    
 	    
 	    etAddress = (EditText) findViewById(R.id.etAddress);
 	    etMessage = (EditText) findViewById(R.id.etMessage);
@@ -123,9 +141,9 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	  				alert.show();
 	  			}
 	  			Log.v(TAG, msg);
+	  			etMessage.setText("");
+	  			messageAdapter.notifyDataSetChanged();
 	  		}
-	  		
-	  		
 		});
 	    
 	    btnCancel = (Button) findViewById(R.id.btnCancel);
@@ -186,15 +204,16 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	}
 
 	private class SendMessageTask extends AsyncTask<String, Void, String> {
-		 
+		
 		 @Override
 		 protected String doInBackground(String... params) {
 			Log.v(TAG, "doInBackground()");
 			String address = params[0]; 
+			address2 = params[0];
 			String msg = params[1]; 
 			try{
 				String retval = sendMessage(address, msg);
-				finish();
+//				finish();
 				return retval;
 			}catch(Exception e){
 				return "";
@@ -202,6 +221,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		 }
 		 
 		 private String sendMessage(String address, String msg) throws IOException {
+			 
 			 Log.v(TAG, "sendMessage()");
 			 	String retval = null;
 				DatagramSocket socket = null;
@@ -213,9 +233,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 //					Log.v(TAG, address);
 					socket = new DatagramSocket();
 //					DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
-					
-					
-					
+
 					byte buff[] = msg.getBytes();
 					int msgLen = buff.length;
 					boolean truncated = false;

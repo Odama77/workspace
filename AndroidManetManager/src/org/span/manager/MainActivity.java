@@ -490,8 +490,8 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		if (state == AdhocStateEnum.STARTED) {
 			startTblRow.setVisibility(View.GONE);
 			stopTblRow.setVisibility(View.VISIBLE);
-//			startConnect.setVisibility(View.GONE);
-//			stopConnect.setVisibility(View.VISIBLE);
+			startConnect.setVisibility(View.GONE);
+			stopConnect.setVisibility(View.VISIBLE);
 			
 			// animation
 //			if (animation != null) {
@@ -520,8 +520,8 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		} else if (state == AdhocStateEnum.STOPPED) {
 			startTblRow.setVisibility(View.VISIBLE);
 			stopTblRow.setVisibility(View.GONE);
-//			startConnect.setVisibility(View.VISIBLE);
-//			stopConnect.setVisibility(View.GONE);
+			startConnect.setVisibility(View.VISIBLE);
+			stopConnect.setVisibility(View.GONE);
 			
 			// animation
 //			if (animation != null) {

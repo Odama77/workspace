@@ -9,8 +9,12 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.span.R;
 
@@ -42,6 +46,11 @@ public class MessageService extends Service {
     // one thread for all activities
     private static Thread msgListenerThread = null;
     
+    //Amado Section
+    public static ConcurrentLinkedQueue <String> chatQueue = null;
+    public static ArrayList<String> messageList = null;
+    //End of Amado Section
+    
     private int notificationId = 0;
     
     @Override 
@@ -53,8 +62,10 @@ public class MessageService extends Service {
     @Override    
     public int onStartCommand(Intent intent, int flags, int startId) {
     	Log.v(TAG, "onStartCommand()");
-    	if (msgListenerThread == null) {	
-	    	msgListenerThread = new MessageListenerThread();
+    	if (msgListenerThread == null) {
+    		messageList = new ArrayList<String>();
+    		chatQueue = new ConcurrentLinkedQueue<String>();
+	    	msgListenerThread = new MessageListenerThread(chatQueue);
 	    	msgListenerThread.start();
     	}
     	
@@ -74,13 +85,29 @@ public class MessageService extends Service {
     
     /**     
      * Show a notification while this service is running.     
+     * @throws UnknownHostException 
      */    
-    private void showNotification(String tickerStr, Bundle extras) {
+    private void showNotification(String tickerStr, Bundle extras) throws UnknownHostException {
     	Log.v(TAG, "showNotification()");
     	if (notifier == null) {
     		// get reference to notifier
     		notifier = (NotificationManager)getSystemService(NOTIFICATION_SERVICE); 
     	}
+    	
+    	//Amado Section
+    	String from = null;
+    	if (chatQueue != null){
+    		String msg = chatQueue.poll();
+    		from = msg.substring(0, msg.indexOf("\n"));
+			String content = msg.substring(msg.indexOf("\n")+1);
+    		messageList.add(from + ": "+ content);
+    		for(String x : messageList)
+    			Log.v(TAG, x);
+    	}
+    	//End of Amado Section
+    	
+    	
+    	
     	
     	// unique notification id
     	notificationId++;
@@ -117,6 +144,13 @@ public class MessageService extends Service {
     
     private class MessageListenerThread extends Thread {
     	
+    	public ConcurrentLinkedQueue<String> chatQueue = null;
+    	
+    	public MessageListenerThread(ConcurrentLinkedQueue<String> chatQueue) {
+			// TODO Auto-generated constructor stub
+    		this.chatQueue = chatQueue;
+		}
+    	
     	public void run() {
     		try {
     			// bind to local machine; will receive broadcasts and directed messages
@@ -144,6 +178,8 @@ public class MessageService extends Service {
 //						String msg = new String(receivedData, 0, receivedData.length);
 						String from = msg.substring(0, msg.indexOf("\n"));
 						String content = msg.substring(msg.indexOf("\n")+1);
+						
+						chatQueue.add(msg);
 						
 						String tickerStr = "New message";
 						
