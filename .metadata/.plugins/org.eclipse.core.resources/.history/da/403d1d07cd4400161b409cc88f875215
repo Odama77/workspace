@@ -25,10 +25,7 @@ import org.span.service.system.ManetConfig;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -61,11 +58,12 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
     private String selection = null;
     
     //Amado Section
-    public static ArrayList<String> messageList = MessageService.messageList;
-//    public static ArrayList<String> messageList = null;
+//    public static ArrayList<String> messageList = MessageService.messageList;
+    public static ArrayList<String> messageList = null;
     public static ListView chatView = null;
     public static ArrayAdapter<String> messageAdapter = null;
     public static String address2 = null;
+    public Updater updater = null;
     
     Handler resultHandler = null;
     
@@ -91,15 +89,9 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	    chatView = (ListView)findViewById(R.id.chat_id);
 	    messageAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.item_view,messageList);
 	    chatView.setAdapter(messageAdapter);
-//	    resultHandler = new HandlerExtension(this);
-	    
-	    WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-    	WifiInfo info = manager.getConnectionInfo();
-    	String macAddress = info.getMacAddress();
-    	if(macAddress != null)
-    		Log.v("Mac is ", macAddress);
-    	else
-    		Log.v("Mac is ", "null");
+//	    updater = new Updater();
+//	    updater.start();
+	    resultHandler = new HandlerExtension(this);
 	    //End Amado Section
 	    
 	    
@@ -365,7 +357,27 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		
 	}
 	
-	public static class HandlerExtension extends Handler {
+	private class Updater extends Thread {
+    	
+//    	public ArrayAdapter messageAdapter = SendMessageActivity.messageAdapter;
+    	
+    	public Updater() {
+			// TODO Auto-generated constructor stub
+		}
+    	
+    	public void run() {
+    		while(true){
+    			try {
+					sleep(1000);
+//					messageAdapter.notifyDataSetChanged();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    	}
+    }
+	private static class HandlerExtension extends Handler {
 	    
 		  private final WeakReference<SendMessageActivity> currentActivity;
 		  

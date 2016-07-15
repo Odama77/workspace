@@ -7,4 +7,15 @@
 <fullyQualifiedTypeName name="java.io.DataOutputStream"/>
 <fullyQualifiedTypeName name="android.widget.Button"/>
 <fullyQualifiedTypeName name="org.span.R.id"/>
+<fullyQualifiedTypeName name="java.util.concurrent.ConcurrentLinkedQueue"/>
+<fullyQualifiedTypeName name="org.span.manager.MessageService"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="android.widget.ListView"/>
+<fullyQualifiedTypeName name="org.span.R.layout"/>
+<fullyQualifiedTypeName name="org.span.manager.ChatAdapter"/>
+<fullyQualifiedTypeName name="java.lang.ref.WeakReference"/>
+<fullyQualifiedTypeName name="android.os.Message"/>
+<fullyQualifiedTypeName name="android.os.Handler"/>
+<fullyQualifiedTypeName name="org.span.manager.SendMessageActivity"/>
+<fullyQualifiedTypeName name="org.span.manager.SendMessageActivity.HandlerExtension"/>
 </qualifiedTypeNameHistroy>

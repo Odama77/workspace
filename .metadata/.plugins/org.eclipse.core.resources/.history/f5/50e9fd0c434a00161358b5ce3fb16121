@@ -93,13 +93,11 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	    chatView.setAdapter(messageAdapter);
 //	    resultHandler = new HandlerExtension(this);
 	    
-	    WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-    	WifiInfo info = manager.getConnectionInfo();
-    	String macAddress = info.getMacAddress();
-    	if(macAddress != null)
-    		Log.v("Mac is ", macAddress);
-    	else
-    		Log.v("Mac is ", "null");
+//	    WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+//    	WifiInfo info = manager.getConnectionInfo();
+//    	String macAddress = info.getMacAddress();
+//    	Log.v("Mac Address: ", macAddress);
+	    
 	    //End Amado Section
 	    
 	    
