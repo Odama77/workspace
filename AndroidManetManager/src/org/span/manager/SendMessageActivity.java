@@ -6,7 +6,6 @@ package org.span.manager;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.span.R;
 import org.span.service.ManetObserver;
@@ -25,14 +23,9 @@ import org.span.service.system.ManetConfig;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -61,14 +54,10 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
     private String selection = null;
     
     //Amado Section
-    public static ArrayList<String> messageList = MessageService.messageList;
-//    public static ArrayList<String> messageList = null;
+    public static ArrayList<String> messageList = MessageService.messageList; 
     public static ListView chatView = null;
     public static ArrayAdapter<String> messageAdapter = null;
     public static String address2 = null;
-    
-    Handler resultHandler = null;
-    
     //End Amado Section
     
 	/** Called when the activity is first created. */
@@ -86,20 +75,18 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	    app = (ManetManagerApp)getApplication();
 	    
 	    //Amado Setcion
-	    messageList = new ArrayList<String>();
-	    
 	    chatView = (ListView)findViewById(R.id.chat_id);
 	    messageAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.item_view,messageList);
 	    chatView.setAdapter(messageAdapter);
-//	    resultHandler = new HandlerExtension(this);
 	    
-	    WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-    	WifiInfo info = manager.getConnectionInfo();
-    	String macAddress = info.getMacAddress();
-    	if(macAddress != null)
-    		Log.v("Mac is ", macAddress);
-    	else
-    		Log.v("Mac is ", "null");
+	    String macAddress = MainActivity.getBluetoothMacAddress();
+	    
+	    if(macAddress != null)
+	    	Log.v("Mac Address", macAddress);
+	    else
+	    	Log.v("Mac Address", "null");
+	    
+	    
 	    //End Amado Section
 	    
 	    
@@ -363,27 +350,5 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	public void onError(String error) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public static class HandlerExtension extends Handler {
-	    
-		  private final WeakReference<SendMessageActivity> currentActivity;
-		  
-		  public HandlerExtension(SendMessageActivity activity){
-			  currentActivity = new WeakReference<SendMessageActivity>(activity);
-		  }
-		  
-		  @Override
-		  public void handleMessage(Message message){
-			  SendMessageActivity activity = currentActivity.get();
-			  if (activity!= null){
-				  activity.updateResults(message.getData().getString("result"));
-			  }
-		 }
-	}
-
-	public void updateResults(String string) {
-		// TODO Auto-generated method stub
-		messageList.add(string);
 	}
 }

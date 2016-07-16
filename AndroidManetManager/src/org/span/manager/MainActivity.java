@@ -50,11 +50,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.EditTextPreference;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -118,7 +118,7 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     	Log.d(TAG, "onCreate()"); // DEBUG
-    	
+        
         setContentView(R.layout.main);
         
         app = (ManetManagerApp)getApplication();
@@ -151,7 +151,7 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
         animation.setStartOffset(0);
         animation.setRepeatCount(1);
         animation.setRepeatMode(Animation.REVERSE);
-
+        
         // start button
         startBtnListener = new OnClickListener() {
         	@Override
@@ -656,5 +656,28 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 	public void onError(String error) {
 		Log.d(TAG, "onError()"); // DEBUG
 	}
+	
+	// AMADO PEÑA Section BlueTooth Section
+	 
+	/**
+	 * get bluetooth adapter MAC address
+	 * @return MAC address String
+	 */
+	public static String getBluetoothMacAddress() {
+	    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+	 
+	    // if device does not support Bluetooth
+	    if(mBluetoothAdapter==null){
+	        Log.d(TAG,"device does not support bluetooth");
+	        return null;
+	    }
+	     
+	    return mBluetoothAdapter.getAddress();
+	}
+	
+	// End Of this Section
+	
+	
+	
 }
 

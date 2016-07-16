@@ -67,7 +67,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
 	
 	private ManetManagerApp app = null;
 	
-    private ManetConfig manetcfg = null;
+    public ManetConfig manetcfg = null;
 	
 	private ProgressDialog progressDialog = null;
 	
@@ -275,12 +275,28 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
 //        } else {
 //        	btdiscoverablePreference.setChecked(manetcfg.isBluetoothDiscoverableWhenInAdhocMode());
 //        }
+
         
-        
-        // ip address
+//		ip Address
         EditTextPreference ipAddressEditTextPref = (EditTextPreference)findPreference("ippref");
-        Validation.setupIpAddressValidator(ipAddressEditTextPref);
-        ipAddressEditTextPref.setText(manetcfg.getIpAddress());        
+//        Validation.setupIpAddressValidator(ipAddressEditTextPref);
+
+//      AMADO WAS HERE --- Adding DHCP  
+        
+        String macAddress = MainActivity.getBluetoothMacAddress();
+	    String[] macAddressSplit = macAddress.split(":");
+	    String ipAddress = "192.168.1.";
+	    ipAddress = ipAddress + Long.toString(Long.parseLong(macAddressSplit[5], 16));
+	    
+//	    for(int i = 3; i < 6; i ++){
+//	    ipAddress = ipAddress + Long.toString(Long.parseLong(macAddressSplit[i], 16));
+//	    if(i != 5)
+//	            ipAddress = ipAddress + ".";
+//	    }
+        
+//      AMADOIS GONE
+        
+        ipAddressEditTextPref.setText(ipAddress);        
         
         // dns server
         EditTextPreference dnsServerEditTextPref = (EditTextPreference)findPreference("dnspref");
@@ -407,8 +423,9 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
     		updateFlag = true;
     	}
     	else if (key.equals("ippref")) {
-	    	String ipAddress = sharedPreferences.getString("ippref", ManetConfig.IP_ADDRESS_DEFAULT);
+    		String ipAddress = sharedPreferences.getString("ippref", ManetConfig.IP_ADDRESS_DEFAULT);
 	    	manetcfg.setIpAddress(ipAddress);
+	    	Log.v(TAG, "XXXXXXXXXXXXXXXX " + ipAddress + " XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     	}
     	else if (key.equals("dnspref")) {
 	    	String dnsServer = sharedPreferences.getString("dnspref", ManetConfig.DNS_SERVER_DEFAULT);

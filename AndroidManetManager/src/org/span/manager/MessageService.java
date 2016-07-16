@@ -4,8 +4,14 @@
  */
 package org.span.manager;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -18,9 +24,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
 
 public class MessageService extends Service {
@@ -45,7 +49,6 @@ public class MessageService extends Service {
     //Amado Section
     public static ConcurrentLinkedQueue <String> chatQueue = null;
     public static ArrayList<String> messageList = null;
-    public Handler resultHandler = null;
     //End of Amado Section
     
     private int notificationId = 0;
@@ -54,7 +57,6 @@ public class MessageService extends Service {
     public void onCreate() {
     	Log.v(TAG, "onCreated()");
     	// do nothing until prompted by startup activity
-//    	resultHandler = new Handler();
     }    
     
     @Override    
@@ -99,8 +101,8 @@ public class MessageService extends Service {
     		from = msg.substring(0, msg.indexOf("\n"));
 			String content = msg.substring(msg.indexOf("\n")+1);
     		messageList.add(from + ": "+ content);
-//    		for(String x : messageList)
-//    			Log.v(TAG, x);
+    		for(String x : messageList)
+    			Log.v(TAG, x);
     	}
     	//End of Amado Section
     	
@@ -111,7 +113,8 @@ public class MessageService extends Service {
     	notificationId++;
     	
     	// set the icon, ticker text, and timestamp        
-    	notification = new Notification(R.drawable.exclamation, tickerStr, System.currentTimeMillis());
+    	notification = 
+    		new Notification(R.drawable.exclamation, tickerStr, System.currentTimeMillis());
     	  	
     	Intent intent = new Intent(this, ViewMessageActivity.class);
     	if (extras != null) {
@@ -138,16 +141,7 @@ public class MessageService extends Service {
     	// send the notification
     	notifier.notify(notificationId, notification);
     }
-    //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-//    private void publishProgress(String string) {
-//        Log.v(TAG, "Getting Message");
-//        Bundle msgBundle = new Bundle();
-//        msgBundle.putString("result", string);
-//        Message msg = new Message();
-//        msg.setData(msgBundle);
-//        resultHandler.sendMessage(msg);
-//    }
-    //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+    
     private class MessageListenerThread extends Thread {
     	
     	public ConcurrentLinkedQueue<String> chatQueue = null;

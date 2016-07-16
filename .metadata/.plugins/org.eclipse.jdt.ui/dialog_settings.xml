@@ -40,10 +40,58 @@
 	<section name="quick_assist_proposal_size">
 	</section>
 	<section name="JavaSearchPage">
-		<item value="5" key="HISTORY_SIZE"/>
+		<item value="9" key="HISTORY_SIZE"/>
 		<item value="false" key="CASE_SENSITIVE"/>
 		<item value="11" key="INCLUDE_MASK"/>
+		<section name="HISTORY6">
+			<item value="false" key="isCaseSensitive"/>
+			<item value="" key="javaElement"/>
+			<item value="0" key="scope"/>
+			<item value="11" key="includeMask"/>
+			<item value="readlinefromfile" key="pattern"/>
+			<item value="3" key="limitTo"/>
+			<item value="0" key="matchLocations"/>
+			<item value="1" key="searchFor"/>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY7">
+			<item value="false" key="isCaseSensitive"/>
+			<item value="" key="javaElement"/>
+			<item value="0" key="scope"/>
+			<item value="11" key="includeMask"/>
+			<item value="MAX_MESSAGE_LENGTH" key="pattern"/>
+			<item value="3" key="limitTo"/>
+			<item value="0" key="matchLocations"/>
+			<item value="0" key="searchFor"/>
+			<list key="workingSets">
+			</list>
+		</section>
 		<section name="HISTORY4">
+			<item value="false" key="isCaseSensitive"/>
+			<item value="" key="javaElement"/>
+			<item value="0" key="scope"/>
+			<item value="11" key="includeMask"/>
+			<item value="dalvikvm" key="pattern"/>
+			<item value="3" key="limitTo"/>
+			<item value="0" key="matchLocations"/>
+			<item value="0" key="searchFor"/>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY5">
+			<item value="false" key="isCaseSensitive"/>
+			<item value="" key="javaElement"/>
+			<item value="0" key="scope"/>
+			<item value="11" key="includeMask"/>
+			<item value="readlinesfromfile" key="pattern"/>
+			<item value="2" key="limitTo"/>
+			<item value="0" key="matchLocations"/>
+			<item value="0" key="searchFor"/>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY8">
 			<item value="false" key="isCaseSensitive"/>
 			<item value="" key="javaElement"/>
 			<item value="0" key="scope"/>
@@ -60,10 +108,10 @@
 			<item value="" key="javaElement"/>
 			<item value="0" key="scope"/>
 			<item value="11" key="includeMask"/>
-			<item value="readlinefromfile" key="pattern"/>
+			<item value="mask" key="pattern"/>
 			<item value="3" key="limitTo"/>
 			<item value="0" key="matchLocations"/>
-			<item value="1" key="searchFor"/>
+			<item value="0" key="searchFor"/>
 			<list key="workingSets">
 			</list>
 		</section>
@@ -72,7 +120,7 @@
 			<item value="" key="javaElement"/>
 			<item value="0" key="scope"/>
 			<item value="11" key="includeMask"/>
-			<item value="MAX_MESSAGE_LENGTH" key="pattern"/>
+			<item value="255.255.255" key="pattern"/>
 			<item value="3" key="limitTo"/>
 			<item value="0" key="matchLocations"/>
 			<item value="0" key="searchFor"/>
@@ -84,7 +132,7 @@
 			<item value="" key="javaElement"/>
 			<item value="0" key="scope"/>
 			<item value="11" key="includeMask"/>
-			<item value="dalvikvm" key="pattern"/>
+			<item value="ip" key="pattern"/>
 			<item value="3" key="limitTo"/>
 			<item value="0" key="matchLocations"/>
 			<item value="0" key="searchFor"/>
@@ -96,7 +144,7 @@
 			<item value="" key="javaElement"/>
 			<item value="0" key="scope"/>
 			<item value="11" key="includeMask"/>
-			<item value="readlinesfromfile" key="pattern"/>
+			<item value="getip" key="pattern"/>
 			<item value="2" key="limitTo"/>
 			<item value="0" key="matchLocations"/>
 			<item value="0" key="searchFor"/>

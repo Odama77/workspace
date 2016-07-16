@@ -18,4 +18,6 @@
 <fullyQualifiedTypeName name="android.os.Handler"/>
 <fullyQualifiedTypeName name="org.span.manager.SendMessageActivity"/>
 <fullyQualifiedTypeName name="org.span.manager.SendMessageActivity.HandlerExtension"/>
+<fullyQualifiedTypeName name="android.net.wifi.WifiInfo"/>
+<fullyQualifiedTypeName name="android.preference.EditTextPreference"/>
 </qualifiedTypeNameHistroy>

@@ -182,15 +182,15 @@
 					        android:visibility="invisible"/>
                     </TableRow>
 
-                    <!-- <TableRow>
+                    <TableRow>
 
-                       <TextView
+                       <!--<TextView
                             android:layout_gravity="center_vertical"
                             android:paddingTop="10dp"
                             android:text="@string/main_layout_presstostart"
                             android:textColor="#FFFFFFFF"
-                            android:textStyle="bold" />
-                    </TableRow> -->
+                            android:textStyle="bold" />-->
+                    </TableRow>
                 </TableLayout>
             </TableRow>
 
@@ -213,16 +213,16 @@
 					        android:visibility="invisible"/>
                     </TableRow>
 
-                    <!-- <TableRow>
+                    <TableRow>
 
-                        <TextView
+                        <!--<TextView
                             android:layout_gravity="center_vertical"
                             android:paddingTop="10dp"
                             android:text="@string/main_layout_presstostop"
                             android:textColor="#FFFFFFFF"
-                            android:textStyle="bold" />
-                    </TableRow> -->
-                </TableLayout> 
+                            android:textStyle="bold" />-->
+                    </TableRow>
+                </TableLayout>
             </TableRow>
         </TableLayout>
     </ScrollView>
