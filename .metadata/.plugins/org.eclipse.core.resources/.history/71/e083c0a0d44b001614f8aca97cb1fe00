@@ -4,10 +4,12 @@
  */
 package org.span.manager;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,12 +23,17 @@ import org.span.service.system.ManetConfig;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -59,17 +66,12 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
     public static ListView chatView = null;
     public static ArrayAdapter<String> messageAdapter = null;
     public static String address2 = null;
-    
-    BroadcastReceiver updateUIReciver;
-    
     //End Amado Section
     
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);	
-		
-		MainActivity.onSendFlag = true;
 		
 		Log.v(TAG, "onCreate()");
 		
@@ -92,7 +94,10 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	    else
 	    	Log.v("Mac Address", "null");
 	    
+	    
 	    //End Amado Section
+	    
+	    
 	    
 	    etAddress = (EditText) findViewById(R.id.etAddress);
 	    etMessage = (EditText) findViewById(R.id.etMessage);
@@ -164,24 +169,6 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 				finish();
 	  		}
 		});
-	  	
-//	  	Updating chat
-	  	
-	  	IntentFilter filter = new IntentFilter();
-
-	  	 filter.addAction("com.hello.action"); 
-
-	  	updateUIReciver = new BroadcastReceiver() {
-
-	  	            @Override
-	  	            public void onReceive(Context context, Intent intent) {
-	  	                //UI update here
-	  	            	messageAdapter.notifyDataSetChanged();
-	  	            }
-	  	        };
-	  	 registerReceiver(updateUIReciver,filter);
-	  	
-//	  	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     }
 	
 	
@@ -205,9 +192,6 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		Log.v(TAG, "onDestroy()");
 		super.onDestroy();
 		app.manet.unregisterObserver(this);
-		unregisterReceiver(updateUIReciver);
-		
-		MainActivity.onSendFlag = false;
 	}
 	
 	public static void open(Activity parentActivity) {
@@ -246,6 +230,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 			String msg = params[1]; 
 			try{
 				String retval = sendMessage(address, msg);
+//				finish();
 				return retval;
 			}catch(Exception e){
 				return "";
@@ -257,9 +242,14 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 			 Log.v(TAG, "sendMessage()");
 			 	String retval = null;
 				DatagramSocket socket = null;
+//			 	Socket socket = null;
 				try {
 					/*Amado section*/
+//					Log.v(TAG, address);
+//					socket = new Socket(address,6789);
+//					Log.v(TAG, address);
 					socket = new DatagramSocket();
+//					DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
 
 					byte buff[] = msg.getBytes();
 					int msgLen = buff.length;
@@ -272,6 +262,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 					DatagramPacket packet = 
 							new DatagramPacket(buff, msgLen, InetAddress.getByName(address), MessageService.MESSAGE_PORT);
 					socket.send(packet);
+//					outToServer.write(buff,0,msgLen);
 					/*Amado section End*/
 					if (truncated) {
 						retval = "Message truncated and sent.";
@@ -361,10 +352,104 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spnDestination.setAdapter(adapter);
 	}
-	
+
+
 	@Override
 	public void onError(String error) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	
+	
+	
+	
+//	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	
+	/** Messenger for communicating with service. */
+	Messenger mService = null;
+	/** Flag indicating whether we have called bind on the service. */
+	boolean mIsBound;
+	
+	
+	class IncomingHandler extends Handler {
+	    @Override
+	    public void handleMessage(Message msg) {
+	        String texto = Integer.toString(msg.what);
+	    	
+	    }
+	}
+	
+	final Messenger mMessenger = new Messenger(new IncomingHandler());
+	
+	private MessageService mConnection = new MessageService() {
+	    public void onServiceConnected(ComponentName className,
+	            IBinder service) {
+	        // This is called when the connection with the service has been
+	        // established, giving us the service object we can use to
+	        // interact with the service.  We are communicating with our
+	        // service through an IDL interface, so get a client-side
+	        // representation of that from the raw service object.
+	        mService = new Messenger(service);
+	        
+	        // We want to monitor the service for as long as we are
+	        // connected to it.
+	        try {
+	            Message msg = Message.obtain(null,
+	            		MessageService.MSG_REGISTER_CLIENT);
+	            msg.replyTo = mMessenger;
+	            mService.send(msg);
+
+	            // Give it some value as an example.
+	            msg = Message.obtain(null,
+	            		MessageService.MSG_SET_VALUE, this.hashCode(), 0);
+	            mService.send(msg);
+	        } catch (RemoteException e) {
+	            // In this case the service has crashed before we could even
+	            // do anything with it; we can count on soon being
+	            // disconnected (and then reconnected if it can be restarted)
+	            // so there is no need to do anything here.
+	        }
+
+	    }
+
+	    public void onServiceDisconnected(ComponentName className) {
+	        // This is called when the connection with the service has been
+	        // unexpectedly disconnected -- that is, its process crashed.
+	        mService = null;
+
+	    }
+	};
+	
+	void doBindService() {
+	    // Establish a connection with the service.  We use an explicit
+	    // class name because there is no reason to be able to let other
+	    // applications replace our component.
+	    bindService(new Intent(SendMessageActivity.this, 
+	    		MessageService.class), (ServiceConnection) mConnection, Context.BIND_AUTO_CREATE);
+	    mIsBound = true;
+
+	}
+
+	void doUnbindService() {
+	    if (mIsBound) {
+	        // If we have received the service, and hence registered with
+	        // it, then now is the time to unregister.
+	        if (mService != null) {
+	            try {
+	                Message msg = Message.obtain(null,
+	                		MessageService.MSG_UNREGISTER_CLIENT);
+	                msg.replyTo = mMessenger;
+	                mService.send(msg);
+	            } catch (RemoteException e) {
+	                // There is nothing special we need to do if the service
+	                // has crashed.
+	            }
+	        }
+
+	        // Detach our existing connection.
+	        unbindService((ServiceConnection) mConnection);
+	        mIsBound = false;
+	    }
 	}
 }

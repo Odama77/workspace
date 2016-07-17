@@ -110,36 +110,35 @@ public class MessageService extends Service {
     	// unique notification id
     	notificationId++;
     	
-    	if(!MainActivity.onSendFlag){
-	    	// set the icon, ticker text, and timestamp        
-	    	notification = 
-	    		new Notification(R.drawable.exclamation, tickerStr, System.currentTimeMillis());
-	    	  	
-	    	Intent intent = new Intent(this, ViewMessageActivity.class);
-	    	if (extras != null) {
-	    		intent.putExtras(extras);
-	    	}
-	    	
-	    	// NOTE: Use a unique notification id to ensure a new pending intent is created.
-	    	
-	    	// pending intent to launch main activity if the user selects notification	  
-	    	pendingIntent = 
-	    		PendingIntent.getActivity(this, notificationId, intent, 0);
-	    	
-	    	// cancel the notification after it is checked by the user
-	    	notification.flags |= Notification.FLAG_AUTO_CANCEL;
-	    	
-	    	// vibrate
-	    	// notification.defaults |= Notification.DEFAULT_VIBRATE; // DEBUG
-	
-	    	// set the info for the views that show in the notification panel    
-	    	notification.setLatestEventInfo(this, "Wireless AdHoc", tickerStr, pendingIntent);
-	    	
-	    	// NOTE: Use a unique notification id, otherwise an existing notification with the same id will be replaced.
-	    	
-	    	// send the notification
-	    	notifier.notify(notificationId, notification);
+    	// set the icon, ticker text, and timestamp        
+    	notification = 
+    		new Notification(R.drawable.exclamation, tickerStr, System.currentTimeMillis());
+    	  	
+    	Intent intent = new Intent(this, ViewMessageActivity.class);
+    	if (extras != null) {
+    		intent.putExtras(extras);
     	}
+    	
+    	// NOTE: Use a unique notification id to ensure a new pending intent is created.
+    	
+    	// pending intent to launch main activity if the user selects notification	  
+    	pendingIntent = 
+    		PendingIntent.getActivity(this, notificationId, intent, 0);
+    	
+    	// cancel the notification after it is checked by the user
+    	notification.flags |= Notification.FLAG_AUTO_CANCEL;
+    	
+    	// vibrate
+    	// notification.defaults |= Notification.DEFAULT_VIBRATE; // DEBUG
+
+    	// set the info for the views that show in the notification panel    
+    	notification.setLatestEventInfo(this, "Wireless AdHoc", tickerStr, pendingIntent);
+    	
+    	// NOTE: Use a unique notification id, otherwise an existing notification with the same id will be replaced.
+    	
+    	// send the notification
+    	notifier.notify(notificationId, notification);
+    	
     	
 //    	Update UI for Chat
     	Intent local = new Intent();

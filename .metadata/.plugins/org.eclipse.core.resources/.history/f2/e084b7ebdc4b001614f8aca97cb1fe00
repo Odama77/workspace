@@ -298,9 +298,11 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
         ipAddressEditTextPref.setText(ipAddress);        
         
         // dns server
+        PreferenceScreen screen = getPreferenceScreen();
         EditTextPreference dnsServerEditTextPref = (EditTextPreference)findPreference("dnspref");
         Validation.setupIpAddressValidator(dnsServerEditTextPref);
         dnsServerEditTextPref.setText(manetcfg.getDnsServer());
+        screen.removePreference(dnsServerEditTextPref);
         
         // routing protocol
 //        String currRoutingProtocol = manetcfg.getRoutingProtocol();

@@ -112,10 +112,6 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 	private TextView tvSSID = null;
 	
 	private int currDialogId = -1;
-	
-	
-	public static boolean onSendFlag = false;
-	
 			
     /** Called when the activity is first created. */
     @Override

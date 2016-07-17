@@ -69,8 +69,6 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);	
 		
-		MainActivity.onSendFlag = true;
-		
 		Log.v(TAG, "onCreate()");
 		
         // init application
@@ -206,8 +204,6 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		super.onDestroy();
 		app.manet.unregisterObserver(this);
 		unregisterReceiver(updateUIReciver);
-		
-		MainActivity.onSendFlag = false;
 	}
 	
 	public static void open(Activity parentActivity) {

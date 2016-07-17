@@ -283,6 +283,7 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
 //        Validation.setupIpAddressValidator(ipAddressEditTextPref);
 
 //      AMADO WAS HERE --- Adding DHCP  
+        
         String macAddress = MainActivity.getBluetoothMacAddress();
 	    String[] macAddressSplit = macAddress.split(":");
 	    String ipAddress = "192.168.1.";
@@ -293,14 +294,17 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
 //	    if(i != 5)
 //	            ipAddress = ipAddress + ".";
 //	    }
+        
 //      AMADOIS GONE
         
         ipAddressEditTextPref.setText(ipAddress);        
         
         // dns server
+        PreferenceScreen screen = getPreferenceScreen();
         EditTextPreference dnsServerEditTextPref = (EditTextPreference)findPreference("dnspref");
         Validation.setupIpAddressValidator(dnsServerEditTextPref);
         dnsServerEditTextPref.setText(manetcfg.getDnsServer());
+        screen.removePreference(dnsServerEditTextPref);
         
         // routing protocol
 //        String currRoutingProtocol = manetcfg.getRoutingProtocol();

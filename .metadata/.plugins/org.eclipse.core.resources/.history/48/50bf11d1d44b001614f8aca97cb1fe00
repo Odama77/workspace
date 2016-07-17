@@ -4,8 +4,14 @@
  */
 package org.span.manager;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -18,7 +24,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 
 public class MessageService extends Service {
@@ -76,6 +86,11 @@ public class MessageService extends Service {
      * When binding to the service, we return an interface to our messenger
      * for sending messages to the service.
      */
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO Auto-generated method stub
+		return mMessenger.getBinder();
+	}
     
     /**     
      * Show a notification while this service is running.     
@@ -97,10 +112,6 @@ public class MessageService extends Service {
     		messageList.add(from + ": "+ content);
     		for(String x : messageList)
     			Log.v(TAG, x);
-    		
-    		if(messageList.size() == 11)
-    			messageList.remove(0);
-    		
     	}
     	//End of Amado Section
     	
@@ -110,44 +121,34 @@ public class MessageService extends Service {
     	// unique notification id
     	notificationId++;
     	
-    	if(!MainActivity.onSendFlag){
-	    	// set the icon, ticker text, and timestamp        
-	    	notification = 
-	    		new Notification(R.drawable.exclamation, tickerStr, System.currentTimeMillis());
-	    	  	
-	    	Intent intent = new Intent(this, ViewMessageActivity.class);
-	    	if (extras != null) {
-	    		intent.putExtras(extras);
-	    	}
-	    	
-	    	// NOTE: Use a unique notification id to ensure a new pending intent is created.
-	    	
-	    	// pending intent to launch main activity if the user selects notification	  
-	    	pendingIntent = 
-	    		PendingIntent.getActivity(this, notificationId, intent, 0);
-	    	
-	    	// cancel the notification after it is checked by the user
-	    	notification.flags |= Notification.FLAG_AUTO_CANCEL;
-	    	
-	    	// vibrate
-	    	// notification.defaults |= Notification.DEFAULT_VIBRATE; // DEBUG
-	
-	    	// set the info for the views that show in the notification panel    
-	    	notification.setLatestEventInfo(this, "Wireless AdHoc", tickerStr, pendingIntent);
-	    	
-	    	// NOTE: Use a unique notification id, otherwise an existing notification with the same id will be replaced.
-	    	
-	    	// send the notification
-	    	notifier.notify(notificationId, notification);
+    	// set the icon, ticker text, and timestamp        
+    	notification = 
+    		new Notification(R.drawable.exclamation, tickerStr, System.currentTimeMillis());
+    	  	
+    	Intent intent = new Intent(this, ViewMessageActivity.class);
+    	if (extras != null) {
+    		intent.putExtras(extras);
     	}
     	
-//    	Update UI for Chat
-    	Intent local = new Intent();
+    	// NOTE: Use a unique notification id to ensure a new pending intent is created.
+    	
+    	// pending intent to launch main activity if the user selects notification	  
+    	pendingIntent = 
+    		PendingIntent.getActivity(this, notificationId, intent, 0);
+    	
+    	// cancel the notification after it is checked by the user
+    	notification.flags |= Notification.FLAG_AUTO_CANCEL;
+    	
+    	// vibrate
+    	// notification.defaults |= Notification.DEFAULT_VIBRATE; // DEBUG
 
-    	local.setAction("com.hello.action");
-
-    	this.sendBroadcast(local);
-//    	XXXXXXXXXXXXXXXXXXXXXXXXXXX
+    	// set the info for the views that show in the notification panel    
+    	notification.setLatestEventInfo(this, "Wireless AdHoc", tickerStr, pendingIntent);
+    	
+    	// NOTE: Use a unique notification id, otherwise an existing notification with the same id will be replaced.
+    	
+    	// send the notification
+    	notifier.notify(notificationId, notification);
     }
     
     private class MessageListenerThread extends Thread {
@@ -206,11 +207,79 @@ public class MessageService extends Service {
 			}
     	}
     }
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
     
+    
+    
+//    XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+    
+   
+//    /** Holds last value set by a client. */
+//    int mValue = 0;
+//
+//    /**
+//     * Command to the service to register a client, receiving callbacks
+//     * from the service.  The Message's replyTo field must be a Messenger of
+//     * the client where callbacks should be sent.
+//     */
+//    static final int MSG_REGISTER_CLIENT = 1;
+//    
+//    /**
+//     * Command to the service to unregister a client, ot stop receiving callbacks
+//     * from the service.  The Message's replyTo field must be a Messenger of
+//     * the client as previously given with MSG_REGISTER_CLIENT.
+//     */
+//    static final int MSG_UNREGISTER_CLIENT = 2;
+//
+//    /**
+//     * Command to service to set a new value.  This can be sent to the
+//     * service to supply a new value, and will be sent by the service to
+//     * any registered clients with the new value.
+//     */
+//    static final int MSG_SET_VALUE = 3;
+//    
+//    /**
+//     * Handler of incoming messages from clients.
+//     */
+//    final Messenger mMessenger = new Messenger(new IncomingHandler());
+//    
+//    public void sendMessage(){
+//    	Message msg = new Message();
+//    	
+//    }
+//    
+//    class IncomingHandler extends Handler {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case MSG_REGISTER_CLIENT:
+//                    mClients.add(msg.replyTo);
+//                    break;
+//                case MSG_UNREGISTER_CLIENT:
+//                    mClients.remove(msg.replyTo);
+//                    break;
+//                case MSG_SET_VALUE:
+//                    mValue = msg.arg1;
+//                    for (int i=mClients.size()-1; i>=0; i--) {
+//                        try {
+//                            mClients.get(i).send(Message.obtain(null,
+//                                    MSG_SET_VALUE, mValue, 0));
+//                        } catch (RemoteException e) {
+//                            // The client is dead.  Remove it from the list;
+//                            // we are going through the list from back to front
+//                            // so this is safe to do inside the loop.
+//                            mClients.remove(i);
+//                        }
+//                    }
+//                    break;
+//                default:
+//                    super.handleMessage(msg);
+//            }
+//        }
+//    }
+//    
+//    /**
+//     * Target we publish for clients to send messages to IncomingHandler.
+//     */
+    
+
 }
