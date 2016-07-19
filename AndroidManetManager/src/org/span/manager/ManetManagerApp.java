@@ -30,7 +30,8 @@ import org.span.service.core.ManetService.AdhocStateEnum;
 import org.span.service.routing.Node;
 import org.span.service.system.ManetConfig;
 
-
+import org.itt.web.MyServer;		
+import org.itt.web.WebServerHelper;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -64,6 +65,7 @@ public class ManetManagerApp extends Application implements ManetObserver {
 	// adhoc state
 	public AdhocStateEnum adhocState = null;
 	
+	public WebServerHelper server = null;
 	// singleton
 	private static ManetManagerApp instance = null;
 	
@@ -89,6 +91,8 @@ public class ManetManagerApp extends Application implements ManetObserver {
         // init MANET helper
 		manet = new ManetHelper(this);
 		manet.registerObserver(this);
+		
+		server = new WebServerHelper();
 		
 		// init activity helpers to start observing before activities are created
 		ViewLogActivityHelper.setApplication(this);

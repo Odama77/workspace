@@ -164,7 +164,6 @@ public class MessageService extends Service {
     			// bind to local machine; will receive broadcasts and directed messages
     			// will most likely bind to 127.0.0.1 (localhost)
     			DatagramSocket socket = new DatagramSocket(MESSAGE_PORT);
-//    			ServerSocket socket = new ServerSocket(MESSAGE_PORT);
     			
     			byte[] buff = new byte[MAX_MESSAGE_LENGTH];
 				DatagramPacket packet = new DatagramPacket(buff, buff.length);
@@ -174,16 +173,9 @@ public class MessageService extends Service {
 						// address Android issue where old packet lengths are erroneously 
 						// carried over between packet reuse
 						packet.setLength(buff.length); 
-//						Socket connectionSocket = socket.accept();
-						
-//						BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-						
-//						DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 						socket.receive(packet); // blocking
 						
 						String msg = new String(packet.getData(), 0, packet.getLength());
-//						byte[] receivedData = inFromClient.readLine().getBytes();
-//						String msg = new String(receivedData, 0, receivedData.length);
 						String from = msg.substring(0, msg.indexOf("\n"));
 						String content = msg.substring(msg.indexOf("\n")+1);
 						
