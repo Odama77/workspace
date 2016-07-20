@@ -684,7 +684,7 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 	
 	@Override
 	public void onPeersUpdated(HashSet<Node> peers) {
-		Log.d(TAG, "onPeersUpdated()"); // DEBUG
+		Log.d(TAG, "onPeersUpdated()"); // 
 	}
 	
 	@Override

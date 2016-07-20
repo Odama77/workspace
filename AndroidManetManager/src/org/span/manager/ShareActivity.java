@@ -31,6 +31,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -42,6 +45,10 @@ import org.apache.http.util.EntityUtils;
 import org.servalproject.SimpleWebServer;
 import org.servalproject.system.WiFiRadio;
 import org.span.R;
+import org.span.service.ManetObserver;
+import org.span.service.core.ManetService.AdhocStateEnum;
+import org.span.service.routing.Node;
+import org.span.service.system.ManetConfig;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -57,13 +64,16 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class ShareActivity extends Activity {
+public class ShareActivity extends Activity implements OnItemSelectedListener, ManetObserver {
 	
 	private static final String TAG = "ShareActivity";
 	public boolean ask=true;
@@ -72,8 +82,16 @@ public class ShareActivity extends Activity {
     public static ArrayAdapter<String> shareAdapter = null;
     public static String currentDir="/";
     
-	 private ProgressDialog pDialog;
-	 public static final int progress_bar_type = 4;
+    private ProgressDialog pDialog;
+    public static final int progress_bar_type = 4;
+    
+    private static final String PROMPT = "Enter address ...";
+    
+    private ManetManagerApp app = null;
+    
+    private Spinner shareServer = null;
+    
+    public String selection = null;
     
     /** Called when the activity is first created. */
     @Override
@@ -83,9 +101,13 @@ public class ShareActivity extends Activity {
         
         setContentView(R.layout.share);
         
+        app = (ManetManagerApp)getApplication();
+        
         shareList = new ArrayList<String>();
         fetchFileNames(currentDir);
         
+        shareServer = (Spinner) findViewById(R.id.shareServer_id);
+	    shareServer.setOnItemSelectedListener(this);
         
         shareView = (ListView)findViewById(R.id.shareList_id);
         shareAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.share_text,shareList);
@@ -111,6 +133,9 @@ public class ShareActivity extends Activity {
 	        	
 	        }
         });
+        
+        app.manet.registerObserver(this);
+	    app.manet.sendPeersQuery();
 
     }
     @Override
@@ -291,6 +316,101 @@ public class ShareActivity extends Activity {
        }
 
    }
+   
+   	
+   	
+	
+	@Override
+	public void onServiceStarted() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onServiceStopped() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAdhocStateUpdated(AdhocStateEnum state, String info) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onConfigUpdated(ManetConfig manetcfg) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onRoutingInfoUpdated(String info) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onError(String error) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onServiceConnected() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onServiceDisconnected() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+		Log.v(TAG, "onItemSelected()");
+		selection = (String)shareServer.getItemAtPosition(position);
+		Log.v(TAG, "Selected Server: " + selection);
+//		if (selection.equals(PROMPT)) {
+//			etAddress.setVisibility(EditText.VISIBLE);
+//			etAddress.setText(app.manetcfg.getIpNetwork());
+//			etAddress.setSelection(etAddress.getText().length()); // move cursor to end
+//			app.focusAndshowKeyboard(etAddress);
+//		} else {
+//			etAddress.setVisibility(EditText.GONE);
+//		}
+	}
+	@Override
+	public void onPeersUpdated(HashSet<Node> peers) {
+		// TODO Auto-generated method stub
+		Log.v(TAG, "onPeersUpdated()");
+		Set<String> options = new TreeSet<String>();
+//		options.add(app.manetcfg.getIpBroadcast() + " (Broadcast)");
+//		options.add(PROMPT);
+		
+		String option = null;
+		for (Node peer : peers) {
+			if (peer.userId != null) {
+				option = peer.addr + " (" + peer.userId + ")";
+			} else {
+				option = peer.addr;	
+			}
+			options.add(option);
+		}
+		
+		ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, options.toArray());
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		shareServer.setAdapter(adapter);
+	}
   	
+	@Override
+	public void onDestroy() {
+		Log.v(TAG, "onDestroy()");
+		super.onDestroy();
+		app.manet.unregisterObserver(this);
+		
+		MainActivity.onSendFlag = false;
+	}
 }
 

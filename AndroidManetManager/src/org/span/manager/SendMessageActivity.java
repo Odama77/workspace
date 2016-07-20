@@ -45,7 +45,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 	
 	private ManetManagerApp app = null;
     
-    private Spinner spnDestination = null;
+    public static Spinner spnDestination = null;
     private EditText etAddress = null;
     private EditText etMessage = null;
     private Button btnSend = null;
