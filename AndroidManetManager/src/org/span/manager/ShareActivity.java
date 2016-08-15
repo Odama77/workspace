@@ -21,6 +21,10 @@
  */
 package org.span.manager;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -91,7 +95,13 @@ public class ShareActivity extends Activity implements OnItemSelectedListener, M
     
     private Spinner shareServer = null;
     
-    public String selection = null;
+    public static String selection = "localhost";
+    
+    public LinkedHashMap<String, String> nameToPath= new LinkedHashMap<String,String>();
+    
+    private static String lastServer = null;
+    private ArrayList<String> keepState;
+    private Set<String> options;
     
     /** Called when the activity is first created. */
     @Override
@@ -101,7 +111,11 @@ public class ShareActivity extends Activity implements OnItemSelectedListener, M
         
         setContentView(R.layout.share);
         
+        nameToPath.put(currentDir,currentDir);
+        
         app = (ManetManagerApp)getApplication();
+        app.manet.registerObserver(this);
+	    app.manet.sendPeersQuery();
         
         shareList = new ArrayList<String>();
         fetchFileNames(currentDir);
@@ -121,21 +135,23 @@ public class ShareActivity extends Activity implements OnItemSelectedListener, M
 	        	System.out.println( "La data " + o.toString());
 	        	
 	        	
-	        	String selected = shareList.get(position);
+	        	String selected = nameToPath.get(shareList.get(position));
 	        	
 	        	if(selected.charAt(selected.length()-1)=='/'){	        	
 		        	fetchFileNames(selected);	        	
 		        	shareAdapter.notifyDataSetChanged();
 		        }
 	        	else{
-	        		new DownloadFileFromURL().execute("http://192.168.1.162:8080"+selected);
+	        		if(selection == null)
+	        			selection = "localhost";
+	        		String file_url= "http://"+ selection +":8080"+selected;
+
+	        		new DownloadFileFromURL().execute(file_url);
 	        	}
 	        	
 	        }
         });
         
-        app.manet.registerObserver(this);
-	    app.manet.sendPeersQuery();
 
     }
     @Override
@@ -145,22 +161,61 @@ public class ShareActivity extends Activity implements OnItemSelectedListener, M
     		return;
     	}
     	
-    	
-    	String parentDir;
-    	int lastIndex= currentDir.length()-1;
-    	if(currentDir.lastIndexOf("/")==lastIndex ){
-    		currentDir = currentDir.substring(0,lastIndex-1);
-    	}
-    	parentDir=currentDir.substring(0, currentDir.lastIndexOf("/")+1);
+//    	String parentDir;
+//    	int lastIndex= currentDir.length()-1;
+//    	if(currentDir.lastIndexOf("/")==lastIndex ){
+//    		currentDir = currentDir.substring(0,lastIndex-1);
+//    	}
+//    	parentDir=currentDir.substring(0, currentDir.lastIndexOf("/")+1);
+    	String parentDir = getParent(currentDir);
     	fetchFileNames(parentDir);
+    	
     	shareAdapter.notifyDataSetChanged();
     }
+    
+    public String getParent(String path){
+    	if (path.isEmpty())
+    		return null;
+    	String parentDir;
+    	int lastIndex= path.length()-1;
+    	int lastIndexOfSlash=path.lastIndexOf("/");
+    	if(path.lastIndexOf("/")==lastIndex ){
+    		path = path.substring(0,lastIndex-1);
+    	}
+    	parentDir=path.substring(0, path.lastIndexOf("/")+1);
+    	return parentDir;
+    	
+    }
+    
+    public String getFileName(String path){
+    	String fileName=path;
+    	String finishChar="";
+    	
+    	if (path.isEmpty())
+    		return null;
+    	
+    	if(path.equals("/"))
+    		return "/";
+    	
+    	int lastIndex= path.length()-1;
+    	if(path.lastIndexOf("/")==lastIndex){
+    		path = path.substring(0,lastIndex);
+    		finishChar="/";
+    	} 
+    	fileName=path.substring(path.lastIndexOf("/")+1, path.length());
+    	return fileName+finishChar;
+    	
+    }
+    
+
+    
     public void fetchFileNames(String query){
     
     	
     	HttpClient client = new DefaultHttpClient();
-    	
-    	HttpGet request = new HttpGet("http://192.168.1.162:8080"+query);
+    	if(selection == null)
+			selection = "localhost";
+    	HttpGet request = new HttpGet("http://"+ selection +":8080"+query);
     	currentDir = query;
     	
     	HttpResponse response=null;
@@ -177,15 +232,23 @@ public class ShareActivity extends Activity implements OnItemSelectedListener, M
     	try {
     		
 			responseStr = EntityUtils.toString(response.getEntity());
-			String lines[] = responseStr.split("\\r?\\n");
+//			String lines[] = responseStr.split("\\r?\\n");
+			nameToPath.clear(); 
+			nameToPath.put(currentDir, currentDir);
+			String lines[]={};
+			if(responseStr.length()>0)
+				lines =responseStr.split("\\r?\\n");
+			
 			for(String line : lines){
-				line = line.replaceFirst(currentDir, "");
+				String displayName = getFileName(line); 
+				nameToPath.put(displayName, line);
 				
 			}
 			shareList.clear();
-			shareList.add(currentDir); 
-			shareList.addAll(Arrays.asList(lines));
-			
+//			shareList.add(currentDir); 
+			for(String key : nameToPath.keySet()){
+				shareList.add(key);
+			}			
 			ask=false;
 		
 			
@@ -371,23 +434,28 @@ public class ShareActivity extends Activity implements OnItemSelectedListener, M
 	public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 		Log.v(TAG, "onItemSelected()");
 		selection = (String)shareServer.getItemAtPosition(position);
+		
+		
+//		if(options.size() == 0)
+//			selection = "localhost";
+		
+//		if(lastServer == null)
+//			lastServer = selection;
+//		else if(keepState.contains(lastServer))
+//			selection = lastServer;
+		
 		Log.v(TAG, "Selected Server: " + selection);
-//		if (selection.equals(PROMPT)) {
-//			etAddress.setVisibility(EditText.VISIBLE);
-//			etAddress.setText(app.manetcfg.getIpNetwork());
-//			etAddress.setSelection(etAddress.getText().length()); // move cursor to end
-//			app.focusAndshowKeyboard(etAddress);
-//		} else {
-//			etAddress.setVisibility(EditText.GONE);
-//		}
+		fetchFileNames("/");
+		
+		
+		shareAdapter.notifyDataSetChanged();
 	}
 	@Override
 	public void onPeersUpdated(HashSet<Node> peers) {
 		// TODO Auto-generated method stub
 		Log.v(TAG, "onPeersUpdated()");
-		Set<String> options = new TreeSet<String>();
-//		options.add(app.manetcfg.getIpBroadcast() + " (Broadcast)");
-//		options.add(PROMPT);
+		options = new TreeSet<String>();
+		options.add("localhost");
 		
 		String option = null;
 		for (Node peer : peers) {
@@ -399,18 +467,35 @@ public class ShareActivity extends Activity implements OnItemSelectedListener, M
 			options.add(option);
 		}
 		
+		Log.v(TAG, "Number of objetcs: " + options.size());
+		
+//		if(options.size() == 0){
+//			selection = "localhost";
+//			fetchFileNames("/");
+//		}
+		
+		keepState = new ArrayList<String>();
+		for(Object x : options.toArray())
+			keepState.add(x.toString());
+		
 		ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, options.toArray());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		shareServer.setAdapter(adapter);
+		
+		if(!options.contains(selection)){
+			selection = "localhost";
+		}
+		shareServer.setSelection(adapter.getPosition(selection));
+		
+		shareAdapter.notifyDataSetChanged();
 	}
   	
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "onDestroy()");
 		super.onDestroy();
+		selection = "localhost";
 		app.manet.unregisterObserver(this);
-		
-		MainActivity.onSendFlag = false;
 	}
 }
 

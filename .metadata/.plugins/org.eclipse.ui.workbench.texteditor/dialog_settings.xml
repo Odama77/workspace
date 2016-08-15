@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Spinner" key="selection"/>
+		<item value="IP_NETMASK_KEY" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="spinner"/>
-			<item value="simple_spinner_dropdown_item"/>
-			<item value="simple_spinner_item"/>
-			<item value="onPeersUpdated"/>
-			<item value="etAddress"/>
-			<item value="selection"/>
-			<item value="onItemSelected"/>
-			<item value="setOnItemSelectedListener"/>
+			<item value="IP_NETMASK_KEY"/>
+			<item value="mask"/>
+			<item value="iw_modul_list"/>
+			<item value="setIpAddress"/>
+			<item value="hash"/>
+			<item value="updatepe"/>
+			<item value="getinstance"/>
+			<item value="shareServer"/>
 		</list>
 		<list key="replacehistory">
 		</list>

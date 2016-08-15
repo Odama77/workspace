@@ -319,7 +319,7 @@ public class ManetConfig implements Serializable {
 	public static final WifiEncryptionSetupMethodEnum WIFI_ENCRYPTION_SETUP_METHOD_DEFAULT 
 		= WifiEncryptionSetupMethodEnum.WPA_SUPPLICANT;
 	public static final WifiTxpowerEnum WIFI_TXPOWER_DEFAULT = WifiTxpowerEnum.AUTO;
-	public static final String IP_ADDRESS_DEFAULT = "192.168.1.100";
+	public static final String IP_ADDRESS_DEFAULT = "10.0.0.12";
 	public static final String DNS_SERVER_DEFAULT = "208.67.222.222"; // OpenDNS
 	
 	public static final boolean ADHOC_FIX_PERSIST_DEFAULT = false;
@@ -578,7 +578,7 @@ public class ManetConfig implements Serializable {
         map.put(ManetConfig.IP_ADDRESS_KEY, addr);
         map.put(ManetConfig.IP_NETWORK_KEY, prefix + ".0");
         map.put(ManetConfig.IP_GATEWAY_KEY, prefix + ".254");
-        map.put(ManetConfig.IP_NETMASK_KEY, "255.255.255.0");
+        map.put(ManetConfig.IP_NETMASK_KEY, "255.0.0.0");
 	}
 	
 	public void setDnsServer(String addr) {
