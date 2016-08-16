@@ -285,14 +285,14 @@ public class ChangeSettingsActivity extends PreferenceActivity implements OnShar
 //      AMADO WAS HERE --- Adding DHCP  
         String macAddress = MainActivity.getBluetoothMacAddress();
 	    String[] macAddressSplit = macAddress.split(":");
-	    String ipAddress = "10.";
-//	    ipAddress = ipAddress + Long.toString(Long.parseLong(macAddressSplit[5], 16));
+	    String ipAddress = "192.168.1.";
+	    ipAddress = ipAddress + Long.toString(Long.parseLong(macAddressSplit[5], 16));
 	    
-	    for(int i = 3; i < 6; i ++){
-	    	ipAddress = ipAddress + Long.toString(Long.parseLong(macAddressSplit[i], 16));
-		    if(i != 5)
-		        ipAddress = ipAddress + ".";
-		}
+//	    for(int i = 3; i < 6; i ++){
+//	    ipAddress = ipAddress + Long.toString(Long.parseLong(macAddressSplit[i], 16));
+//	    if(i != 5)
+//	            ipAddress = ipAddress + ".";
+//	    }
 //      AMADOIS GONE
         
         ipAddressEditTextPref.setText(ipAddress);        
