@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import org.span.service.system.Encryption;
 
 public class MessageService extends Service {
 	
@@ -59,7 +60,12 @@ public class MessageService extends Service {
     	if (msgListenerThread == null) {
     		messageList = new ArrayList<String>();
     		chatQueue = new ConcurrentLinkedQueue<String>();
-	    	msgListenerThread = new MessageListenerThread(chatQueue);
+	    	try {
+				msgListenerThread = new MessageListenerThread(chatQueue);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    	msgListenerThread.start();
     	}
     	
@@ -153,10 +159,11 @@ public class MessageService extends Service {
     private class MessageListenerThread extends Thread {
     	
     	public ConcurrentLinkedQueue<String> chatQueue = null;
-    	
-    	public MessageListenerThread(ConcurrentLinkedQueue<String> chatQueue) {
+    	public Encryption encrypt = null;
+    	public MessageListenerThread(ConcurrentLinkedQueue<String> chatQueue) throws Exception{
 			// TODO Auto-generated constructor stub
     		this.chatQueue = chatQueue;
+    		encrypt = new Encryption();
 		}
     	
     	public void run() {
@@ -176,6 +183,8 @@ public class MessageService extends Service {
 						socket.receive(packet); // blocking
 						
 						String msg = new String(packet.getData(), 0, packet.getLength());
+						msg = encrypt.decrypt(msg);
+						System.out.println("Mensaje -> " + msg);
 						String from = msg.substring(0, msg.indexOf("\n"));
 						String content = msg.substring(msg.indexOf("\n")+1);
 						

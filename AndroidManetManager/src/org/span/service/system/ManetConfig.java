@@ -577,6 +577,7 @@ public class ManetConfig implements Serializable {
         
         map.put(ManetConfig.IP_ADDRESS_KEY, addr);
         map.put(ManetConfig.IP_NETWORK_KEY, prefix + ".0");
+//        map.put(ManetConfig.IP_NETWORK_KEY,"10.0.0.0");
         map.put(ManetConfig.IP_GATEWAY_KEY, prefix + ".254");
         map.put(ManetConfig.IP_NETMASK_KEY, "255.0.0.0");
 	}

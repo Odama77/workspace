@@ -27,6 +27,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.crypto.NoSuchPaddingException;
+
 import org.apache.http.conn.util.InetAddressUtils;
 import org.span.R;
 import org.span.service.ManetObserver;
@@ -36,6 +38,7 @@ import org.span.service.legal.EulaObserver;
 import org.span.service.routing.Node;
 import org.span.service.system.CoreTask;
 import org.span.service.system.ManetConfig;
+import org.span.service.system.Encryption;
 
 import android.R.drawable;
 import android.app.Activity;
@@ -82,6 +85,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;		
 import java.net.URLConnection;
+import java.security.NoSuchAlgorithmException;
+
 import org.itt.web.MyServer;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -223,6 +228,19 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
         
         EulaHelper eula = new EulaHelper(this, this);
         eula.showDialog();
+        
+//        try {
+//			Encryption encrypt = new Encryption();
+//			
+//			String x = encrypt.encrypt("Amado se baña");
+//			String y = encrypt.decrypt(x);
+//			
+//			Log.d("TEST ->", x);
+//			Log.d("TEST ->", y);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} 
     }
     
     @Override

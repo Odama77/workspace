@@ -1,0 +1,5 @@
+package org.span.service.system;
+
+public class Encryption {
+
+}

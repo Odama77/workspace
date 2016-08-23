@@ -18,6 +18,7 @@ import org.span.service.ManetObserver;
 import org.span.service.core.ManetService.AdhocStateEnum;
 import org.span.service.routing.Node;
 import org.span.service.system.ManetConfig;
+import org.span.service.system.Encryption;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -252,14 +253,16 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 			}
 		 }
 		 
-		 private String sendMessage(String address, String msg) throws IOException {
-			 
+		 private String sendMessage(String address, String msg) throws Exception {
+			 Encryption encrypt = new Encryption();
 			 Log.v(TAG, "sendMessage()");
 			 	String retval = null;
 				DatagramSocket socket = null;
 				try {
 					/*Amado section*/
 					socket = new DatagramSocket();
+					
+					msg = encrypt.encrypt(msg);
 
 					byte buff[] = msg.getBytes();
 					int msgLen = buff.length;
@@ -344,7 +347,8 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		// provide option to enter peer address
 		Log.v(TAG, "onPeersUpdated()");
 		Set<String> options = new TreeSet<String>();
-		options.add(app.manetcfg.getIpBroadcast() + " (Broadcast)");
+//		options.add(app.manetcfg.getIpBroadcast() + " (Broadcast)");
+		options.add("10.0.0.0" + " (Broadcast)");
 		options.add(PROMPT);
 		
 		String option = null;
