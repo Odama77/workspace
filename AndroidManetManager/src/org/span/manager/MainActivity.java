@@ -312,7 +312,8 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
     	boolean supRetVal = super.onCreateOptionsMenu(menu);
     	SubMenu setup = menu.addSubMenu(0, MENU_CHANGE_SETTINGS, 0, getString(R.string.main_activity_settings));
     	setup.setIcon(drawable.ic_menu_preferences);
-    	SubMenu about = menu.addSubMenu(0, MENU_ABOUT, 0, getString(R.string.main_activity_about));
+//    	SubMenu about = menu.addSubMenu(0, MENU_ABOUT, 0, getString(R.string.main_activity_about));
+    	SubMenu about = menu.addSubMenu(0, MENU_ABOUT, 0, "Call");
     	about.setIcon(drawable.ic_menu_info_details);
     	SubMenu send = menu.addSubMenu(0, MENU_SEND_MESSAGE, 0, getString(R.string.main_activity_send_message));
     	SubMenu info = menu.addSubMenu(0, MENU_VIEW_ROUTING_INFO, 0, getString(R.string.main_activity_view_routing_info));
@@ -333,7 +334,8 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
 		        	MainActivity.this, ChangeSettingsActivity.class), 0);
 		        break;
 	    	case MENU_ABOUT :
-	    		openAboutDialog();
+	    		RTPGenerator.open((Activity)this);
+//	    		openAboutDialog();
 	    		break;
 	    	case MENU_VIEW_LOG :
 	    		ViewLogActivity.open(this);

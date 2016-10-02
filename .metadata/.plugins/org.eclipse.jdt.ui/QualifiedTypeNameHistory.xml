@@ -29,4 +29,10 @@
 <fullyQualifiedTypeName name="android.content.IntentFilter"/>
 <fullyQualifiedTypeName name="android.content.BroadcastReceiver"/>
 <fullyQualifiedTypeName name="android.preference.PreferenceScreen"/>
+<fullyQualifiedTypeName name="android.util.Base64"/>
+<fullyQualifiedTypeName name="javax.crypto.spec.SecretKeySpec"/>
+<fullyQualifiedTypeName name="android.net.sip.SipProfile"/>
+<fullyQualifiedTypeName name="android.net.sip.SipSession"/>
+<fullyQualifiedTypeName name="android.net.sip.SipErrorCode"/>
+<fullyQualifiedTypeName name="android.R"/>
 </qualifiedTypeNameHistroy>

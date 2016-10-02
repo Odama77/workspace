@@ -4,7 +4,7 @@
     android:versionCode="4"
     android:versionName="1.0" >
     
-    <uses-sdk android:minSdkVersion="9" />
+    <uses-sdk android:minSdkVersion="19" />
     
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -19,14 +19,16 @@
     <uses-permission android:name="android.permission.RECEIVE_ACTION_SCREEN_OFF" />
     <uses-permission android:name="android.permission.RECEIVE_ACTION_USER_PRESENT" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="org.span.permission.MANET" />
+    <uses-permission android:name="org.span.permission.MANET" /><uses-permission android:name="android.permission.RECORD_AUDIO" />
     
     <!-- NOTE: receiver and service tags must be embedded within application tag -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    
     <application android:name="org.span.manager.ManetManagerApp"
         android:icon="@drawable/service_icon_64" 
         android:logo="@drawable/service_icon_64" 
         android:label="@string/global_app_name"
-        android:debuggable="true">
+        >
         
         <activity android:name=".manager.MainActivity"
             android:label="@string/global_app_name" 
@@ -112,6 +114,16 @@
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.SHARE_ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name="org.span.manager.RTPGenerator"
+            android:label="@string/global_app_share_name"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.RTP_ACTION" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

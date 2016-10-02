@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package org.span.manager;
+
+/**
+ * @author Amado L. Peña Mallen
+ *
+ */
+public class SipSettings {
+
+}

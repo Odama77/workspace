@@ -380,9 +380,6 @@ public class ShareActivity extends Activity implements OnItemSelectedListener, M
 
    }
    
-   	
-   	
-	
 	@Override
 	public void onServiceStarted() {
 		// TODO Auto-generated method stub
