@@ -5,8 +5,16 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 import org.span.R;
+import org.span.service.ManetObserver;
+import org.span.service.core.ManetService.AdhocStateEnum;
+import org.span.service.routing.Node;
+import org.span.service.system.ManetConfig;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,16 +29,27 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
-public class RTPGenerator extends Activity{
+public class RTPGenerator extends Activity implements OnItemSelectedListener, ManetObserver{
 	
+	private static final String PROMPT = "Enter address ...";
 	private OnClickListener send = null;
 	private OnClickListener stop = null;
 	private Button sendRTP = null;
 	private Button stopRTP = null;
 	AudioStream audioStream;
 	AudioGroup audioGroup;
+	
+	public static Spinner spnRTP = null;
+	private String selection = null;
+	private EditText desAddress = null;
+	private ManetManagerApp app = null;
 	
 	private static final String TAG = "RTPGenerator";
 	@Override
@@ -39,6 +58,14 @@ public class RTPGenerator extends Activity{
 	  setContentView(R.layout.rtp);
 	  StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 	  StrictMode.setThreadPolicy(policy);
+	  
+	  app = (ManetManagerApp)getApplication();
+	  app.manet.registerObserver(this);
+	  app.manet.sendPeersQuery();
+	  
+	  spnRTP = (Spinner) findViewById(R.id.spnRTP);
+	  spnRTP.setOnItemSelectedListener(this);
+	  desAddress = (EditText) findViewById(R.id.desAddress);
 	  
 	  sendRTP = (Button)findViewById(R.id.startRTP);
 	  stopRTP = (Button)findViewById(R.id.stopRTP);
@@ -54,14 +81,20 @@ public class RTPGenerator extends Activity{
 	      	      audioStream = new AudioStream(InetAddress.getByAddress(getLocalIPAddress ()));
 	      	      audioStream.setCodec(AudioCodec.PCMU);
 	      	      audioStream.setMode(RtpStream.MODE_NORMAL);
-	      	                           //set receiver(vlc player) machine ip address(please update with your machine ip)
-	      	      audioStream.associate(InetAddress.getByAddress(new byte[] {(byte)10, (byte)87, (byte)224, (byte)196 }), 22222);
-	      	   
+	      	      //set receiver(vlc player) machine ip address(please update with your machine ip)
+	      	      if(selection.equals(PROMPT))
+	      	    	  selection = desAddress.getText().toString();
+	      	      StringTokenizer parts = new StringTokenizer(selection);
+	      	      audioStream.associate(InetAddress.getByAddress(new byte[] {(byte)Integer.parseInt(parts.nextToken(".")),
+	      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")), 
+	      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")), 
+	      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")) }), 22222);
 	      	  } catch (Exception e) {
-	      	   Log.e("----------------------", e.toString());
 	      	   e.printStackTrace();
 	      	  }
       			audioStream.join(audioGroup);
+      			stopRTP.setVisibility(View.VISIBLE);
+        		sendRTP.setVisibility(View.GONE);
 			}
 		};
 		
@@ -76,11 +109,15 @@ public class RTPGenerator extends Activity{
         		}catch(Exception e){
         			
         		}
+        		stopRTP.setVisibility(View.GONE);
+        		sendRTP.setVisibility(View.VISIBLE);
 			}
 		};
 		
 		stopRTP.setOnClickListener(this.stop);
 	  
+		stopRTP.setVisibility(View.GONE);
+		
 	}
 	  public static byte[] getLocalIPAddress () {
 		    byte ip[]=null;
@@ -106,6 +143,100 @@ public class RTPGenerator extends Activity{
 		Intent it = new Intent("android.intent.action.RTP_ACTION");
 		activity.startActivity(it);
 		
+	}
+	
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+		Log.v(TAG, "onItemSelected()");
+		selection = (String)spnRTP.getItemAtPosition(position);
+		if (selection.equals(PROMPT)) {
+			desAddress.setVisibility(EditText.VISIBLE);
+			desAddress.setText(app.manetcfg.getIpNetwork());
+			desAddress.setSelection(desAddress.getText().length()); // move cursor to end
+			app.focusAndshowKeyboard(desAddress);
+		} else {
+			desAddress.setVisibility(EditText.GONE);
+		}
+	}
+	@Override
+	public void onServiceConnected() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onServiceDisconnected() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onServiceStarted() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onServiceStopped() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAdhocStateUpdated(AdhocStateEnum state, String info) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onConfigUpdated(ManetConfig manetcfg) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onPeersUpdated(HashSet<Node> peers) {
+		// provide option to enter peer address
+		Log.v(TAG, "onPeersUpdated()");
+		Set<String> options = new TreeSet<String>();
+//		options.add(app.manetcfg.getIpBroadcast() + " (Broadcast)");
+		options.add(PROMPT);
+		
+		String option = null;
+		for (Node peer : peers) {
+			if (peer.userId != null) {
+				option = peer.addr + " (" + peer.userId + ")";
+			} else {
+				option = peer.addr;	
+			}
+			options.add(option);
+		}
+		
+		ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, options.toArray());
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spnRTP.setAdapter(adapter);
+		
+	}
+	@Override
+	public void onRoutingInfoUpdated(String info) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onError(String error) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void onDestroy() {
+		Log.v(TAG, "onDestroy()");
+		super.onDestroy();
+		
+		try{
+			audioGroup.clear();
+    		audioStream.release();
+		}catch(Exception e){
+			
+		}
 	}
 
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    android:paddingTop="3dp">
+
+    	<LinearLayout android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:paddingTop="3dp"
+        android:orientation="vertical" >
+        	<TextView android:text="Destination:" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:gravity="center_vertical" />
+		    <Spinner android:id="@+id/spnRTP"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:prompt="@string/prompt_destination_spinner"/>
+	   
+		    <EditText android:id="@+id/desAddress"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:visibility="gone"
+		            android:inputType="phone" />
+    	    
+        </LinearLayout>
+	    
+	    <Button
+	        android:id="@+id/startRTP"
+	        android:text="@string/prompt_send_button"
+	        android:layout_gravity="center"
+	        android:layout_width="220dp"
+			android:layout_height="70dp"/>
+	
+	    <Button
+	        android:id="@+id/stopRTP"
+	        android:text="@string/prompt_stop_button"
+	        android:layout_gravity="center"
+	        android:layout_width="220dp"
+			android:layout_height="70dp"/>
+
+</LinearLayout>

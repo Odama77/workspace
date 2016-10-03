@@ -81,7 +81,7 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
 		
 	    app = (ManetManagerApp)getApplication();
 	    
-	    //Amado Setcion
+	    //Amado Section
 	    chatView = (ListView)findViewById(R.id.chat_id);
 	    messageAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.item_view,messageList);
 	    chatView.setAdapter(messageAdapter);

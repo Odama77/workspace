@@ -158,6 +158,8 @@
     <string name="hint_message_waiting">"Waiting ..."</string>
     <string name="start_notification_line">"Wireless Ad-Hoc"</string>
     <string name="prompt_destination_spinner">"Select Destination"</string>
+    <string name="prompt_send_button">"CALL"</string>
+    <string name="prompt_stop_button">"HAND OFF"</string>
     <string name="routing_info_layout_category_all">Routing</string>
     <string name="routing_info_layout_neighbors">Neighbors</string>
     <string name="routing_info_layout_neighbors_summary">Info about neighbors</string>
