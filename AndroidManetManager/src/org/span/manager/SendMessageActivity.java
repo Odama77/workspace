@@ -60,7 +60,6 @@ public class SendMessageActivity extends Activity implements OnItemSelectedListe
     public static ListView chatView = null;
     public static ArrayAdapter<String> messageAdapter = null;
     public static String address2 = null;
-    
     BroadcastReceiver updateUIReciver;
     
     //End Amado Section

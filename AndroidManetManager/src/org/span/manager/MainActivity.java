@@ -52,6 +52,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -228,19 +230,8 @@ public class MainActivity extends Activity implements EulaObserver, ManetObserve
         
         EulaHelper eula = new EulaHelper(this, this);
         eula.showDialog();
-        
-//        try {
-//			Encryption encrypt = new Encryption();
-//			
-//			String x = encrypt.encrypt("Amado se baña");
-//			String y = encrypt.decrypt(x);
-//			
-//			Log.d("TEST ->", x);
-//			Log.d("TEST ->", y);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} 
+        MediaPlayer mediaPlayer = new MediaPlayer(); 
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
     
     @Override

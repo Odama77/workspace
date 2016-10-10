@@ -25,7 +25,6 @@
 <fullyQualifiedTypeName name="android.os.Handler"/>
 <fullyQualifiedTypeName name="android.os.Message"/>
 <fullyQualifiedTypeName name="android.os.RemoteException"/>
-<fullyQualifiedTypeName name="android.content.Context"/>
 <fullyQualifiedTypeName name="android.content.IntentFilter"/>
 <fullyQualifiedTypeName name="android.content.BroadcastReceiver"/>
 <fullyQualifiedTypeName name="android.preference.PreferenceScreen"/>
@@ -35,4 +34,16 @@
 <fullyQualifiedTypeName name="android.net.sip.SipSession"/>
 <fullyQualifiedTypeName name="android.net.sip.SipErrorCode"/>
 <fullyQualifiedTypeName name="android.R"/>
+<fullyQualifiedTypeName name="java.util.StringTokenizer"/>
+<fullyQualifiedTypeName name="android.net.Uri"/>
+<fullyQualifiedTypeName name="android.media.RingtoneManager"/>
+<fullyQualifiedTypeName name="android.media.Ringtone"/>
+<fullyQualifiedTypeName name="android.media.AudioManager"/>
+<fullyQualifiedTypeName name="android.content.Context"/>
+<fullyQualifiedTypeName name="android.net.rtp.AudioGroup"/>
+<fullyQualifiedTypeName name="android.net.rtp.AudioCodec"/>
+<fullyQualifiedTypeName name="android.net.rtp.RtpStream"/>
+<fullyQualifiedTypeName name="java.util.Timer"/>
+<fullyQualifiedTypeName name="java.util.TimerTask"/>
+<fullyQualifiedTypeName name="android.os.StrictMode"/>
 </qualifiedTypeNameHistroy>
