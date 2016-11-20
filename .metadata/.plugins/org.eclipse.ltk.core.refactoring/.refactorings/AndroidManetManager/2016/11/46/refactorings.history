@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;AndroidManetManager&apos;&#x0D;&#x0A;- Original project: &apos;AndroidManetManager&apos;&#x0D;&#x0A;- Original element: &apos;AndroidManetManager/src/org.videolan.libvlc&apos;&#x0D;&#x0A;- Delete subpackages" description="Delete element" element1="/src&lt;org.videolan.libvlc.util" element2="/src&lt;org.videolan.libvlc.media" element3="/src&lt;org.videolan.libvlc" element4="/src&lt;org.videolan" elements="4" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1479600924628" subPackages="true" version="1.0"/>
+</session>

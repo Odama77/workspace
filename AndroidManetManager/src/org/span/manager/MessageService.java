@@ -260,13 +260,13 @@ public class MessageService extends Service {
   	      	    	audioGroup = new AudioGroup();
   	      	    	audioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);        
   	      	    	audioStream = new AudioStream(InetAddress.getByAddress(getLocalIPAddress()));
-  	      	    	audioStream.setCodec(AudioCodec.GSM);
+  	      	    	audioStream.setCodec(AudioCodec.PCMU);
   	      	    	audioStream.setMode(RtpStream.MODE_NORMAL);
   	      	    	StringTokenizer parts2 = new StringTokenizer(sourceIP);
   	      	    	audioStream.associate(InetAddress.getByAddress(new byte[] {(byte)Integer.parseInt(parts2.nextToken(".")),
   	      	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")), 
   	      	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")), 
-  	      	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")) }), 22222);
+  	      	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")) }), 55555);
 	  	      	} catch (Exception e) {
 	  	      		e.printStackTrace();
 	  	      	}

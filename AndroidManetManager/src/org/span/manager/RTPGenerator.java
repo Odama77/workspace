@@ -190,14 +190,14 @@ public class RTPGenerator extends Activity implements OnItemSelectedListener, Ma
 		      	      audioGroup = new AudioGroup();
 		      	      audioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);        
 		      	      audioStream = new AudioStream(InetAddress.getByAddress(getLocalIPAddress ()));
-		      	      audioStream.setCodec(AudioCodec.GSM);
+		      	      audioStream.setCodec(AudioCodec.PCMU);
 		      	      audioStream.setMode(RtpStream.MODE_NORMAL);
 		      	      //set receiver(vlc player) machine ip address(please update with your machine ip)
 		      	      StringTokenizer parts = new StringTokenizer(selection);
 		      	      audioStream.associate(InetAddress.getByAddress(new byte[] {(byte)Integer.parseInt(parts.nextToken(".")),
 		      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")), 
 		      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")), 
-		      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")) }), 22222);
+		      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")) }), 55555);
 		      	  } catch (Exception e) {
 		      	   e.printStackTrace();
 		      	  }
@@ -282,7 +282,7 @@ public class RTPGenerator extends Activity implements OnItemSelectedListener, Ma
     	    	audioStream.associate(InetAddress.getByAddress(new byte[] {(byte)Integer.parseInt(parts2.nextToken(".")),
     	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")), 
     	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")), 
-    	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")) }), 22222);
+    	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")) }), 55555);
     	    	audioStream.join(audioGroup);
     			audioGroup.clear();
 //    			audioStream.release();
