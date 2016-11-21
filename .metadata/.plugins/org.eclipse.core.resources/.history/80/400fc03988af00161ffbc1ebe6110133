@@ -271,7 +271,7 @@ public class MessageService extends Service {
   	      	    	audioStream = new AudioStream(InetAddress.getByAddress(getLocalIPAddress()));
   	      	    	audioStream.setCodec(AudioCodec.PCMU);
   	      	    	audioStream.setMode(RtpStream.MODE_NORMAL);
-  	      	    	StringTokenizer parts2 = new StringTokenizer(destinationIP);
+  	      	    	StringTokenizer parts2 = new StringTokenizer(sourceIP);
   	      	    	audioStream.associate(InetAddress.getByAddress(new byte[] {(byte)Integer.parseInt(parts2.nextToken(".")),
   	      	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")), 
   	      	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")), 

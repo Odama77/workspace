@@ -94,7 +94,7 @@ public class RTPGenerator extends Activity implements OnItemSelectedListener, Ma
 	    		sendRTP.setVisibility(View.GONE);
 	    		answerRTP.setVisibility(View.GONE);
     	      	String destination = selection;
-	  			String msg = "<<1>>&" + app.manetcfg.getIpAddress();		//Mensaje de conexion
+	  			String msg = "<<1>>";		//Mensaje de conexion
 	  			String error = null, errorMsg = "";
 	  			if (selection.equals(PROMPT)) {
 	  				address = desAddress.getText().toString();

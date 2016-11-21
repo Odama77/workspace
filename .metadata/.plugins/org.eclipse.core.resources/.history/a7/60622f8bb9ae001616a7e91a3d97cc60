@@ -75,9 +75,6 @@ public class MessageService extends Service {
 	public AudioGroup audioGroup;
 	public static boolean answerFlag = false;
 	public static String sourceIP = null;
-	
-	public static String destinationIP = null;
-	
     //End of Amado Section
     
     private int notificationId = 0;
@@ -222,12 +219,6 @@ public class MessageService extends Service {
     		//XXXXXXXXXXXXXXXX TYPE OF MESSAGES XXXXXXXXXXXXXXXXXXXXXX
     		//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     		
-    		if(content.toLowerCase().indexOf("<<1>>".toLowerCase()) != -1){
-    			StringTokenizer first_message = new StringTokenizer(content,"&");
-    			first_message.nextToken();
-    			destinationIP = first_message.nextToken();
-    		}
-    		
     		if(content.toLowerCase().indexOf("<<1>>".toLowerCase()) != -1){					//CONNECT MESSAGE
     			Log.v("Connect <<1>>:", content);
     			AudioManager audio =  (AudioManager) getSystemService(Context.AUDIO_SERVICE); 
@@ -271,7 +262,7 @@ public class MessageService extends Service {
   	      	    	audioStream = new AudioStream(InetAddress.getByAddress(getLocalIPAddress()));
   	      	    	audioStream.setCodec(AudioCodec.PCMU);
   	      	    	audioStream.setMode(RtpStream.MODE_NORMAL);
-  	      	    	StringTokenizer parts2 = new StringTokenizer(destinationIP);
+  	      	    	StringTokenizer parts2 = new StringTokenizer(sourceIP);
   	      	    	audioStream.associate(InetAddress.getByAddress(new byte[] {(byte)Integer.parseInt(parts2.nextToken(".")),
   	      	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")), 
   	      	    		  													 (byte)Integer.parseInt(parts2.nextToken(".")), 
