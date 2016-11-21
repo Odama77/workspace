@@ -193,7 +193,7 @@ public class RTPGenerator extends Activity implements OnItemSelectedListener, Ma
 		      	      audioStream.setCodec(AudioCodec.PCMU);
 		      	      audioStream.setMode(RtpStream.MODE_NORMAL);
 		      	      //set receiver(vlc player) machine ip address(please update with your machine ip)
-		      	      StringTokenizer parts = new StringTokenizer(MessageService.destinationIP);
+		      	      StringTokenizer parts = new StringTokenizer(selection);
 		      	      audioStream.associate(InetAddress.getByAddress(new byte[] {(byte)Integer.parseInt(parts.nextToken(".")),
 		      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")), 
 		      	    		  													 (byte)Integer.parseInt(parts.nextToken(".")), 

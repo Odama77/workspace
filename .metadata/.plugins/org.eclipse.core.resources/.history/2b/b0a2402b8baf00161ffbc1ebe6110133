@@ -66,6 +66,8 @@ public class RTPGenerator extends Activity implements OnItemSelectedListener, Ma
 	
 	private static String address = null;
 	
+	private static String destinationIP = null;
+	
 	
 	private static final String TAG = "RTPGenerator";
 	@Override
